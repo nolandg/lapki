@@ -1,0 +1,47 @@
+{
+  "name": "strazzle",
+  "version": "0.0.1",
+  "description": "Library to marry Strapi with Razzle",
+  "main": "build/server.js",
+  "browser": "build/client.js",
+  "author": "Noland Germain",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel --out-dir=build src",
+    "start": "babel --out-dir=build src -w"
+  },
+  "devDependencies": {
+    "@material-ui/core": "^1.4.0",
+    "apollo-cache-inmemory": "^1.2.5",
+    "apollo-client": "^2.3.5",
+    "apollo-link-batch-http": "^1.2.2",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-http": "^1.5.4",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
+    "react-dom": "^16.4.1",
+    "react-jss": "^8.6.1"
+  },
+  "peerDependencies": {
+    "apollo-client": "^2.3.5",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "react-apollo": "^2.1.9"
+  },
+  "dependencies": {
+    "await-to-js": "^2.0.1",
+    "babel-polyfill": "^6.26.0",
+    "chalk": "^2.4.1",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
