@@ -11,16 +11,25 @@ import Youch from 'youch';
 import createApolloClient from './createApolloClient';
 import Document from './Document';
 
-function configureServerApp(server, {
-  muiTheme,
-  routes,
-  razzlePublicDir,
-  razzleAssetsManifestPath,
-}) {
-  const assets = require(razzleAssetsManifestPath);
+function configureServerApp(server, options) {
+  const defaultOptions = {
+    muiTheme: null,
+    routes: [],
+    razzlePublicDir: '',
+    razzleAssetsManifestPath: '',
+    apolloClientOptions: {},
+    customGetInitialPropsArgs: {},
+    isDataTreeErrorFatal: error => false, /* eslint-disable-line no-unused-vars */
+    customRenderer: null,
+    onError: null,
+    overrideDefaultErrorHandler: false,
+  };
+  options = { ...defaultOptions, ...options };
+
+  const assets = require(options.razzleAssetsManifestPath);
 
   server
-    .use(express.static(razzlePublicDir))
+    .use(express.static(options.razzlePublicDir))
     .get('/*', async (req, res) => {
       const client = createApolloClient({ ssrMode: true });
 
@@ -36,9 +45,7 @@ function configureServerApp(server, {
           console.error(chalk.yellow(errorStr));
           console.error(chalk.yellow('------------------------------------------------------------'));
 
-          // ToDo: Decide if error is fatal
-          const fatal = false;
-          if(fatal) throw treeError;
+          if(options.isDataTreeErrorFatal(treeError)) throw treeError;
         }
 
         const initialApolloState = client.extract();
@@ -50,14 +57,18 @@ function configureServerApp(server, {
         const html = await render({
           req,
           res,
-          routes,
+          routes: options.routes,
           assets,
-          customRenderer,
+          customRenderer: options.customRenderer || customRenderer,
           document: Document,
-          muiTheme,
+          muiTheme: options.muiTheme,
+          ...options.customGetInitialPropsArgs,
         });
         res.send(html);
       } catch (error) {
+        if(options.onError) options.onError(error, res);
+        if(options.overrideDefaultErrorHandler) return;
+
         const youch = new Youch(error, req);
 
         youch
