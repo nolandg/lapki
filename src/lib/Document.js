@@ -12,7 +12,7 @@ const sheetsRegistry = new SheetsRegistry();
 const sheetsManager = new WeakMap();
 const generateClassName = createGenerateClassName();
 
-export default class Document extends React.Component {
+class Document extends React.Component {
   static async getInitialProps({ assets, data, renderPage, muiTheme }) {
     const [error, page] = await qatch(renderPage(After => props => (
       <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
@@ -80,3 +80,5 @@ Document.defaultProps = {
   data: null,
   error: null,
 };
+
+export default Document;
