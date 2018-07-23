@@ -28,7 +28,7 @@ Trace:
 
 npm manifest: 
   {
-    "name": "strazzle",
+    "name": "lapki",
     "version": "0.0.1",
     "description": "Library to marry Strapi with Razzle",
     "main": "server.js",

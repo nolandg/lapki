@@ -1,7 +1,7 @@
 {
-  "name": "strazzle",
+  "name": "lapki",
   "version": "0.0.1",
-  "description": "Library to marry Strapi with Razzle",
+  "description": "Full-stack reactive GraphQL Node framework",
   "main": "build/server.js",
   "browser": "build/client.js",
   "author": "Noland Germain",
