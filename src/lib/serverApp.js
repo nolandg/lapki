@@ -9,69 +9,97 @@ import qatch from 'await-to-js';
 import Youch from 'youch';
 
 import createApolloClient from './createApolloClient';
-import Document from './Document';
-import ConfigurationManager from './serverAppConfig';
+import { Document, getInitialProps, render as documentRender } from './Document';
 
+export { Document, getInitialProps, documentRender as render, createApolloClient };
 
-const config = ConfigurationManager.getConfig();
-const server = express();
-const assets = require(config.razzleAssetsManifestPath);
+export const create = (options, server) => {
+  if(!server) server = express();
+  const defaultOptions = {
+    muiTheme: null,
+    routes: [],
+    razzlePublicDir: '',
+    razzleAssetsManifestPath: '',
+    apolloClientOptions: {},
+    customGetInitialPropsArgs: {},
+    isDataTreeErrorFatal: error => false, /* eslint-disable-line no-unused-vars */
+    customRenderer: null,
+    onError: null,
+    overrideDefaultErrorHandler: false,
+    disablePoweredByExpress: true,
+    disablePoweredByLapki: false,
+    appHeaders: {}, // object of form {field1: value1, field2: value2} or a function returning such an object
+    document: Document,
+  };
+  options = { ...defaultOptions, ...options };
 
-server
-  .disable('x-powered-by')
-  .use(express.static(config.razzlePublicDir))
-  .get('/*', async (req, res) => {
-    const client = createApolloClient({ ssrMode: true });
+  const assets = require(options.razzleAssetsManifestPath);
 
-    const customRenderer = async (node) => {
-      const App = <ApolloProvider client={client}>{node}</ApolloProvider>;
+  if(options.disablePoweredByExpress) server.disable('x-powered-by');
 
-      const [treeError] = await qatch(getDataFromTree(App));
-      if(treeError) {
-        let errorStr;
-        if(treeError instanceof Error) errorStr = treeError.stack;
-        else errorStr = stringifySafe(treeError, null, 2);
-        console.error(chalk.yellow('------------ Error getting data from tree: -----------------'));
-        console.error(chalk.yellow(errorStr));
-        console.error(chalk.yellow('------------------------------------------------------------'));
+  server
+    .use(express.static(options.razzlePublicDir))
+    .get('/*', async (req, res, next) => {
+      if(!options.disablePoweredByLapki) res.set('Powered-By', 'Lapki');
+      if(typeof options.appHeaders === 'function') res.set(options.appHeaders(req, res));
+      else res.set(options.appHeaders);
 
-        // ToDo: Decide if error is fatal
-        const fatal = false;
-        if(fatal) throw treeError;
-      }
+      const client = createApolloClient({ ssrMode: true });
 
-      const initialApolloState = client.extract();
-      const html = renderToString(App);
-      return { html, initialApolloState, error: treeError };
-    };
+      const customRenderer = async (node) => {
+        const App = <ApolloProvider client={client}>{node}</ApolloProvider>;
 
-    try {
-      const html = await render({
-        req,
-        res,
-        routes: config.routes,
-        assets,
-        customRenderer,
-        document: Document,
-        muiTheme: config.muiTheme,
-      });
-      res.send(html);
-    } catch (error) {
-      const youch = new Youch(error, req);
+        const [treeError] = await qatch(getDataFromTree(App));
+        if(treeError) {
+          let errorStr;
+          if(treeError instanceof Error) errorStr = treeError.stack;
+          else errorStr = stringifySafe(treeError, null, 2);
+          console.error(chalk.yellow('------------ Error getting data from tree: -----------------'));
+          console.error(chalk.yellow(errorStr));
+          console.error(chalk.yellow('------------------------------------------------------------'));
 
-      youch
-        .toHTML()
-        .then((html) => {
-          res.send(html);
+          if(options.isDataTreeErrorFatal(treeError)) throw treeError;
+        }
+
+        const initialApolloState = client.extract();
+        const html = renderToString(App);
+        return { html, initialApolloState, error: treeError };
+      };
+
+      try {
+        const html = await render({
+          req,
+          res,
+          routes: options.routes,
+          assets,
+          customRenderer: options.customRenderer || customRenderer,
+          document: options.document,
+          muiTheme: options.muiTheme,
+          ...options.customGetInitialPropsArgs,
         });
+        res.send(html);
+      } catch (error) {
+        if(options.onError) options.onError(error, res);
+        if(options.overrideDefaultErrorHandler) return;
 
-      let errorStr;
-      if(error instanceof Error) errorStr = error.stack;
-      else errorStr = stringifySafe(error, null, 2);
-      console.log(chalk.red('------------------------------ Error server rendering page ------------------------------'));
-      console.log(chalk.red(errorStr));
-      console.log(chalk.red('-----------------------------------------------------------------------------------------'));
-    }
-  });
+        const youch = new Youch(error, req);
 
-export default server;
+        youch
+          .toHTML()
+          .then((html) => {
+            res.send(html);
+          });
+
+        let errorStr;
+        if(error instanceof Error) errorStr = error.stack;
+        else errorStr = stringifySafe(error, null, 2);
+        console.log(chalk.red('------------------------------ Error server rendering page ------------------------------'));
+        console.log(chalk.red(errorStr));
+        console.log(chalk.red('-----------------------------------------------------------------------------------------'));
+      } finally {
+        next();
+      }
+    });
+
+  return server;
+};
