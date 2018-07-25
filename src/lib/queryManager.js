@@ -1,18 +1,18 @@
 const queries = [];
 
-const register = (query) => {
-  queries.push(query);
+const registerRefetch = ({ key, refetch, description }) => {
+  queries.push({ key, refetch, description });
 };
 
-const runQueries = () => {
+const refetchQueries = (params) => {
   queries.forEach(async (q) => {
-    q();
+    q.refetch(params);
   });
 };
 
 const queryManager = {
-  register,
-  runQueries,
-}
+  registerRefetch,
+  refetchQueries,
+};
 
-export default queryManager
+export default queryManager;

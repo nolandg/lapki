@@ -3345,9 +3345,9 @@ yallist@^3.0.0, yallist@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.0.2.tgz#8452b4bb7e83c7c188d8041c1a837c773d6d8bb9"
 
-youch@^2.0.8:
+"youch@git+https://github.com/nolandg/youch.git#896474c":
   version "2.0.8"
-  resolved "https://registry.yarnpkg.com/youch/-/youch-2.0.8.tgz#6e976ffa68fa586acd0445d4ed47abca287b0c0f"
+  resolved "git+https://github.com/nolandg/youch.git#896474c41fcadc8228e6b23dee678fbdb4797459"
   dependencies:
     cookie "^0.3.1"
     mustache "^2.3.0"

@@ -23,7 +23,7 @@ const withRefetch = function (WrappedComponent, queryVariables) {
       this.state = {
         variables: queryVariables,
       };
-      queryManager.register(this.refetch);
+      queryManager.registerRefetch({ refetch: this.refetch });
     }
 
     refetch = async () => {
@@ -31,6 +31,7 @@ const withRefetch = function (WrappedComponent, queryVariables) {
       if(error) {
         console.error(gqlError(error).message);
         console.error(error);
+        this.setState({ refetchError: error });
       }
     }
 
