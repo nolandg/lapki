@@ -1,11 +1,8 @@
 import 'babel-polyfill';
-import queryManager from './lib/queryManager';
-import withReactiveQuery from './lib/withReactiveQuery';
-import * as serverApp from './lib/serverApp';
-
+import * as serverApp from './lib/boot/serverApp';
+import common from './lib/common';
 
 module.exports = {
-  withReactiveQuery,
-  queryManager,
   serverApp,
+  ...common,
 };

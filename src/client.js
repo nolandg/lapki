@@ -1,11 +1,9 @@
 import 'babel-polyfill';
 
-import createApolloClient from './lib/createApolloClient.js';
-import queryManager from './lib/queryManager';
-import withReactiveQuery from './lib/withReactiveQuery';
+import common from './lib/common';
+import startClientApp from './lib/boot/startClientApp';
 
 module.exports = {
-  createApolloClient,
-  withReactiveQuery,
-  queryManager,
+  startClientApp,
+  ...common,
 };

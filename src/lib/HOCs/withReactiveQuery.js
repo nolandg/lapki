@@ -13,8 +13,8 @@ import { graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 import qatch from 'await-to-js';
 
-import queryManager from './queryManager';
-import gqlError from './gqlError';
+import queryManager from '../utils/queryManager';
+import gqlError from '../utils/gqlError';
 
 const withRefetch = function (WrappedComponent, queryVariables) {
   class withRefetchClass extends Component {

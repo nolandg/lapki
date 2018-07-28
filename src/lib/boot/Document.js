@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { JssProvider } from 'react-jss';
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles';
-// import { MuiThemeProvider, createGenerateClassName, createMuiTheme } from '@material-ui/core/styles';
 
 const sheetsRegistry = new SheetsRegistry();
 const sheetsManager = new WeakMap();

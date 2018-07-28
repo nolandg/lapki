@@ -54,6 +54,7 @@
     "chalk": "^2.4.1",
     "isomorphic-fetch": "^2.2.1",
     "json-stringify-safe": "^5.0.1",
+    "react-router-dom": "^4.3.1",
     "youch": "git+https://github.com/nolandg/youch.git#896474c"
   }
 }
