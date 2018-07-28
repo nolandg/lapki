@@ -26,6 +26,10 @@ const withRefetch = function (WrappedComponent, queryVariables) {
       queryManager.registerRefetch({ refetch: this.refetch });
     }
 
+    componentDidUpdate = () => {
+
+    }
+
     refetch = async () => {
       const [error] = await qatch(this.props.data.refetch(this.state.variables));
       if(error) {
