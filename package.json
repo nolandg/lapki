@@ -11,7 +11,7 @@
     "start": "babel --out-dir=build src -w"
   },
   "devDependencies": {
-    "@material-ui/core": "^1.4.0",
+    "@material-ui/core": "^1.4.2",
     "apollo-cache-inmemory": "^1.2.5",
     "apollo-client": "^2.3.5",
     "apollo-link-batch-http": "^1.2.2",
@@ -38,14 +38,19 @@
     "react": "^16.4.1",
     "react-apollo": "^2.1.9",
     "react-dom": "^16.4.1",
+    "react-dom-server": "^0.0.5",
     "react-jss": "^8.6.1"
   },
   "peerDependencies": {
     "@jaredpalmer/after": "^1.3.1",
+    "@material-ui/core": "^1.4.2",
     "apollo-client": "^2.3.5",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "react-apollo": "^2.1.9"
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
+    "react-dom": "^16.4.1",
+    "react-jss": "^8.6.1"
   },
   "dependencies": {
     "apollo-link": "^1.2.2",
@@ -54,6 +59,7 @@
     "chalk": "^2.4.1",
     "isomorphic-fetch": "^2.2.1",
     "json-stringify-safe": "^5.0.1",
+    "lodash.set": "^4.3.2",
     "react-router-dom": "^4.3.1",
     "youch": "git+https://github.com/nolandg/youch.git#896474c"
   }

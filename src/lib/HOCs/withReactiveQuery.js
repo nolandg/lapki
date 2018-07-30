@@ -80,4 +80,4 @@ function withReactiveQuery(query, queryVariables, graphqlOptions) {
   return WrappedComponent => graphql(query, config)(withRefetch(WrappedComponent, queryVariables));
 }
 
-export default withReactiveQuery;
+export { withReactiveQuery };
