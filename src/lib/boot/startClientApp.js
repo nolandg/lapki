@@ -3,24 +3,32 @@ import { hydrate } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { ensureReady, After } from '@jaredpalmer/after';
 import { ApolloProvider } from 'react-apollo';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles';
+import { SheetsRegistry } from 'react-jss/lib/jss';
+import { JssProvider } from 'react-jss';
+
 import createApolloClient from './createApolloClient';
 
 export default function startClientApp({ routes, muiTheme, apolloClientOptions }) {
+  const sheetsRegistry = new SheetsRegistry();
   const sheetsManager = new WeakMap();
+  const generateClassName = createGenerateClassName();
   const defaultApolloClientOptions = {
     ssrMode: false,
   };
   const client = createApolloClient({ ...defaultApolloClientOptions, ...apolloClientOptions });
 
   ensureReady(routes).then(data => hydrate(
-    <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
-      <ApolloProvider client={client}>
-        <BrowserRouter>
-          <After data={data} routes={routes} />
-        </BrowserRouter>
-      </ApolloProvider>
-    </MuiThemeProvider>,
+    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+
+      <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
+        <ApolloProvider client={client}>
+          <BrowserRouter>
+            <After data={data} routes={routes} />
+          </BrowserRouter>
+        </ApolloProvider>
+      </MuiThemeProvider>
+    </JssProvider>,
     document.getElementById('root'),
   ));
 }
