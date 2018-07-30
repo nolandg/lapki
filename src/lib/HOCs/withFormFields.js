@@ -12,7 +12,7 @@ const formFieldStyles = () => ({
   },
 });
 
-const withFormFields = function (WrappedComponent) {
+export const withFormFields = function (WrappedComponent) {
   class withFormFieldClass extends Component {
      onChange = (e) => {
        const value = e.target.value;
@@ -64,12 +64,5 @@ const withFormFields = function (WrappedComponent) {
     helperText: '',
   };
 
-  // return withStyles(formFieldStyles)(withFormFieldClass);
-  return withFormFieldClass;
+  return withStyles(formFieldStyles)(withFormFieldClass);
 };
-
-const fuck = function (WrappedComponent) {
-  const shit = withFormFields(WrappedComponent);
-  return withStyles(formFieldStyles)(shit);
-};
-export { fuck as withFormFields };
