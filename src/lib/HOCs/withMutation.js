@@ -4,10 +4,43 @@ import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import deepSet from 'lodash.set';
 import qatch from 'await-to-js';
+import isEqual from 'lodash.isequal';
 import queryManager from '../utils/queryManager';
 
 function withMutation(query, graphqlOptions) {
   return function withMutationInner(WrappedComponent) {
+    // Example field:
+    //   {
+    //     name: 'title',
+    //     value: 'My Title',
+    //     error: 'Too short',
+    //   }
+    const getInitialFields = (props) => {
+      const { document, collection } = props;
+      const { schema } = collection;
+      const fields = {};
+
+      Object.keys(schema.fields).forEach((fieldName) => {
+        const schemaField = schema.fields[fieldName];
+
+        // Firs try to get initial value from document
+        let value = document ? document[fieldName] : undefined;
+        if(value === undefined) {
+          // No document available or this field isn't in the document
+          // Get a default value from schema
+          value = schemaField.default();
+        }
+
+        fields[fieldName] = {
+          name: fieldName,
+          value,
+          error: null,
+        };
+      });
+
+      return fields;
+    };
+
     class withMutationClass extends Component {
       callbacks = {
         onMutationSuccess: null,
@@ -16,10 +49,18 @@ function withMutation(query, graphqlOptions) {
 
       constructor(props) {
         super(props);
-        this.state = {
-          fields: this.initializeFields(props),
-          firstSaveAttempted: false,
-        };
+        this.state = this.getInitialState(props);
+      }
+
+      getInitialState = props => ({
+        fields: getInitialFields(props),
+        firstSaveAttempted: false,
+      })
+
+      componentDidUpdate = (prevProps) => {
+        if(!isEqual(prevProps.document, this.props.document)) {
+          this.setState(this.getInitialState(this.props));
+        }
       }
 
       isNew = () => {
@@ -35,42 +76,6 @@ function withMutation(query, graphqlOptions) {
           fields.push(field);
         });
         return fields;
-      }
-
-      // Example field:
-      //   {
-      //     name: 'title',
-      //     value: 'My Title',
-      //     error: 'Too short',
-      //   }
-      initializeFields = (props) => {
-        const { document, collection } = props;
-        const { schema } = collection;
-        const fields = {};
-
-        Object.keys(schema.fields).forEach((fieldName) => {
-          const schemaField = schema.fields[fieldName];
-
-          // Firs try to get initial value from document
-          let value = document ? document[fieldName] : undefined;
-          if(value === undefined) {
-            // No document available or this field isn't in the document
-            // Get a default value from schema
-            value = schemaField.default();
-          }
-
-          fields[fieldName] = {
-            name: fieldName,
-            value,
-            error: null,
-          };
-        });
-
-        return fields;
-      }
-
-      componentDidMount = () => {
-        this.setState({ firstSaveAttempted: false });
       }
 
       setFieldValue = (name, value, cb) => {
