@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import fetch from 'isomorphic-fetch';
 import deepSet from 'lodash.set';
 import qatch from 'await-to-js';
 import queryManager from '../utils/queryManager';
 
-import connectionManager from '../utils/connectionManager';
-
-export function withMutation() {
+function withMutation(query, graphqlOptions) {
   return function withMutationInner(WrappedComponent) {
     class withMutationClass extends Component {
       callbacks = {
@@ -25,7 +24,7 @@ export function withMutation() {
 
       isNew = () => {
         const { document } = this.props;
-        if(document && (document.id || document._id)) return false;
+        if(document && (document.id || document.id)) return false;
         return true;
       }
 
@@ -152,7 +151,7 @@ export function withMutation() {
           return;
         }
 
-        this.mutate(castDoc, 'save');
+        this.mutate(castDoc, 'update');
       }
 
       handleMutationSuccess = (doc) => {
@@ -167,48 +166,20 @@ export function withMutation() {
       }
 
       mutate = (doc, operation) => {
-        const { typeName, connectionName } = this.props.collection;
-        const connection = connectionManager.get(connectionName);
+        const { mutate } = this.props;
         const isNew = this.isNew();
-        let verb;
-        let uri = `${connection.uri}/${typeName}`;
+        if((operation !== 'create') && isNew) throw new Error(`Cannot "${operation}" on new document.`);
+        if((operation === 'create') && !isNew) throw new Error('Cannot create a non-new document.');
 
-        if(isNew && (operation === 'save')) {
-          verb = 'POST';
-        }else if(!isNew) {
-          if(operation === 'save') {
-            verb = 'PUT';
-          }else if(operation === 'delete') {
-            verb = 'DELETE';
-          }else{
-            throw new Error(`Invalid combination of operation and newness to mutate(). Cannot "${operation}" on existing document`);
-          }
-          if(doc._id) uri += `/${doc._id}`;
-          else if(doc.id) uri += `/${doc.id}`;
-          else throw new Error('Mising id or _id field for non-new mutation');
-        }else{
-          throw new Error(`Invalid combination of operation and newness to mutate(). Cannot "${operation}" on new document`);
-        }
+        const data = { ...doc, id: undefined };
 
-        const headers = {
-          'Content-Type': 'application/json',
-          ...connection.headers,
-        };
-        fetch(uri, {
-          method: verb,
-          headers,
-          body: doc ? JSON.stringify(doc) : '',
+        mutate({
+          variables: {
+            data,
+            where: { id: doc.id },
+          },
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-            return response.json();
-          }, (error) => {
-            console.error('Network mutation error');
-            this.handleMutationError(error);
-          })
-          .then((responseDoc) => {
+          .then(({ responseDoc }) => {
             this.handleMutationSuccess(responseDoc);
           })
           .catch((error) => {
@@ -243,11 +214,33 @@ export function withMutation() {
     withMutationClass.propTypes = {
       document: PropTypes.object,
       collection: PropTypes.object.isRequired,
+      mutate: PropTypes.func.isRequired,
     };
     withMutationClass.defaultProps = {
       document: undefined,
     };
 
-    return withMutationClass;
+    const defaultOptions = {
+      errorPolicy: 'none',
+    };
+    const options = { ...defaultOptions, ...graphqlOptions };
+    const config = {
+      options,
+    };
+
+    const query2 = gql`
+      mutation updatePost($data: PostUpdateInput!, $where: PostWhereUniqueInput!){
+        updatePost(data: $data, where: $where) {
+          id
+          title
+          body
+        },
+      }
+    `;
+
+    return graphql(query2, config)(withMutationClass);
   };
 }
+
+
+export { withMutation };

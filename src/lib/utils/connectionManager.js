@@ -2,7 +2,7 @@ class ConnectionManager {
   constructor() {
     this.connections = {
       default: {
-        uri: 'http://localhost:1337',
+        uri: 'http://localhost:4000',
         headers: {},
       },
     };

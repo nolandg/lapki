@@ -12,8 +12,8 @@ import chalk from 'chalk';
 function createApolloClient(options) {
   const defaultOptions = {
     ssrMode: false,
-    uri: 'http://localhost:1337/graphql',
-    useBatchHttpLink: false,
+    uri: 'http://localhost:4000',
+    useBatchHttpLink: true,
     batchMax: 10,
     batchInterval: 10,
     onError: null,
