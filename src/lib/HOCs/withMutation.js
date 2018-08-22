@@ -1,13 +1,52 @@
 import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import deepSet from 'lodash.set';
+import _ from 'lodash';
 import qatch from 'await-to-js';
-import isEqual from 'lodash.isequal';
+// import pluralize from 'pluralize';
+import gqlError from '../utils/gqlError';
 import queryManager from '../utils/queryManager';
 
-function withMutation(query, graphqlOptions) {
+// const pascalToCamel = string => string.replace(/\w/, c => c.toLowerCase());
+const camelToPascal = string => string.replace(/\w/, c => c.toUpperCase());
+
+const generateMutation = (operation, type, fragment) => {
+  const pascalType = camelToPascal(type);
+  const pascalOperation = camelToPascal(operation);
+  // const camelType = pascalToCamel(pascalType);
+  // const pluralCamelType = pluralize.plural(camelType);
+  // const pluralPascalType = pluralize.plural(pascalType);
+  const fragmentName = _.get(fragment, 'definitions[0].name.value', null);
+  if(!fragmentName) {
+    throw Error('Invalid fragment passed to withMutation; cannot find name of fragment.');
+  }
+
+  const data = operation !== 'delete'
+    ? `$data: ${pascalType}${pascalOperation}Input!`
+    : '';
+  const where = operation !== 'create'
+    ? `$where: ${pascalType}WhereUniqueInput!`
+    : '';
+
+  const mutation = gql`
+    ${fragment}
+
+    mutation ${operation}${pascalType}(
+      ${data}
+      ${where}
+    ){
+      ${operation}${pascalType}(data: $data, ${where ? 'where: $where' : ''}) {
+        ...${fragmentName}
+      },
+    }
+  `;
+
+  return mutation;
+};
+
+
+function withMutation(type, fragment, graphqlOptions) {
   return function withMutationInner(WrappedComponent) {
     // Example field:
     //   {
@@ -54,11 +93,12 @@ function withMutation(query, graphqlOptions) {
 
       getInitialState = props => ({
         fields: getInitialFields(props),
+        globalErrors: [],
         firstSaveAttempted: false,
       })
 
       componentDidUpdate = (prevProps) => {
-        if(!isEqual(prevProps.document, this.props.document)) {
+        if(!_.isEqual(prevProps.document, this.props.document)) {
           this.setState(this.getInitialState(this.props));
         }
       }
@@ -80,16 +120,27 @@ function withMutation(query, graphqlOptions) {
 
       setFieldValue = (name, value, cb) => {
         this.setState((state) => {
-          deepSet(state.fields, `${name}.value`, value);
-          deepSet(state.fields, `${name}.name`, name);
+          _.set(state.fields, `${name}.value`, value);
+          _.set(state.fields, `${name}.name`, name);
           return state;
         }, cb);
       }
 
       setFieldError = (name, error, cb) => {
         this.setState((state) => {
-          deepSet(state.fields, `${name}.error`, error);
-          deepSet(state.fields, `${name}.name`, name);
+          if(name) {
+            _.set(state.fields, `${name}.error`, error);
+            _.set(state.fields, `${name}.name`, name);
+          }else{
+            state.globalErrors.push(error);
+          }
+          return state;
+        }, cb);
+      }
+
+      setGlobalError = (error, cb) => {
+        this.setState((state) => {
+          state.globalErrors.push(error);
           return state;
         }, cb);
       }
@@ -126,7 +177,7 @@ function withMutation(query, graphqlOptions) {
       assembleDocument = () => {
         const doc = {};
         this.getFields().forEach((field) => {
-          deepSet(doc, field.name, field.value);
+          _.set(doc, field.name, field.value);
         });
 
         return doc;
@@ -136,6 +187,7 @@ function withMutation(query, graphqlOptions) {
         this.getFields().forEach((field) => {
           this.setFieldError(field.name, null);
         });
+        this.setState({ globalErrors: [] });
       }
 
       extractErrorsFromFields = () => {
@@ -156,7 +208,7 @@ function withMutation(query, graphqlOptions) {
           return;
         }
 
-        this.mutate(castDoc, 'update');
+        this.mutate(castDoc, this.isNew() ? 'create' : 'update');
       }
 
       handleMutationSuccess = (doc) => {
@@ -167,28 +219,33 @@ function withMutation(query, graphqlOptions) {
 
       handleMutationError = (error) => {
         console.error('Mutation Error: ', error);
+
+        error = gqlError(error);
+        this.setGlobalError(error.message);
+
         if(this.callbacks.onMutationError) this.callbacks.onMutationError(error);
       }
 
       mutate = (doc, operation) => {
-        const { mutate } = this.props;
         const isNew = this.isNew();
         if((operation !== 'create') && isNew) throw new Error(`Cannot "${operation}" on new document.`);
         if((operation === 'create') && !isNew) throw new Error('Cannot create a non-new document.');
 
         const data = { ...doc, id: undefined };
+        const mutateFunc = this.props[`${operation}Mutation`];
+        const pascalType = camelToPascal(type);
 
-        mutate({
+        mutateFunc({
           variables: {
             data,
             where: { id: doc.id },
           },
         })
-          .then(({ responseDoc }) => {
-            this.handleMutationSuccess(responseDoc);
+          .then((response) => {
+            const returnedDoc = response.data[`${operation}${pascalType}`];
+            this.handleMutationSuccess(returnedDoc);
           })
           .catch((error) => {
-            console.error('Mutation error caught');
             this.handleMutationError(error);
           });
       }
@@ -200,6 +257,7 @@ function withMutation(query, graphqlOptions) {
       render() {
         const { ...rest } = this.props;
         const errors = this.extractErrorsFromFields();
+        const { globalErrors } = this.state;
         const fieldProps = {
           onChange: this.handleFieldValueChange,
           fields: this.state.fields,
@@ -210,6 +268,7 @@ function withMutation(query, graphqlOptions) {
             save={this.save}
             fieldProps={fieldProps}
             errors={errors}
+            globalErrors={globalErrors}
             registerCallbacks={this.registerCallbacks}
             {...rest}
           />
@@ -219,7 +278,9 @@ function withMutation(query, graphqlOptions) {
     withMutationClass.propTypes = {
       document: PropTypes.object,
       collection: PropTypes.object.isRequired,
-      mutate: PropTypes.func.isRequired,
+      createMutation: PropTypes.func.isRequired,
+      updateMutation: PropTypes.func.isRequired,
+      deleteMutation: PropTypes.func.isRequired,
     };
     withMutationClass.defaultProps = {
       document: undefined,
@@ -233,17 +294,15 @@ function withMutation(query, graphqlOptions) {
       options,
     };
 
-    const query2 = gql`
-      mutation updatePost($data: PostUpdateInput!, $where: PostWhereUniqueInput!){
-        updatePost(data: $data, where: $where) {
-          id
-          title
-          body
-        },
-      }
-    `;
+    const createMutation = generateMutation('create', type, fragment);
+    const updateMutation = generateMutation('update', type, fragment);
+    const deleteMutation = generateMutation('delete', type, fragment);
 
-    return graphql(query2, config)(withMutationClass);
+    return compose(
+      graphql(createMutation, { ...config, name: 'createMutation' }),
+      graphql(updateMutation, { ...config, name: 'updateMutation' }),
+      graphql(deleteMutation, { ...config, name: 'deleteMutation' }),
+    )(withMutationClass);
   };
 }
 

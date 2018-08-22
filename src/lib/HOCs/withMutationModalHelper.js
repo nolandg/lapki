@@ -54,6 +54,9 @@ function withMutationModalHelper(WrappedComponent) {
   return withMutationModalHelperClass;
 }
 
-const withMutationModalHelperWithHOCs = WrappedComponent => withMutation()(withMutationModalHelper(WrappedComponent));
+// eslint-disable-next-line arrow-body-style
+const withMutationModalHelperWithHOCs = (type, fragment, graphqlOptions) => {
+  return WrappedComponent => withMutation(type, fragment, graphqlOptions)(withMutationModalHelper(WrappedComponent));
+};
 
 export { withMutationModalHelperWithHOCs as withMutationModalHelper };
