@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withMutation } from './withMutation';
+import { withCrudMutations } from './withCrudMutations';
 
-function withMutationModalHelper(WrappedComponent) {
+function crudModalHelperWithoutHOCs(WrappedComponent) {
   class withMutationModalHelperClass extends React.Component {
     constructor(props) {
       super(props);
@@ -12,7 +12,7 @@ function withMutationModalHelper(WrappedComponent) {
       };
 
       props.registerCallbacks({
-        onMutationSuccess: this.handleClose,
+        onMutationSuccess: this.handleMutationSuccess,
       });
     }
 
@@ -26,7 +26,6 @@ function withMutationModalHelper(WrappedComponent) {
 
     handleMutationSuccess = () => {
       this.handleClose();
-      console.log('we are done!!');
     };
 
     render() {
@@ -55,8 +54,8 @@ function withMutationModalHelper(WrappedComponent) {
 }
 
 // eslint-disable-next-line arrow-body-style
-const withMutationModalHelperWithHOCs = (type, fragment, graphqlOptions) => {
-  return WrappedComponent => withMutation(type, fragment, graphqlOptions)(withMutationModalHelper(WrappedComponent));
+const crudModalHelper = (options) => {
+  return WrappedComponent => withCrudMutations(options)(crudModalHelperWithoutHOCs(WrappedComponent));
 };
 
-export { withMutationModalHelperWithHOCs as withMutationModalHelper };
+export { crudModalHelper };
