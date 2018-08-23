@@ -12,7 +12,7 @@ const formFieldStyles = () => ({
   },
 });
 
-export const withFormFields = function (WrappedComponent) {
+export const withFormField = function (WrappedComponent) {
   class withFormFieldClass extends Component {
      onChange = (e) => {
        const value = e.target.value;
@@ -32,7 +32,6 @@ export const withFormFields = function (WrappedComponent) {
          <span>
            <span className="helpText">{helperText}</span>
            {error
-             // ? <span><br /><br />{error}</span>
              ? <span className={classes.errorHelpText}><br /><br />{error}</span>
              : null}
          </span>

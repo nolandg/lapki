@@ -1,7 +1,7 @@
 import React from 'react';
 import MuiTextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
-import { withFormFields } from '../HOCs/withFormFields';
+import { withFormField } from '../HOCs/withFormField';
 
 /**
  * TextField
@@ -16,4 +16,4 @@ TextFieldWithoutHOCs.propTypes = {
 TextFieldWithoutHOCs.defaultProps = {
   value: '',
 };
-export const TextField = withFormFields(TextFieldWithoutHOCs);
+export const TextField = withFormField(TextFieldWithoutHOCs);

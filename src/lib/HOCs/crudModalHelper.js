@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withCrudMutations } from './withCrudMutations';
 
 function crudModalHelperWithoutHOCs(WrappedComponent) {
-  class withMutationModalHelperClass extends React.Component {
+  class crudModalHelperClass extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -41,16 +41,15 @@ function crudModalHelperWithoutHOCs(WrappedComponent) {
       );
     }
   }
-  withMutationModalHelperClass.propTypes = {
+  crudModalHelperClass.propTypes = {
     document: PropTypes.object,
-    collection: PropTypes.object.isRequired,
     registerCallbacks: PropTypes.func.isRequired,
   };
-  withMutationModalHelperClass.defaultProps = {
+  crudModalHelperClass.defaultProps = {
     document: undefined,
   };
 
-  return withMutationModalHelperClass;
+  return crudModalHelperClass;
 }
 
 // eslint-disable-next-line arrow-body-style

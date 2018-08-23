@@ -43,9 +43,11 @@ function createApolloClient(options) {
         console.error(chalk.red('\n[GraphQL Link Error]'));
         console.error(`${chalk.blue('\tMessage: ')}${message}`);
         console.error(chalk.blue('\tLocations: '));
-        locations.forEach(({ line, column }) => {
-          console.error(`${chalk.blue('\t\tLine: ')}${line}${chalk.blue(' Column: ')}${column}`);
-        });
+        if(locations) {
+          locations.forEach(({ line, column }) => {
+            console.error(`${chalk.blue('\t\tLine: ')}${line}${chalk.blue(' Column: ')}${column}`);
+          });
+        }
         console.error(`${chalk.blue('\tPath: ')}${path}`);
       });
     }
