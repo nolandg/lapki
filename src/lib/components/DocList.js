@@ -16,26 +16,64 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import { pascalToCamel } from '../utils/stringUtils';
-// import queryManager from '../utils/queryManager';
 // import gqlError from '../utils/gqlError';
 
 class DocList extends Component {
-  buildQuery = (collection, fragmentName) => {
-    const queryTitle = `${pluralize.plural(collection.type)}List`;
-    const queryName = pluralize.plural(pascalToCamel(collection.type));
+  buildQuery = (collection, fragmentName, useConnection) => {
+    const operationName = `${pluralize.plural(collection.type)}List${useConnection ? 'Connection' : ''}`;
+    const queryName = pluralize.plural(pascalToCamel(collection.type)) + (useConnection ? 'Connection' : '');
     const fragment = collection.fragments[fragmentName];
     const fragmentDefinitionName = fragment.definitions[0].name.value;
+    //
+    // const variables = '$skip: Int!, $first: Int!';
+    //
+    // const queryArgs = `
+    //   skip: $skip,
+    //   first: $first,
+    // `;
+    //
+    // if(!useConnection) {
+    //   return gql`
+    //     ${fragment}
+    //
+    //     query ${operationName}(${variables})
+    //     {
+    //       ${queryName}{
+    //         ...${fragmentDefinitionName}
+    //       }
+    //     }
+    //   `;
+    // }
 
     return gql`
       ${fragment}
 
-      query ${queryTitle}
+      query ${operationName}($skip: Int!, $first: Int!)
       {
-        ${queryName}{
-          ...${fragmentDefinitionName}
+        ${queryName}(first: $first, skip: $skip){
+          aggregate {
+            count
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
+          edges {
+            cursor
+            node {
+              ...${fragmentDefinitionName}
+            }
+          }
         }
       }
     `;
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      skip: 0,
+    };
   }
 
   renderLoading = result => <div>Loading...</div>
@@ -63,7 +101,11 @@ class DocList extends Component {
     </div>
   )
 
-  renderPaginationControls = (location, result) => <div>Pagination Controls Here</div>
+  renderPaginationControls = (location, result) => (
+    <div className="pagination">
+      Pagination Controls Here
+    </div>
+  )
 
   renderWhereControls = (location, result) => <div>Where Controls Here</div>
 
@@ -86,12 +128,22 @@ class DocList extends Component {
   }
 
   renderProp = (result) => {
-    const { renderLoaded, render, collection } = this.props;
+    const { renderLoaded, render, collection, useConnection } = this.props;
     const { data, loading, error } = result;
 
     // Normalize the result a bit
-    const docsPropName = pascalToCamel(pluralize.plural(collection.type));
-    result.docs = data[docsPropName];
+    let queryName = pascalToCamel(pluralize.plural(collection.type));
+    if(useConnection) queryName += 'Connection';
+    if(!loading && !error) {
+      const queryData = data[queryName];
+      if(useConnection) {
+        result.docs = queryData.edges.map(edge => edge.node);
+        result.totalDocs = queryData.aggregate.count;
+        result.pageInfo = queryData.pageInfo;
+      }else{
+        result.docs = queryData;
+      }
+    }
 
     if(render) {
       // Parent handles rendering everything in all cases
@@ -111,15 +163,15 @@ class DocList extends Component {
     };
 
     if(error) {
-      renderFuncs.renderError(error, result);
+      return renderFuncs.renderError(error, result);
     }
     if(loading) {
-      renderFuncs.renderLoading(result);
+      return renderFuncs.renderLoading(result);
     }
 
     if(renderLoaded) {
       // Parent will render everything after docs are loaded
-      return(renderLoaded(result.docs, result));
+      return renderLoaded(result.docs, result);
     }
 
     // We will render individual docs using our or parent-supplied doc render function
@@ -138,10 +190,19 @@ class DocList extends Component {
   }
 
   render() {
-    const { collection, fragmentName, variables, errorPolicy, ...rest } = this.props;
-    const query = this.buildQuery(collection, fragmentName);
+    const { collection, fragmentName, errorPolicy, useConnection, first, variables, ...rest } = this.props;
+    const { skip } = this.state;
+    const query = this.buildQuery(collection, fragmentName, useConnection);
 
-    return <Query query={query} variables={variables} errorPolicy={errorPolicy} {...rest} children={this.renderProp} />;
+    const controlledVariables = {
+      ...this.props.variables,
+      skip,
+      first,
+    };
+
+    console.log(variables);
+
+    return <Query query={query} variables={controlledVariables} errorPolicy={errorPolicy} children={this.renderProp} {...rest} />;
   }
 }
 
@@ -161,6 +222,8 @@ DocList.propTypes = {
   renderOrderByControls: PropTypes.func,
   renderNoResults: PropTypes.func,
   locations: PropTypes.object,
+  useConnection: PropTypes.bool,
+  first: PropTypes.number,
 };
 DocList.defaultProps = {
   fragmentName: 'default',
@@ -180,6 +243,8 @@ DocList.defaultProps = {
     top: ['pagination', 'where', 'order-by'],
     bottom: ['pagination'],
   },
+  useConnection: true,
+  first: 3,
 };
 
 

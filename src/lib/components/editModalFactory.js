@@ -6,6 +6,7 @@ import Modal from '@material-ui/core/Modal';
 import { compose } from 'react-apollo';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -29,6 +30,12 @@ function editModalFactory(collection, styles) {
     renderSaveButton = saveDoc => (
       <Button onClick={saveDoc} variant="contained" color="primary">
         <SaveIcon />Save
+      </Button>
+    )
+
+    renderCancelButton = handleClose => (
+      <Button onClick={handleClose} variant="contained" color="secondary">
+        <CancelIcon />Cancel
       </Button>
     )
 
@@ -57,6 +64,7 @@ function editModalFactory(collection, styles) {
       const buttonRenderFuncs = {
         renderSaveButton: renderFuncs.renderSaveButton,
         renderDeleteButton: renderFuncs.renderDeleteButton,
+        renderCancelButton: renderFuncs.renderCancelButton,
       };
 
       return (
@@ -77,6 +85,7 @@ function editModalFactory(collection, styles) {
         <div className="buttons">
           {renderFuncs.renderSaveButton(saveDoc)}
           {renderFuncs.renderDeleteButton(deleteDoc)}
+          {renderFuncs.renderCancelButton(deleteDoc)}
         </div>
       );
     }
@@ -91,6 +100,7 @@ function editModalFactory(collection, styles) {
         renderButtons: this.props.renderButtons || this.renderButtons,
         renderSaveButton: this.props.renderSaveButton || this.renderSaveButton,
         renderDeleteButton: this.props.renderDeleteButton || this.renderDeleteButton,
+        renderCancelButton: this.props.renderCancelButton || this.renderCancelButton,
         renderTitle: this.props.renderTitle || this.renderTitle,
         renderErrors: this.props.renderErrors || this.renderErrors,
       };
@@ -121,6 +131,7 @@ function editModalFactory(collection, styles) {
     renderButtons: PropTypes.func,
     renderSaveButton: PropTypes.func,
     renderDeleteButton: PropTypes.func,
+    renderCancelButton: PropTypes.func,
     renderTitle: PropTypes.func,
     renderErrors: PropTypes.func,
     title: PropTypes.string,
@@ -131,6 +142,7 @@ function editModalFactory(collection, styles) {
     renderButtons: null,
     renderSaveButton: null,
     renderDeleteButton: null,
+    renderCancelButton: null,
     renderTitle: null,
     renderErrors: null,
     title: 'Edit',

@@ -34,6 +34,7 @@ const generateInitialFields = (props, collection) => {
       name: fieldName,
       value,
       error: null,
+      touched: false,
     };
   });
 
@@ -85,7 +86,7 @@ function withCrudMutations(options) {
       setFieldValue = (name, value, cb) => {
         this.setState((state) => {
           _.set(state.fields, `${name}.value`, value);
-          _.set(state.fields, `${name}.name`, name);
+          _.set(state.fields, `${name}.touched`, true);
           return state;
         }, cb);
       }
@@ -94,7 +95,7 @@ function withCrudMutations(options) {
         this.setState((state) => {
           if(name) {
             _.set(state.fields, `${name}.error`, error);
-            _.set(state.fields, `${name}.name`, name);
+            // _.set(state.fields, `${name}.name`, name);
           }
           return state;
         }, cb);
@@ -199,9 +200,11 @@ function withCrudMutations(options) {
         if((operation !== 'create') && isNew) throw new Error(`Cannot "${operation}" on new document.`);
         if((operation === 'create') && !isNew) throw new Error('Cannot create a non-new document.');
 
-        const data = { ...doc, id: undefined };
         const mutateFunc = this.props[`${operation}Mutation`];
         const pascalType = camelToPascal(collection.type);
+
+        // Strip off props we don't need or haven't changed to make data object
+        const data = _.pickBy(doc, (value, fieldName) => this.state.fields[fieldName].touched);
 
         mutateFunc({
           variables: {
