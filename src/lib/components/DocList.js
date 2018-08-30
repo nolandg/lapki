@@ -9,37 +9,20 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Typography from '@material-ui/core/Typography';
 
+import { CrudMutator } from './CrudMutator';
 import { pascalToCamel } from '../utils/stringUtils';
 // import gqlError from '../utils/gqlError';
 
 class DocList extends Component {
-  buildQuery = (collection, fragmentName, useConnection) => {
-    const operationName = `${pluralize.plural(collection.type)}List${useConnection ? 'Connection' : ''}`;
-    const queryName = pluralize.plural(pascalToCamel(collection.type)) + (useConnection ? 'Connection' : '');
+  buildQuery = (collection, fragmentName) => {
+    const uniqueTag = DocList.queryCount;
+    DocList.queryCount += 1;
+    const operationName = `${pluralize.plural(collection.type)}ListConnectionDocList${uniqueTag}`;
+    const queryName = `${pluralize.plural(pascalToCamel(collection.type))}Connection`;
     const fragment = collection.fragments[fragmentName];
     const fragmentDefinitionName = fragment.definitions[0].name.value;
-    //
-    // const variables = '$skip: Int!, $first: Int!';
-    //
-    // const queryArgs = `
-    //   skip: $skip,
-    //   first: $first,
-    // `;
-    //
-    // if(!useConnection) {
-    //   return gql`
-    //     ${fragment}
-    //
-    //     query ${operationName}(${variables})
-    //     {
-    //       ${queryName}{
-    //         ...${fragmentDefinitionName}
-    //       }
-    //     }
-    //   `;
-    // }
 
-    return gql`
+    const query = gql`
       ${fragment}
 
       query ${operationName}($skip: Int!, $first: Int!)
@@ -61,13 +44,21 @@ class DocList extends Component {
         }
       }
     `;
+
+    return { query, operationName };
   }
 
   constructor(props) {
     super(props);
+    const { collection, fragmentName } = props;
+
     this.state = {
       skip: 0,
     };
+
+    const { query, operationName } = this.buildQuery(collection, fragmentName);
+    this.query = query;
+    CrudMutator.registerQuery(operationName);
   }
 
   renderLoading = result => <div>Loading...</div>
@@ -148,22 +139,17 @@ class DocList extends Component {
   }
 
   renderProp = (result) => {
-    const { renderLoaded, render, collection, useConnection } = this.props;
+    const { renderLoaded, render, collection } = this.props;
     const { data, networkStatus, error } = result;
     const loading = networkStatus === 1;
 
     // Normalize the result a bit
-    let queryName = pascalToCamel(pluralize.plural(collection.type));
-    if(useConnection) queryName += 'Connection';
+    const queryName = `${pascalToCamel(pluralize.plural(collection.type))}Connection`;
     if(!loading && !error) {
       const queryData = data[queryName];
-      if(useConnection) {
-        result.docs = queryData.edges.map(edge => edge.node);
-        result.totalDocs = queryData.aggregate.count;
-        result.pageInfo = queryData.pageInfo;
-      }else{
-        result.docs = queryData;
-      }
+      result.docs = queryData.edges.map(edge => edge.node);
+      result.totalDocs = queryData.aggregate.count;
+      result.pageInfo = queryData.pageInfo;
     }
 
     if(render) {
@@ -211,9 +197,8 @@ class DocList extends Component {
   }
 
   render() {
-    const { collection, fragmentName, errorPolicy, useConnection, first, variables, ...rest } = this.props;
+    const { collection, fragmentName, errorPolicy, first, variables, ...rest } = this.props;
     const { skip } = this.state;
-    const query = this.buildQuery(collection, fragmentName, useConnection);
 
     const controlledVariables = {
       ...variables,
@@ -223,7 +208,7 @@ class DocList extends Component {
 
     return (
       <Query
-        query={query}
+        query={this.query}
         variables={controlledVariables}
         errorPolicy={errorPolicy}
         notifyOnNetworkStatusChange
@@ -250,7 +235,6 @@ DocList.propTypes = {
   renderOrderByControls: PropTypes.func,
   renderNoResults: PropTypes.func,
   locations: PropTypes.object,
-  useConnection: PropTypes.bool,
   first: PropTypes.number,
 };
 DocList.defaultProps = {
@@ -271,9 +255,10 @@ DocList.defaultProps = {
     top: ['pagination'],
     bottom: ['pagination'],
   },
-  useConnection: true,
   first: 3,
 };
+
+DocList.queryCount = 0;
 
 
 export { DocList };
