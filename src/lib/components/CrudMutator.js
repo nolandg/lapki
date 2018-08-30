@@ -14,11 +14,11 @@ import generateMutation from '../utils/generateMutation';
 //     value: 'My Title',
 //     error: 'Too short',
 //   }
-const generateInitialFields = ({ document, collection }) => {
+const generateInitialFields = ({ document, collection, fields: fieldsToInclude }) => {
   const { schema } = collection;
   const fields = {};
 
-  Object.keys(schema.fields).forEach((fieldName) => {
+  fieldsToInclude.forEach((fieldName) => {
     const schemaField = schema.fields[fieldName];
 
     // Firs try to get initial value from document
@@ -168,13 +168,6 @@ class CrudMutator extends Component {
     return castDoc;
   }
 
-  deleteDoc = async () => {
-    this.clearErrors();
-    const id = _.get(this.props, 'document.id');
-    if(!id) throw Error('Cannot delete a document without id.');
-    this.mutate({ id }, 'delete');
-  }
-
   handleMutationSuccess = () => {
     console.log('Mutation successful');
   }
@@ -186,15 +179,17 @@ class CrudMutator extends Component {
     this.setGlobalError(error.message);
   }
 
-  renderButtons = ({ create }) => (
+  renderButtons = ({ createComponent, updateComponent, deleteComponent }) => (
     <div>
-      {create}
+      {createComponent}
+      {updateComponent}
+      {deleteComponent}
     </div>
   )
 
-  handleCreateDoc = async (mutate) => {
+  handleCreateDoc = async (mutate, result) => {
     const doc = await this.prepareToSaveDoc();
-    if(!doc) return;
+    if(!doc) return; // must have failed validation
 
     mutate({
       variables: {
@@ -203,11 +198,55 @@ class CrudMutator extends Component {
     });
   }
 
-  renderCreateButton = (mutate, result) => {
+  handleUpdateDoc = async (mutate, result) => {
+    const doc = await this.prepareToSaveDoc();
+    if(!doc) return; // must have failed validation
+    const id = doc.id;
+    if(!id) throw Error('Cannot update a document without id.');
+
+    mutate({
+      variables: {
+        where: { id },
+        data: doc,
+      },
+    });
+  }
+
+  handleDeleteDoc = async (mutate, result) => {
+    this.clearErrors();
+    const id = _.get(this.props, 'document.id');
+    if(!id) throw Error('Cannot delete a document without id.');
+
+    mutate({
+      variables: {
+        where: { id },
+      },
+    });
+  }
+
+  renderCreateButton = (handleCreateDoc, result) => {
     const { loading } = result;
     return (
-      <Button disabled={loading} onClick={() => { this.handleCreateDoc(mutate, result); }}>
+      <Button disabled={loading} onClick={handleCreateDoc}>
         Create
+      </Button>
+    );
+  }
+
+  renderUpdateButton = (handleUpdateDoc, result) => {
+    const { loading } = result;
+    return (
+      <Button disabled={loading} onClick={handleUpdateDoc}>
+        Update
+      </Button>
+    );
+  }
+
+  renderDeleteButton = (handleDeleteDoc, result) => {
+    const { loading } = result;
+    return (
+      <Button disabled={loading} onClick={handleDeleteDoc}>
+        Delete
       </Button>
     );
   }
@@ -220,10 +259,15 @@ class CrudMutator extends Component {
       collection,
       renderButtons: propRenderButtons,
       renderCreateButton: propRenderCreateButton,
+      renderUpdateButton: propRenderUpdateButton,
+      renderDeleteButton: propRenderDeleteButton,
+      fields,
       ...rest
     } = this.props;
     const renderButtons = propRenderButtons || this.renderButtons;
     const renderCreateButton = this.props.renderCreateButton || this.renderCreateButton;
+    const renderUpdateButton = this.props.renderUpdateButton || this.renderUpdateButton;
+    const renderDeleteButton = this.props.renderDeleteButton || this.renderDeleteButton;
     const errors = this.extractErrorsFromFields();
     const { globalErrors } = this.state;
     const fieldProps = {
@@ -234,13 +278,23 @@ class CrudMutator extends Component {
     const commonMutationProps = {
       onCompleted: this.handleMutationSuccess,
       onError: this.handleMutationError,
+      refetchQueries: result => CrudMutator.queryRegistry,
     };
 
     const crudMutationComponents = {
-      create: <Mutation
+      createComponent: <Mutation
         mutation={this.createMutation}
-        children={renderCreateButton}
-        refetchQueries={result => CrudMutator.queryRegistry}
+        children={(mutate, result) => renderCreateButton(() => this.handleCreateDoc(mutate, result), result)}
+        {...commonMutationProps}
+      />,
+      updateComponent: <Mutation
+        mutation={this.updateMutation}
+        children={(mutate, result) => renderUpdateButton(() => this.handleUpdateDoc(mutate, result), result)}
+        {...commonMutationProps}
+      />,
+      deleteComponent: <Mutation
+        mutation={this.deleteMutation}
+        children={(mutate, result) => renderDeleteButton(() => this.handleDeleteDoc(mutate, result), result)}
         {...commonMutationProps}
       />,
     };
@@ -261,13 +315,18 @@ CrudMutator.propTypes = {
   fragmentName: PropTypes.string,
   renderButtons: PropTypes.func,
   renderCreateButton: PropTypes.func,
+  renderUpdateButton: PropTypes.func,
+  renderDeleteButton: PropTypes.func,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  fields: PropTypes.array.isRequired,
 };
 CrudMutator.defaultProps = {
   document: undefined,
   fragmentName: 'default',
   renderButtons: null,
   renderCreateButton: null,
+  renderUpdateButton: null,
+  renderDeleteButton: null,
   as: 'div',
 };
 

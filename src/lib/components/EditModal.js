@@ -3,45 +3,43 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
-import { compose } from 'react-apollo';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
-import { withStyles } from '@material-ui/core/styles';
 
-import { crudModalHelper } from '../HOCs'; // eslint-disable-line import/no-extraneous-dependencies
 
-function editModalFactory(collection, styles) {
-  styles = styles || (theme => ({
-    modalContainer: {
-      position: 'absolute',
-      width: theme.spacing.unit * 50,
-      backgroundColor: theme.palette.background.paper,
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing.unit * 4,
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  }));
+class EditModal extends Component {
+    renderCreateButton = (handleCreateDoc, result) => {
+      const { loading } = result;
+      return (
+        <Button onClick={handleCreateDoc} variant="contained" color="primary" disabled={loading}>
+          <SaveIcon />Save
+        </Button>
+      );
+    }
 
-  class EditModalWithoutHOCs extends Component {
-    renderSaveButton = saveDoc => (
-      <Button onClick={saveDoc} variant="contained" color="primary">
-        <SaveIcon />Save
-      </Button>
-    )
+    renderUpdateButton = (handleUpdateDoc, result) => {
+      const { loading } = result;
+      return (
+        <Button onClick={handleUpdateDoc} variant="contained" color="primary" disabled={loading}>
+          <SaveIcon />Save
+        </Button>
+      );
+    }
+
+    renderDeleteButton = (handleDeleteDoc, result) => {
+      const { loading } = result;
+      return (
+        <Button onClick={handleDeleteDoc} disabled={loading}>
+          <DeleteIcon />Delete
+        </Button>
+      );
+    }
 
     renderCancelButton = handleClose => (
-      <Button onClick={handleClose} variant="contained" color="secondary">
+      <Button onClick={handleClose}>
         <CancelIcon />Cancel
-      </Button>
-    )
-
-    renderDeleteButton = deleteDoc => (
-      <Button onClick={deleteDoc} variant="contained" color="secondary">
-        <DeleteIcon />Delete
       </Button>
     )
 
@@ -52,7 +50,7 @@ function editModalFactory(collection, styles) {
     )
 
     renderTitle = () => (
-      <Typography variant="title" id="modal-title">
+      <Typography variant="title">
         {this.props.title}
       </Typography>
     )
@@ -115,45 +113,50 @@ function editModalFactory(collection, styles) {
         </div>
       );
     }
-  }
-  EditModalWithoutHOCs.propTypes = {
-    modalOpen: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    handleOpen: PropTypes.func.isRequired,
-    fieldProps: PropTypes.object.isRequired,
-    classes: PropTypes.object.isRequired,
-    saveDoc: PropTypes.func.isRequired,
-    deleteDoc: PropTypes.func.isRequired,
-    globalErrors: PropTypes.array.isRequired,
-    renderForm: PropTypes.func.isRequired,
-    renderTrigger: PropTypes.func,
-    renderContainer: PropTypes.func,
-    renderButtons: PropTypes.func,
-    renderSaveButton: PropTypes.func,
-    renderDeleteButton: PropTypes.func,
-    renderCancelButton: PropTypes.func,
-    renderTitle: PropTypes.func,
-    renderErrors: PropTypes.func,
-    title: PropTypes.string,
-  };
-  EditModalWithoutHOCs.defaultProps = {
-    renderTrigger: null,
-    renderContainer: null,
-    renderButtons: null,
-    renderSaveButton: null,
-    renderDeleteButton: null,
-    renderCancelButton: null,
-    renderTitle: null,
-    renderErrors: null,
-    title: 'Edit',
-  };
-
-  const EditModal = compose(
-    withStyles(styles),
-    crudModalHelper({ collection }),
-  )(EditModalWithoutHOCs);
-
-  return EditModal;
 }
+EditModal.propTypes = {
+  modalOpen: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  handleOpen: PropTypes.func.isRequired,
+  fieldProps: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  saveDoc: PropTypes.func.isRequired,
+  deleteDoc: PropTypes.func.isRequired,
+  globalErrors: PropTypes.array.isRequired,
+  renderForm: PropTypes.func.isRequired,
+  renderTrigger: PropTypes.func,
+  renderContainer: PropTypes.func,
+  renderButtons: PropTypes.func,
+  renderSaveButton: PropTypes.func,
+  renderDeleteButton: PropTypes.func,
+  renderCancelButton: PropTypes.func,
+  renderTitle: PropTypes.func,
+  renderErrors: PropTypes.func,
+  title: PropTypes.string,
+};
+EditModal.defaultProps = {
+  renderTrigger: null,
+  renderContainer: null,
+  renderButtons: null,
+  renderSaveButton: null,
+  renderDeleteButton: null,
+  renderCancelButton: null,
+  renderTitle: null,
+  renderErrors: null,
+  title: 'Edit',
+};
 
-export { editModalFactory };
+EditModal.defaultStyles = (theme => ({
+  modalContainer: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
+}));
+
+export { EditModal };
