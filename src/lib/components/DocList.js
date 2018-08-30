@@ -1,19 +1,13 @@
-/**
- * HOC to provide a reactive query that registers itself with the mutation handler
-   and refetches the query when needed.
-
-   Takes query and variables as arguments.
-
-
-   eg: withReactiveQuery(POSTS_QUERY, { start: 0, limit: 3 })(PostsList);
- */
-
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import Button from '@material-ui/core/Button';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Typography from '@material-ui/core/Typography';
 
 import { pascalToCamel } from '../utils/stringUtils';
 // import gqlError from '../utils/gqlError';
@@ -101,11 +95,32 @@ class DocList extends Component {
     </div>
   )
 
-  renderPaginationControls = (location, result) => (
-    <div className="pagination">
-      Pagination Controls Here
-    </div>
-  )
+  gotoNextPage = () => {
+    this.setState(state => ({ skip: state.skip + this.props.first }));
+  }
+
+  gotoPreviousPage = () => {
+    this.setState(state => ({ skip: state.skip - this.props.first }));
+  }
+
+  renderPaginationControls = (location, { gotoPreviousPage, gotoNextPage }, { pageInfo, totalDocs }) => {
+    const { skip } = this.state;
+    const { first } = this.props;
+    const totalPages = Math.ceil(totalDocs / first);
+    const pageNumber = Math.ceil(skip / first) + 1;
+
+    // Prisma is bizzare with pageInfo's has next/prev page flags so we need to calculate these ourselves
+    const hasNextPage = skip + first < totalDocs;
+    const hasPreviousPage = skip > 0;
+
+    return (
+      <div className="pagination">
+        <Button onClick={gotoPreviousPage} disabled={!hasPreviousPage}><ChevronLeftIcon />Prev</Button>
+        <Typography variant="body1" component="span">Page {pageNumber} of {totalPages}</Typography>
+        <Button onClick={gotoNextPage} disabled={!hasNextPage}>Next<ChevronRightIcon /></Button>
+      </div>
+    );
+  }
 
   renderWhereControls = (location, result) => <div>Where Controls Here</div>
 
@@ -118,9 +133,14 @@ class DocList extends Component {
     const showWhere = controlsAtLocation.includes('where');
     const showOrderBy = controlsAtLocation.includes('order-by');
 
+    const paginationFuncs = {
+      gotoNextPage: this.gotoNextPage,
+      gotoPreviousPage: this.gotoPreviousPage,
+    };
+
     return (
       <div className="doc-list-controls">
-        {showPagination ? renderPaginationControls(location, result) : null}
+        {showPagination ? renderPaginationControls(location, paginationFuncs, result) : null}
         {showWhere ? renderWhereControls(location, result) : null}
         {showOrderBy ? renderOrderByControls(location, result) : null}
       </div>
@@ -129,7 +149,8 @@ class DocList extends Component {
 
   renderProp = (result) => {
     const { renderLoaded, render, collection, useConnection } = this.props;
-    const { data, loading, error } = result;
+    const { data, networkStatus, error } = result;
+    const loading = networkStatus === 1;
 
     // Normalize the result a bit
     let queryName = pascalToCamel(pluralize.plural(collection.type));
@@ -195,14 +216,21 @@ class DocList extends Component {
     const query = this.buildQuery(collection, fragmentName, useConnection);
 
     const controlledVariables = {
-      ...this.props.variables,
+      ...variables,
       skip,
       first,
     };
 
-    console.log(variables);
-
-    return <Query query={query} variables={controlledVariables} errorPolicy={errorPolicy} children={this.renderProp} {...rest} />;
+    return (
+      <Query
+        query={query}
+        variables={controlledVariables}
+        errorPolicy={errorPolicy}
+        notifyOnNetworkStatusChange
+        children={this.renderProp}
+        {...rest}
+      />
+    );
   }
 }
 
@@ -240,7 +268,7 @@ DocList.defaultProps = {
   renderOrderByControls: null,
   renderNoResults: null,
   locations: {
-    top: ['pagination', 'where', 'order-by'],
+    top: ['pagination'],
     bottom: ['pagination'],
   },
   useConnection: true,
