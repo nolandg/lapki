@@ -25,6 +25,7 @@ export const withFormField = function (WrappedComponent) {
          value: typeof defaultValue !== 'undefined' ? defaultValue : '',
          error: false,
        };
+       const { loading, disabled } = fieldProps;
        const theseFieldProps = { ...defaults, ...fieldProps.fields[name] };
        const { error } = theseFieldProps;
 
@@ -45,6 +46,7 @@ export const withFormField = function (WrappedComponent) {
            onChange={this.onChange}
            helperText={helperTextWithError}
            error={!!error}
+           disabled={disabled || loading}
            {...theseFieldProps}
            {...rest}
          />

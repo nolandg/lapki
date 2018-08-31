@@ -8,6 +8,8 @@ import gqlError from '../utils/gqlError';
 import generateMutation from '../utils/generateMutation';
 // import { camelToPascal } from '../utils/stringUtils';
 
+const EXPECTED_REQUESTED_TIME = 2000;
+
 // Example field:
 //   {
 //     name: 'title',
@@ -17,6 +19,7 @@ import generateMutation from '../utils/generateMutation';
 const generateInitialFields = ({ document, collection, fields: fieldsToInclude }) => {
   const { schema } = collection;
   const fields = {};
+  if(!fieldsToInclude.includes('id')) fieldsToInclude.push('id');
 
   fieldsToInclude.forEach((fieldName) => {
     const schemaField = schema.fields[fieldName];
@@ -59,6 +62,8 @@ class CrudMutator extends Component {
     fields: generateInitialFields(props),
     globalErrors: [],
     firstSaveAttempted: false,
+    loading: false,
+    expectedProgress: 100,
   })
 
   componentDidUpdate = (prevProps) => {
@@ -67,11 +72,7 @@ class CrudMutator extends Component {
     }
   }
 
-  isNew = () => {
-    const { document } = this.props;
-    if(document && (document.id || document.id)) return false;
-    return true;
-  }
+  isNew = () => !_.get(this.props, 'document.id')
 
   getFields = () => {
     const fields = [];
@@ -168,29 +169,39 @@ class CrudMutator extends Component {
     return castDoc;
   }
 
+  startMutation = () => {
+    this.setState({ loading: true, expectedProgress: 0 });
+    const intervalTime = 100;
+    const step = 100 / (EXPECTED_REQUESTED_TIME / intervalTime);
+    this.expectedProgressInterval = setInterval(
+      () => this.setState(state => ({ expectedProgress: state.expectedProgress + step })),
+      intervalTime,
+    );
+  }
+
+  finishMutation = () => {
+    this.setState({ loading: false, expectedProgress: 100 });
+    clearInterval(this.expectedProgressInterval);
+  }
+
   handleMutationSuccess = () => {
+    this.finishMutation();
     console.log('Mutation successful');
   }
 
   handleMutationError = (error) => {
+    this.finishMutation();
     console.error('Mutation Error: ', error);
 
     error = gqlError(error);
     this.setGlobalError(error.message);
   }
 
-  renderButtons = ({ createComponent, updateComponent, deleteComponent }) => (
-    <div>
-      {createComponent}
-      {updateComponent}
-      {deleteComponent}
-    </div>
-  )
-
   handleCreateDoc = async (mutate, result) => {
     const doc = await this.prepareToSaveDoc();
     if(!doc) return; // must have failed validation
 
+    this.startMutation();
     mutate({
       variables: {
         data: doc,
@@ -204,6 +215,10 @@ class CrudMutator extends Component {
     const id = doc.id;
     if(!id) throw Error('Cannot update a document without id.');
 
+    // We can't send id for updates
+    delete doc.id;
+
+    this.startMutation();
     mutate({
       variables: {
         where: { id },
@@ -217,6 +232,7 @@ class CrudMutator extends Component {
     const id = _.get(this.props, 'document.id');
     if(!id) throw Error('Cannot delete a document without id.');
 
+    this.startMutation();
     mutate({
       variables: {
         where: { id },
@@ -224,55 +240,36 @@ class CrudMutator extends Component {
     });
   }
 
-  renderCreateButton = (handleCreateDoc, result) => {
-    const { loading } = result;
-    return (
-      <Button disabled={loading} onClick={handleCreateDoc}>
+  renderCreateButton = (handleCreateDoc, loading, result) => (
+    <Button disabled={loading} onClick={handleCreateDoc}>
         Create
-      </Button>
-    );
-  }
+    </Button>
+  )
 
-  renderUpdateButton = (handleUpdateDoc, result) => {
-    const { loading } = result;
-    return (
-      <Button disabled={loading} onClick={handleUpdateDoc}>
+  renderUpdateButton = (handleUpdateDoc, loading, result) => (
+    <Button disabled={loading} onClick={handleUpdateDoc}>
         Update
-      </Button>
-    );
-  }
+    </Button>
+  )
 
-  renderDeleteButton = (handleDeleteDoc, result) => {
-    const { loading } = result;
-    return (
-      <Button disabled={loading} onClick={handleDeleteDoc}>
+  renderDeleteButton = (handleDeleteDoc, loading, result) => (
+    <Button disabled={loading} onClick={handleDeleteDoc}>
         Delete
-      </Button>
-    );
-  }
+    </Button>
+  )
 
   render() {
-    const {
-      as: As,
-      renderForm,
-      fragmentName,
-      collection,
-      renderButtons: propRenderButtons,
-      renderCreateButton: propRenderCreateButton,
-      renderUpdateButton: propRenderUpdateButton,
-      renderDeleteButton: propRenderDeleteButton,
-      fields,
-      ...rest
-    } = this.props;
-    const renderButtons = propRenderButtons || this.renderButtons;
+    const isNew = this.isNew();
+    const { children } = this.props;
     const renderCreateButton = this.props.renderCreateButton || this.renderCreateButton;
     const renderUpdateButton = this.props.renderUpdateButton || this.renderUpdateButton;
     const renderDeleteButton = this.props.renderDeleteButton || this.renderDeleteButton;
     const errors = this.extractErrorsFromFields();
-    const { globalErrors } = this.state;
+    const { globalErrors, loading, expectedProgress } = this.state;
     const fieldProps = {
       onChange: this.handleFieldValueChange,
       fields: this.state.fields,
+      loading,
     };
 
     const commonMutationProps = {
@@ -284,36 +281,30 @@ class CrudMutator extends Component {
     const crudMutationComponents = {
       createComponent: <Mutation
         mutation={this.createMutation}
-        children={(mutate, result) => renderCreateButton(() => this.handleCreateDoc(mutate, result), result)}
+        children={(mutate, result) => renderCreateButton(() => this.handleCreateDoc(mutate, result), loading, result)}
         {...commonMutationProps}
       />,
       updateComponent: <Mutation
         mutation={this.updateMutation}
-        children={(mutate, result) => renderUpdateButton(() => this.handleUpdateDoc(mutate, result), result)}
+        children={(mutate, result) => renderUpdateButton(() => this.handleUpdateDoc(mutate, result), loading, result)}
         {...commonMutationProps}
       />,
       deleteComponent: <Mutation
         mutation={this.deleteMutation}
-        children={(mutate, result) => renderDeleteButton(() => this.handleDeleteDoc(mutate, result), result)}
+        children={(mutate, result) => renderDeleteButton(() => this.handleDeleteDoc(mutate, result), loading, result)}
         {...commonMutationProps}
       />,
     };
 
-    return (
-      <As {...rest}>
-        {renderForm({ fieldProps, errors, globalErrors })}
-        {renderButtons(crudMutationComponents)}
-      </As>
-    );
+    return children({ fieldProps, errors, globalErrors, crudMutationComponents, isNew, loading, expectedProgress });
   }
 }
 
 CrudMutator.propTypes = {
   document: PropTypes.object,
   collection: PropTypes.object.isRequired,
-  renderForm: PropTypes.func.isRequired,
   fragmentName: PropTypes.string,
-  renderButtons: PropTypes.func,
+  children: PropTypes.func.isRequired,
   renderCreateButton: PropTypes.func,
   renderUpdateButton: PropTypes.func,
   renderDeleteButton: PropTypes.func,
@@ -323,7 +314,6 @@ CrudMutator.propTypes = {
 CrudMutator.defaultProps = {
   document: undefined,
   fragmentName: 'default',
-  renderButtons: null,
   renderCreateButton: null,
   renderUpdateButton: null,
   renderDeleteButton: null,
