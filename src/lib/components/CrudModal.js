@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import HelpIcon from '@material-ui/icons/Help';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -109,28 +110,31 @@ class CrudModal extends Component {
     this.setState({ confirmDialogOpen: true });
   }
 
-  renderConfirmDialog = deleteComponent => (
-    <Dialog
-      fullScreen={this.props.fullScreen}
-      open={this.state.confirmDialogOpen}
-      onClose={this.handleClose}
-      aria-labelledby="delete-confirm-dialog-title"
-    >
-      <DialogTitle id="delete-confirm-dialog-title">Are you sure?</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        {deleteComponent}
-        <Button onClick={this.handleConfirmDialogClose} color="primary" autoFocus>
+  renderConfirmDialog = (deleteComponent) => {
+    const { renderDeleteConfirmTitle, renderDeleteConfirmContent, document, classes } = this.props;
+    const title = renderDeleteConfirmTitle(document, classes, HelpIcon);
+    const content = renderDeleteConfirmContent(document);
+
+    return (
+      <Dialog
+        fullScreen={this.props.fullScreen}
+        open={this.state.confirmDialogOpen}
+        onClose={this.handleClose}
+        aria-labelledby="delete-confirm-dialog-title"
+      >
+        <DialogTitle id="delete-confirm-dialog-title">{title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{content}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          {deleteComponent}
+          <Button onClick={this.handleConfirmDialogClose} color="primary" autoFocus>
           Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 
   render() {
     const { open } = this.state;
@@ -164,11 +168,9 @@ class CrudModal extends Component {
         {mutatorArg => (
           <div>
             {renderTrigger(this.open)}
-
             <Modal open={open} onClose={this.close}>
               {renderContainer(renderFuncs, mutatorArg)}
             </Modal>
-
             {this.renderConfirmDialog(mutatorArg.crudMutationComponents.deleteComponent)}
           </div>
         )}
@@ -195,6 +197,8 @@ CrudModal.propTypes = {
   fragmentName: PropTypes.string,
   fields: PropTypes.array.isRequired,
   fullScreen: PropTypes.bool,
+  renderDeleteConfirmTitle: PropTypes.func,
+  renderDeleteConfirmContent: PropTypes.func,
 };
 CrudModal.defaultProps = {
   renderTrigger: null,
@@ -210,6 +214,8 @@ CrudModal.defaultProps = {
   fragmentName: 'default',
   document: undefined,
   fullScreen: false,
+  renderDeleteConfirmTitle: (doc, classes, Icon) => <span className={classes.confirmDeleteTitle}><Icon className={classes.confirmDeleteHelpIcon} />Confirm Delete</span>,
+  renderDeleteConfirmContent: doc => 'Are you sure you want to delete this?',
 };
 
 CrudModal = withMobileDialog()(CrudModal);
@@ -227,6 +233,14 @@ CrudModal.defaultStyles = (theme => ({
   },
   circularProgress: {
     height: '.5em',
+  },
+  confirmDeleteTitle: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  confirmDeleteHelpIcon: {
+    fontSize: '35px',
+    marginRight: theme.spacing.unit,
   },
 }));
 
