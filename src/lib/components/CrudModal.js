@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HelpIcon from '@material-ui/icons/Help';
@@ -61,28 +60,46 @@ class CrudModal extends Component {
     </Button>
   )
 
-  renderTitle = () => (
-    <Typography variant="title">
-      {this.props.title}
-    </Typography>
+  renderTitle = document => (
+    <span><EditIcon />{this.props.title}</span>
   )
 
-  renderErrors = errors => errors.map(error => <div key={error}>Error: {error}</div>)
-
-  renderContainer = (renderFuncs, mutatorArg) => {
-    const { fieldProps, globalErrors, expectedProgress, loading } = mutatorArg;
+  renderError = (error) => {
     const { classes } = this.props;
-    const variant = (expectedProgress > 100) && loading ? 'indeterminate' : 'determinate';
-
     return (
-      <div className={classes.modalContainer}>
-        {renderFuncs.renderTitle()}
-        {renderFuncs.renderErrors(globalErrors)}
-        {renderFuncs.renderForm(fieldProps)}
-        {renderFuncs.renderButtons(mutatorArg)}
-        <LinearProgress variant={variant} value={expectedProgress} />
+      <div key={error} className={classes.error}>
+        Error: {error}
       </div>
     );
+  }
+
+  renderErrors = (errors) => {
+    const { classes } = this.props;
+    const renderError = this.props.renderError || this.renderError;
+
+    return (
+      <div className={classes.errorList}>
+        {errors.map(renderError)}
+      </div>
+    );
+  }
+
+  renderDialogParts = (renderFuncs, mutatorArg) => {
+    const { fieldProps, globalErrors, expectedProgress, loading } = mutatorArg;
+    const { classes, document } = this.props;
+    const variant = (expectedProgress > 100) && loading ? 'indeterminate' : 'determinate';
+
+    return [
+      <DialogTitle key="title">{renderFuncs.renderTitle(document)}</DialogTitle>,
+      <DialogContent key="content">
+        {renderFuncs.renderErrors(globalErrors)}
+        {renderFuncs.renderForm(fieldProps)}
+      </DialogContent>,
+      <DialogActions key="actions" className={classes.dialogActions}>
+        {renderFuncs.renderButtons(mutatorArg)}
+      </DialogActions>,
+      <LinearProgress variant={variant} value={expectedProgress} key="progress" className={classes.linearProgress} />,
+    ];
   }
 
   renderButtons = ({ isNew, crudMutationComponents, loading }) => {
@@ -138,8 +155,8 @@ class CrudModal extends Component {
 
   render() {
     const { open } = this.state;
-    const { collection, fragmentName, fields, document } = this.props;
-    const renderContainer = this.props.renderContainer || this.renderContainer;
+    const { collection, fragmentName, fields, document, classes } = this.props;
+    const renderDialogParts = this.props.renderDialogParts || this.renderDialogParts;
     const renderTrigger = this.props.renderTrigger || this.renderTrigger;
 
     const renderCreateButton = this.props.renderCreateButton || this.renderCreateButton;
@@ -168,9 +185,9 @@ class CrudModal extends Component {
         {mutatorArg => (
           <div>
             {renderTrigger(this.open)}
-            <Modal open={open} onClose={this.close}>
-              {renderContainer(renderFuncs, mutatorArg)}
-            </Modal>
+            <Dialog open={open} onClose={this.close} fullScreen={this.props.fullScreen} classes={{ paper: classes.dialogPaper }}>
+              {renderDialogParts(renderFuncs, mutatorArg)}
+            </Dialog>
             {this.renderConfirmDialog(mutatorArg.crudMutationComponents.deleteComponent)}
           </div>
         )}
@@ -183,7 +200,7 @@ CrudModal.propTypes = {
   classes: PropTypes.object.isRequired,
   renderForm: PropTypes.func.isRequired,
   renderTrigger: PropTypes.func,
-  renderContainer: PropTypes.func,
+  renderDialogParts: PropTypes.func,
   renderButtons: PropTypes.func,
   renderCreateButton: PropTypes.func,
   renderUpdateButton: PropTypes.func,
@@ -199,15 +216,17 @@ CrudModal.propTypes = {
   fullScreen: PropTypes.bool,
   renderDeleteConfirmTitle: PropTypes.func,
   renderDeleteConfirmContent: PropTypes.func,
+  renderError: PropTypes.func,
 };
 CrudModal.defaultProps = {
   renderTrigger: null,
-  renderContainer: null,
+  renderDialogParts: null,
   renderButtons: null,
   renderCreateButton: null,
   renderUpdateButton: null,
   renderDeleteButton: null,
   renderCancelButton: null,
+  renderError: null,
   renderTitle: null,
   renderErrors: null,
   title: 'Edit',
@@ -220,28 +239,27 @@ CrudModal.defaultProps = {
 
 CrudModal = withMobileDialog()(CrudModal);
 
-CrudModal.defaultStyles = (theme => ({
-  modalContainer: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+CrudModal.defaultStyles = theme => ({
+  dialogPaper: {
+    position: 'relative',
+  },
+  dialogActions: {
+    marginBottom: theme.spacing.unit * 6,
   },
   circularProgress: {
     height: '.5em',
-  },
-  confirmDeleteTitle: {
-    display: 'flex',
-    alignItems: 'center',
   },
   confirmDeleteHelpIcon: {
     fontSize: '35px',
     marginRight: theme.spacing.unit,
   },
-}));
+  linearProgress: {
+    position: 'absolute',
+    height: '32px',
+    left: '0',
+    right: '0',
+    bottom: '0',
+  },
+});
 
 export { CrudModal };
