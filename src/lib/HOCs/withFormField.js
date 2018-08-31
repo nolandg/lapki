@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 /**
  * Base form field class HOC
  */
-const formFieldStyles = () => ({
+const formFieldStyles = theme => ({
   errorHelpText: {
     fontSize: '1.2em',
     fontWeight: 'bold',

@@ -7,8 +7,13 @@ import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 import { CrudMutator } from './CrudMutator'; // eslint-disable-line import/no-extraneous-dependencies
 
@@ -17,6 +22,7 @@ class CrudModal extends Component {
     super(props);
     this.state = {
       open: false,
+      confirmDialogOpen: false,
     };
   }
 
@@ -32,19 +38,19 @@ class CrudModal extends Component {
 
   renderUpdateButton = (handleUpdateDoc, loading, result) => (
     <Button onClick={handleUpdateDoc} variant="contained" color="primary" disabled={loading}>
-      <SaveIcon />Save
+      <SaveIcon /> Save
     </Button>
   )
 
   renderDeleteButton = (handleDeleteDoc, loading, result) => (
-    <Button onClick={handleDeleteDoc} disabled={loading}>
-      <DeleteIcon />Delete
+    <Button onClick={handleDeleteDoc} disabled={loading} autoFocus>
+      <DeleteIcon /> Delete
     </Button>
   )
 
   renderCancelButton = handleClose => (
     <Button onClick={handleClose}>
-      <CancelIcon />Cancel
+      <CancelIcon /> Cancel
     </Button>
   )
 
@@ -65,7 +71,7 @@ class CrudModal extends Component {
   renderContainer = (renderFuncs, mutatorArg) => {
     const { fieldProps, globalErrors, expectedProgress, loading } = mutatorArg;
     const { classes } = this.props;
-    const variant = (expectedProgress >= 100) && loading ? 'indeterminate' : 'determinate';
+    const variant = (expectedProgress > 100) && loading ? 'indeterminate' : 'determinate';
 
     return (
       <div className={classes.modalContainer}>
@@ -78,16 +84,53 @@ class CrudModal extends Component {
     );
   }
 
-  renderButtons = ({ isNew, crudMutationComponents }) => {
-    const { createComponent, updateComponent, deleteComponent } = crudMutationComponents;
+  renderButtons = ({ isNew, crudMutationComponents, loading }) => {
+    const { createComponent, updateComponent } = crudMutationComponents;
 
     return (
       <div className="buttons">
         {isNew ? createComponent : updateComponent}
-        {deleteComponent}
+        <Button onClick={this.handleConfirmDialogOpe} disabled={loading}>
+          <DeleteIcon /> Delete
+        </Button>
       </div>
     );
   }
+
+  handleMutationSuccess = () => {
+    this.close();
+  }
+
+  handleConfirmDialogClose = () => {
+    this.setState({ confirmDialogOpen: false });
+  }
+
+  handleConfirmDialogOpe = () => {
+    this.setState({ confirmDialogOpen: true });
+  }
+
+  renderConfirmDialog = deleteComponent => (
+    <Dialog
+      fullScreen={this.props.fullScreen}
+      open={this.state.confirmDialogOpen}
+      onClose={this.handleClose}
+      aria-labelledby="delete-confirm-dialog-title"
+    >
+      <DialogTitle id="delete-confirm-dialog-title">Are you sure?</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+              Let Google help apps determine location. This means sending anonymous location data to
+              Google, even when no apps are running.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        {deleteComponent}
+        <Button onClick={this.handleConfirmDialogClose} color="primary" autoFocus>
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 
   render() {
     const { open } = this.state;
@@ -116,6 +159,7 @@ class CrudModal extends Component {
         renderCreateButton={renderCreateButton}
         renderUpdateButton={renderUpdateButton}
         renderDeleteButton={renderDeleteButton}
+        onMutationSuccess={this.handleMutationSuccess}
       >
         {mutatorArg => (
           <div>
@@ -124,12 +168,15 @@ class CrudModal extends Component {
             <Modal open={open} onClose={this.close}>
               {renderContainer(renderFuncs, mutatorArg)}
             </Modal>
+
+            {this.renderConfirmDialog(mutatorArg.crudMutationComponents.deleteComponent)}
           </div>
         )}
       </CrudMutator>
     );
   }
 }
+
 CrudModal.propTypes = {
   classes: PropTypes.object.isRequired,
   renderForm: PropTypes.func.isRequired,
@@ -147,6 +194,7 @@ CrudModal.propTypes = {
   collection: PropTypes.object.isRequired,
   fragmentName: PropTypes.string,
   fields: PropTypes.array.isRequired,
+  fullScreen: PropTypes.bool,
 };
 CrudModal.defaultProps = {
   renderTrigger: null,
@@ -161,7 +209,10 @@ CrudModal.defaultProps = {
   title: 'Edit',
   fragmentName: 'default',
   document: undefined,
+  fullScreen: false,
 };
+
+CrudModal = withMobileDialog()(CrudModal);
 
 CrudModal.defaultStyles = (theme => ({
   modalContainer: {
@@ -173,6 +224,9 @@ CrudModal.defaultStyles = (theme => ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+  },
+  circularProgress: {
+    height: '.5em',
   },
 }));
 

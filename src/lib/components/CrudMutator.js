@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Button from '@material-ui/core/Button';
 import qatch from 'await-to-js';
-import gqlError from '../utils/gqlError';
 import generateMutation from '../utils/generateMutation';
+import gqlError from '../utils/gqlError';
 // import { camelToPascal } from '../utils/stringUtils';
 
-const EXPECTED_REQUESTED_TIME = 2000;
+const EXPECTED_REQUESTED_TIME = 500;
 
 // Example field:
 //   {
@@ -52,6 +52,7 @@ class CrudMutator extends Component {
     super(props);
     const { collection, fragmentName } = props;
     this.state = this.generateInitialState(props);
+    // this.state.expectedProgress = 0;
 
     this.createMutation = generateMutation('create', collection, fragmentName);
     this.updateMutation = generateMutation('update', collection, fragmentName);
@@ -63,7 +64,7 @@ class CrudMutator extends Component {
     globalErrors: [],
     firstSaveAttempted: false,
     loading: false,
-    expectedProgress: 100,
+    expectedProgress: 0,
   })
 
   componentDidUpdate = (prevProps) => {
@@ -171,7 +172,7 @@ class CrudMutator extends Component {
 
   startMutation = () => {
     this.setState({ loading: true, expectedProgress: 0 });
-    const intervalTime = 100;
+    const intervalTime = 50;
     const step = 100 / (EXPECTED_REQUESTED_TIME / intervalTime);
     this.expectedProgressInterval = setInterval(
       () => this.setState(state => ({ expectedProgress: state.expectedProgress + step })),
@@ -181,20 +182,33 @@ class CrudMutator extends Component {
 
   finishMutation = () => {
     this.setState({ loading: false, expectedProgress: 100 });
+    setTimeout(() => {
+      // if(!this.state.loading) this.setState({ expectedProgress: 0 });
+    }, 1000);
+    clearInterval(this.expectedProgressInterval);
+  }
+
+  componentWillUnmount = () => {
     clearInterval(this.expectedProgressInterval);
   }
 
   handleMutationSuccess = () => {
+    const { onMutationSuccess } = this.props;
+
     this.finishMutation();
+    if(onMutationSuccess) setTimeout(onMutationSuccess, 1000);
     console.log('Mutation successful');
   }
 
   handleMutationError = (error) => {
+    const { onMutationError } = this.props;
     this.finishMutation();
-    console.error('Mutation Error: ', error);
+
+    if(onMutationError) onMutationError();
 
     error = gqlError(error);
     this.setGlobalError(error.message);
+    console.error('Mutation Error: ', error);
   }
 
   handleCreateDoc = async (mutate, result) => {
@@ -308,6 +322,8 @@ CrudMutator.propTypes = {
   renderCreateButton: PropTypes.func,
   renderUpdateButton: PropTypes.func,
   renderDeleteButton: PropTypes.func,
+  onMutationError: PropTypes.func,
+  onMutationSuccess: PropTypes.func,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   fields: PropTypes.array.isRequired,
 };
@@ -317,6 +333,8 @@ CrudMutator.defaultProps = {
   renderCreateButton: null,
   renderUpdateButton: null,
   renderDeleteButton: null,
+  onMutationError: null,
+  onMutationSuccess: null,
   as: 'div',
 };
 
