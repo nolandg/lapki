@@ -9,7 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Typography from '@material-ui/core/Typography';
 
-import { CrudMutator } from './CrudMutator';
+import { Mutator } from './Mutator';
 import { pascalToCamel } from '../utils/stringUtils';
 // import gqlError from '../utils/gqlError';
 
@@ -58,7 +58,7 @@ class DocList extends Component {
 
     const { query, operationName } = this.buildQuery(collection, fragmentName);
     this.query = query;
-    CrudMutator.registerQuery(operationName);
+    Mutator.registerQuery(operationName);
   }
 
   renderLoading = result => <div>Loading...</div>

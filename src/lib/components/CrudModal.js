@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HelpIcon from '@material-ui/icons/Help';
 import CancelIcon from '@material-ui/icons/Cancel';
+import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,6 +15,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import _ from 'lodash';
 
 import { CrudMutator } from './CrudMutator'; // eslint-disable-line import/no-extraneous-dependencies
 
@@ -29,6 +31,8 @@ class CrudModal extends Component {
   open = () => this.setState({ open: true })
 
   close = () => this.setState({ open: false })
+
+  isNew = () => !_.get(this.props, 'document.id')
 
   renderCreateButton = (handleCreateDoc, loading, result) => (
     <Button onClick={handleCreateDoc} variant="contained" color="primary" disabled={loading}>
@@ -56,7 +60,8 @@ class CrudModal extends Component {
 
   renderTrigger = handleOpen => (
     <Button onClick={handleOpen} variant="contained" color="secondary">
-      <EditIcon />Edit
+      {this.isNew() ? <AddIcon /> : <EditIcon /> }
+      {this.isNew() ? 'Create' : 'Edit / Delete'}
     </Button>
   )
 
@@ -102,12 +107,12 @@ class CrudModal extends Component {
     ];
   }
 
-  renderButtons = ({ isNew, crudMutationComponents, loading }) => {
-    const { createComponent, updateComponent } = crudMutationComponents;
+  renderButtons = ({ isNew, mutationComponents, loading }) => {
+    const { create, update } = mutationComponents;
 
     return (
       <div className="buttons">
-        {isNew ? createComponent : updateComponent}
+        {isNew ? create : update}
         <Button onClick={this.handleConfirmDialogOpe} disabled={loading}>
           <DeleteIcon /> Delete
         </Button>
@@ -188,7 +193,7 @@ class CrudModal extends Component {
             <Dialog open={open} onClose={this.close} fullScreen={this.props.fullScreen} classes={{ paper: classes.dialogPaper }}>
               {renderDialogParts(renderFuncs, mutatorArg)}
             </Dialog>
-            {this.renderConfirmDialog(mutatorArg.crudMutationComponents.deleteComponent)}
+            {this.renderConfirmDialog(mutatorArg.mutationComponents.delete)}
           </div>
         )}
       </CrudMutator>
