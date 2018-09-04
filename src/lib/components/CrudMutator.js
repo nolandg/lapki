@@ -74,8 +74,11 @@ class CrudMutator extends Component {
   }
 
   render() {
+    const { fields, ...rest } = this.props;
+    if(!fields.includes('id')) fields.push('id');
+
     return (
-      <Mutator operations={this.operations} {...this.props} />
+      <Mutator operations={this.operations} fields={fields} {...rest} />
     );
   }
 }

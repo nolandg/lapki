@@ -15,10 +15,9 @@ class Mutator extends Component {
     this.state = this.buildInitialState(props);
   }
 
-  buildInitialFields = ({ document, collection, fields: fieldsToInclude }) => {
+  buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues }) => {
     const { schema } = collection;
     const fields = {};
-    if(!fieldsToInclude.includes('id')) fieldsToInclude.push('id');
 
     fieldsToInclude.forEach((fieldName) => {
       const schemaField = schema.fields[fieldName];
@@ -27,8 +26,10 @@ class Mutator extends Component {
       let value = document ? document[fieldName] : undefined;
       if(value === undefined) {
         // No document available or this field isn't in the document
-        // Get a default value from schema
-        value = schemaField.default();
+
+        // First try a default value from passed in defaultValues
+        // otherwise fallback to schema default
+        value = _.get(defaultValues, fieldName, schemaField.default());
       }
 
       _.set(fields, fieldName, {
@@ -175,16 +176,20 @@ class Mutator extends Component {
   }
 
   componentWillUnmount = () => {
+    const { onMutationSuccess } = this.props;
     clearInterval(this.expectedProgressInterval);
     clearTimeout(this.onMutationsSuccessTimeout);
-    this.props.onMutationSuccess();
+    if(onMutationSuccess) this.callMutationSuccess();
   }
 
-  handleMutationSuccess = () => {
+  handleMutationSuccess = (result) => {
     const { onMutationSuccess } = this.props;
 
     this.finishMutation();
-    if(onMutationSuccess) this.onMutationsSuccessTimeout = setTimeout(onMutationSuccess, 1000);
+    if(onMutationSuccess) {
+      this.callMutationSuccess = () => onMutationSuccess(result);
+      this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
+    }
     console.log('Mutation successful');
   }
 
