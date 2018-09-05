@@ -5,14 +5,14 @@ import { BatchHttpLink } from 'apollo-link-batch-http';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import fetch from 'isomorphic-fetch';
 import { onError } from 'apollo-link-error';
 import chalk from 'chalk';
 import { isBrowser } from 'browser-or-node';
 import { withClientState } from 'apollo-link-state';
+import fetch from 'node-fetch';
 
 // Create the Apollo Client
-function createApolloClient(options) {
+function createApolloClient(options, request) {
   const defaultOptions = {
     ssrMode: false,
     uri: 'http://localhost:4000/graphql',
@@ -32,15 +32,14 @@ function createApolloClient(options) {
   const httpLinkSettings = {
     uri: options.uri,
     credentials: 'include',
-    fetch,
-    fetchOptions: {
-      credentials: 'include',
-      batchMax: options.batchMax,
-      method: 'GET',
-      batchInterval: options.batchInterval,
-    },
+    fetch: !isBrowser ? fetch : undefined,
   };
 
+  if(!isBrowser) {
+    httpLinkSettings.headers = {
+      cookie: request.headers.cookie,
+    };
+  }
 
   const httpLink = options.useBatchHttpLink ? new BatchHttpLink(httpLinkSettings) : createHttpLink(httpLinkSettings);
 
@@ -72,7 +71,9 @@ function createApolloClient(options) {
   //* ************** Context link for auth ***************
   // Add the auth token to the headers with context link only if we're on the browser
   // Compose the http and error links
-  const authLink = setContext((_, { headers }) => {
+  const authLink = setContext((dunno, ctx) => {
+    let { headers } = ctx;
+
     if(isBrowser) {
       // get the authentication token from local storage and add to headers
       const token = window.localStorage.getItem('lapki_auth_token');

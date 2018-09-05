@@ -45,7 +45,7 @@ export const create = (options, server) => {
       if(typeof options.appHeaders === 'function') res.set(options.appHeaders(req, res));
       else res.set(options.appHeaders);
 
-      const client = createApolloClient(options.apolloClientOptions);
+      const client = createApolloClient(options.apolloClientOptions, req);
 
       const customRenderer = async (node) => {
         const App = <ApolloProvider client={client}>{node}</ApolloProvider>;

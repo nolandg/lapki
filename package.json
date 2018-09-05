@@ -14,7 +14,7 @@
     "@material-ui/core": "^1.4.2",
     "@material-ui/icons": "^3.0.1",
     "apollo-cache-inmemory": "^1.2.5",
-    "apollo-client": "^2.3.5",
+    "apollo-client": "^2.4.1",
     "apollo-link-batch-http": "^1.2.2",
     "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.4",
@@ -64,6 +64,7 @@
     "chalk": "^2.4.1",
     "isomorphic-fetch": "^2.2.1",
     "json-stringify-safe": "^5.0.1",
+    "node-fetch": "^2.2.0",
     "pluralize": "^7.0.0",
     "react-router-dom": "^4.3.1",
     "youch": "git+https://github.com/nolandg/youch.git#896474c"
