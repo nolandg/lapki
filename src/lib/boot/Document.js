@@ -22,7 +22,6 @@ export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) =>
 
   if(error) {
     // ToDo: decide if error is fatal?
-    // I don't think so, child components should decide this for themselves?
     const fatal = true;
     if(fatal) {
       throw error;
@@ -30,7 +29,7 @@ export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) =>
   }
   return { assets, data, error, sheetsRegistry, ...page };
 };
-
+ 
 // eslint-disable-next-line react/prop-types
 export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistry }) => {
   // get attributes from React Helmet

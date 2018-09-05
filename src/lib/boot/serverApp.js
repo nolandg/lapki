@@ -22,7 +22,7 @@ export const create = (options, server) => {
     razzleAssetsManifestPath: '',
     apolloClientOptions: {},
     customGetInitialPropsArgs: {},
-    isDataTreeErrorFatal: error => false, /* eslint-disable-line no-unused-vars */
+    isDataTreeErrorFatal: error => false,
     customRenderer: null,
     onError: null,
     overrideDefaultErrorHandler: false,
@@ -32,6 +32,7 @@ export const create = (options, server) => {
     document: Document,
   };
   options = { ...defaultOptions, ...options };
+  options.apolloClientOptions = { ...options.apolloClientOptions, ssrMode: true };
 
   const assets = require(options.razzleAssetsManifestPath);
 
@@ -44,7 +45,7 @@ export const create = (options, server) => {
       if(typeof options.appHeaders === 'function') res.set(options.appHeaders(req, res));
       else res.set(options.appHeaders);
 
-      const client = createApolloClient({ ssrMode: true });
+      const client = createApolloClient(options.apolloClientOptions);
 
       const customRenderer = async (node) => {
         const App = <ApolloProvider client={client}>{node}</ApolloProvider>;

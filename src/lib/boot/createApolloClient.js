@@ -15,8 +15,8 @@ import { withClientState } from 'apollo-link-state';
 function createApolloClient(options) {
   const defaultOptions = {
     ssrMode: false,
-    uri: 'http://localhost:4000',
-    useBatchHttpLink: true,
+    uri: 'http://localhost:4000/graphql',
+    useBatchHttpLink: false,
     batchMax: 10,
     batchInterval: 100,
     onError: null,
@@ -31,13 +31,16 @@ function createApolloClient(options) {
   //* ************** HTTP Link ***************
   const httpLinkSettings = {
     uri: options.uri,
-    credentials: 'same-origin',
+    credentials: 'include',
     fetch,
     fetchOptions: {
+      credentials: 'include',
       batchMax: options.batchMax,
+      method: 'GET',
       batchInterval: options.batchInterval,
     },
   };
+
 
   const httpLink = options.useBatchHttpLink ? new BatchHttpLink(httpLinkSettings) : createHttpLink(httpLinkSettings);
 
@@ -69,45 +72,28 @@ function createApolloClient(options) {
   //* ************** Context link for auth ***************
   // Add the auth token to the headers with context link only if we're on the browser
   // Compose the http and error links
-  const authLink = isBrowser
-    ? (
-      setContext((_, { headers }) => {
-        // get the authentication token from local storage if it exists
-        const token = window.localStorage.getItem('lapki_auth_token');
-        // return the headers to the context so httpLink can read them
-        return {
-          headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : 'none',
-          },
-        };
-      }))
-    : null;
+  const authLink = setContext((_, { headers }) => {
+    if(isBrowser) {
+      // get the authentication token from local storage and add to headers
+      const token = window.localStorage.getItem('lapki_auth_token');
+      if(token) headers = { ...headers, Authorization: `Bearer ${token}` };
+    }
+
+    // add the CSRF header
+    headers = { ...headers, 'x-requested-with': 'XmlHttpRequest' };
+
+    return { headers };
+  });
 
   //* ************** Local state link ***************
-  const stateLinkDefaults = {
-    currentUser: {
-      __typename: 'User',
-      id: '123',
-      name: 'Billy Bob',
-      email: '',
-      roles: [{
-        name: 'annon',
-        title: 'annony',
-        __typename: 'Role',
-      }],
-    },
-  };
-  console.log(stateLinkDefaults);
+  const stateLinkDefaults = {};
   const stateLink = withClientState({
     cache,
     defaults: stateLinkDefaults,
   });
 
   //* ************** Build composed link **************
-  const links = [errorLink, httpLink];
-  if(stateLink) links.unshift(stateLink);
-  if(authLink) links.unshift(authLink);
+  const links = [authLink, stateLink, errorLink, httpLink];
   const link = ApolloLink.from(links);
 
   return new ApolloClient({
