@@ -179,7 +179,7 @@ class Mutator extends Component {
     const { onMutationSuccess } = this.props;
     clearInterval(this.expectedProgressInterval);
     clearTimeout(this.onMutationsSuccessTimeout);
-    if(onMutationSuccess) this.callMutationSuccess();
+    if(onMutationSuccess && this.callMutationSuccess) this.callMutationSuccess();
   }
 
   handleMutationSuccess = (result) => {

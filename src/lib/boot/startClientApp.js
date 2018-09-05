@@ -20,7 +20,6 @@ export default function startClientApp({ routes, muiTheme, apolloClientOptions }
 
   ensureReady(routes).then(data => hydrate(
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-
       <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
         <ApolloProvider client={client}>
           <BrowserRouter>
