@@ -1,15 +1,17 @@
-/* eslint-disable no-use-before-define */
+/* eslint-disable camelcase */
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import chalk from 'chalk';
-import { isBrowser, isNode } from 'browser-or-node';
+import { isNode } from 'browser-or-node';
 import { withClientState } from 'apollo-link-state';
 import fetch from 'node-fetch';
+
+// const cookie = isNode ? require('cookie') : null;
+const cookie = require('cookie');
 
 // Create the Apollo Client
 function createApolloClient(options, request) {
@@ -21,6 +23,7 @@ function createApolloClient(options, request) {
     batchInterval: 100,
     onError: null,
     overrideDefaultErrorHandler: false,
+    tokenExchangeScheme: 'cookie',
   };
   options = { ...defaultOptions, ...options };
 
@@ -32,12 +35,31 @@ function createApolloClient(options, request) {
   const httpLinkSettings = {
     uri: options.uri,
     credentials: 'include',
-    fetch: !isNode ? fetch : undefined,
+    fetch: isNode ? fetch : undefined,
   };
 
+  const antiCsrfHeaders = { 'x-requested-with': 'XmlHttpRequest' };
+
   if(isNode) {
+    // Server/Node
+    const cookiesReceived = cookie.parse(request.headers.cookie || '');
+    const { lapki_auth_token, lapki_auth_token_insecure } = cookiesReceived;
+    let cookieStr = '';
+    if(lapki_auth_token) {
+      cookieStr += `${cookie.serialize('lapki_auth_token', lapki_auth_token)}; `;
+    }
+    if(lapki_auth_token_insecure) {
+      cookieStr += `${cookie.serialize('lapki_auth_token_insecure', lapki_auth_token_insecure)}; `;
+    }
+
     httpLinkSettings.headers = {
-      cookie: request.headers.cookie,
+      cookie: cookieStr,
+      ...antiCsrfHeaders,
+    };
+  }else{
+    // Client/Browser
+    httpLinkSettings.headers = {
+      ...antiCsrfHeaders,
     };
   }
 
@@ -68,24 +90,6 @@ function createApolloClient(options, request) {
     }
   });
 
-  //* ************** Context link for auth ***************
-  // Add the auth token to the headers with context link only if we're on the browser
-  // Compose the http and error links
-  const authLink = setContext((doNotKnowWhatThisArgIs, ctx) => {
-    let { headers } = ctx;
-
-    if(isBrowser) {
-      // get the authentication token from local storage and add to headers
-      const token = window.localStorage.getItem('lapki_auth_token');
-      if(token) headers = { ...headers, Authorization: `Bearer ${token}` };
-    }
-
-    // add the anti-CSRF header
-    headers = { ...headers, 'x-requested-with': 'XmlHttpRequest' };
-
-    return { headers };
-  });
-
   //* ************** Local state link ***************
   const stateLinkDefaults = {};
   const stateLink = withClientState({
@@ -94,7 +98,7 @@ function createApolloClient(options, request) {
   });
 
   //* ************** Build composed link **************
-  const links = [authLink, stateLink, errorLink, httpLink];
+  const links = [stateLink, errorLink, httpLink];
   const link = ApolloLink.from(links);
 
   return new ApolloClient({

@@ -56,12 +56,12 @@
   },
   "dependencies": {
     "apollo-link": "^1.2.2",
-    "apollo-link-context": "^1.0.8",
     "apollo-link-state": "^0.4.1",
     "await-to-js": "^2.0.1",
     "babel-polyfill": "^6.26.0",
     "browser-or-node": "^1.1.0",
     "chalk": "^2.4.1",
+    "cookie": "^0.3.1",
     "isomorphic-fetch": "^2.2.1",
     "json-stringify-safe": "^5.0.1",
     "node-fetch": "^2.2.0",
