@@ -7,7 +7,7 @@ import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import chalk from 'chalk';
-import { isBrowser } from 'browser-or-node';
+import { isBrowser, isNode } from 'browser-or-node';
 import { withClientState } from 'apollo-link-state';
 import fetch from 'node-fetch';
 
@@ -16,7 +16,7 @@ function createApolloClient(options, request) {
   const defaultOptions = {
     ssrMode: false,
     uri: 'http://localhost:4000/graphql',
-    useBatchHttpLink: false,
+    useBatchHttpLink: true,
     batchMax: 10,
     batchInterval: 100,
     onError: null,
@@ -32,10 +32,10 @@ function createApolloClient(options, request) {
   const httpLinkSettings = {
     uri: options.uri,
     credentials: 'include',
-    fetch: !isBrowser ? fetch : undefined,
+    fetch: !isNode ? fetch : undefined,
   };
 
-  if(!isBrowser) {
+  if(isNode) {
     httpLinkSettings.headers = {
       cookie: request.headers.cookie,
     };
@@ -71,7 +71,7 @@ function createApolloClient(options, request) {
   //* ************** Context link for auth ***************
   // Add the auth token to the headers with context link only if we're on the browser
   // Compose the http and error links
-  const authLink = setContext((dunno, ctx) => {
+  const authLink = setContext((doNotKnowWhatThisArgIs, ctx) => {
     let { headers } = ctx;
 
     if(isBrowser) {
@@ -80,7 +80,7 @@ function createApolloClient(options, request) {
       if(token) headers = { ...headers, Authorization: `Bearer ${token}` };
     }
 
-    // add the CSRF header
+    // add the anti-CSRF header
     headers = { ...headers, 'x-requested-with': 'XmlHttpRequest' };
 
     return { headers };
