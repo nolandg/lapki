@@ -7,6 +7,7 @@ import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/sty
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import { JssProvider } from 'react-jss';
 
+import { UserContextProvider } from '../contexts/UserContext';
 import createApolloClient from './createApolloClient';
 
 export default function startClientApp({ routes, muiTheme, apolloClientOptions }) {
@@ -23,7 +24,9 @@ export default function startClientApp({ routes, muiTheme, apolloClientOptions }
       <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
         <ApolloProvider client={client}>
           <BrowserRouter>
-            <After data={data} routes={routes} />
+            <UserContextProvider>
+              <After data={data} routes={routes} />
+            </UserContextProvider>
           </BrowserRouter>
         </ApolloProvider>
       </MuiThemeProvider>

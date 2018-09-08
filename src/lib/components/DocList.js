@@ -178,7 +178,7 @@ class DocList extends Component {
 
     if(renderLoaded) {
       // Parent will render everything after docs are loaded
-      return renderLoaded(result.docs, result);
+      return renderLoaded(result.docs, renderFuncs, result);
     }
 
     // We will render individual docs using our or parent-supplied doc render function

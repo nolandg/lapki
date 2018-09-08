@@ -7,6 +7,8 @@ import { JssProvider } from 'react-jss';
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles';
 
+import { UserContextProvider } from '../contexts/UserContext';
+
 const sheetsRegistry = new SheetsRegistry();
 const sheetsManager = new WeakMap();
 const generateClassName = createGenerateClassName();
@@ -15,7 +17,9 @@ export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) =>
   const [error, page] = await qatch(renderPage(After => props => (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
-        <After {...props} />
+        <UserContextProvider>
+          <After {...props} />
+        </UserContextProvider>
       </MuiThemeProvider>
     </JssProvider>
   )));
@@ -29,7 +33,7 @@ export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) =>
   }
   return { assets, data, error, sheetsRegistry, ...page };
 };
- 
+
 // eslint-disable-next-line react/prop-types
 export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistry }) => {
   // get attributes from React Helmet
