@@ -20,8 +20,14 @@ function withUser(WrappedComponent) {
 
       return (
         <UserContext.Consumer>
-          { user => (
-            <WrappedComponent currentUser={user} {...this.props} logout={() => logout(client)} />
+          { ({ user, loading, error }) => (
+            <WrappedComponent
+              currentUser={user}
+              currentUserLoading={loading}
+              currentUserError={error}
+              logout={() => logout(client)}
+              {...this.props}
+            />
           )}
         </UserContext.Consumer>
       );

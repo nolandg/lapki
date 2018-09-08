@@ -46,8 +46,14 @@ class CrudModal extends Component {
     </Button>
   )
 
-  renderDeleteButton = (handleDeleteDoc, loading, result) => (
+  renderConfirmDeleteButton = (handleDeleteDoc, loading, result) => (
     <Button onClick={handleDeleteDoc} disabled={loading} autoFocus>
+      <DeleteIcon /> Delete
+    </Button>
+  )
+
+  renderDeleteButton = (handleConfirmDialogOpen, loading, result) => (
+    <Button onClick={handleConfirmDialogOpen} disabled={loading}>
       <DeleteIcon /> Delete
     </Button>
   )
@@ -101,21 +107,20 @@ class CrudModal extends Component {
         {renderFuncs.renderForm(fieldProps)}
       </DialogContent>,
       <DialogActions key="actions" className={classes.dialogActions}>
-        {renderFuncs.renderButtons(mutatorArg)}
+        {renderFuncs.renderButtons(renderFuncs, mutatorArg)}
       </DialogActions>,
       <LinearProgress variant={variant} value={expectedProgress} key="progress" className={classes.linearProgress} />,
     ];
   }
 
-  renderButtons = ({ isNew, mutationComponents, loading }) => {
+  renderButtons = (renderFuncs, { isNew, mutationComponents, loading, result }) => {
     const { create, update } = mutationComponents;
 
     return (
       <div className="buttons">
+        {renderFuncs.renderCancelButton(this.close, loading, result)}
+        {renderFuncs.renderDeleteButton(this.handleConfirmDialogOpen, loading, result)}
         {isNew ? create : update}
-        <Button onClick={this.handleConfirmDialogOpe} disabled={loading}>
-          <DeleteIcon /> Delete
-        </Button>
       </div>
     );
   }
@@ -128,7 +133,7 @@ class CrudModal extends Component {
     this.setState({ confirmDialogOpen: false });
   }
 
-  handleConfirmDialogOpe = () => {
+  handleConfirmDialogOpen = () => {
     this.setState({ confirmDialogOpen: true });
   }
 
@@ -151,7 +156,7 @@ class CrudModal extends Component {
         <DialogActions>
           {deleteComponent}
           <Button onClick={this.handleConfirmDialogClose} color="primary" autoFocus>
-          Cancel
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -166,7 +171,7 @@ class CrudModal extends Component {
 
     const renderCreateButton = this.props.renderCreateButton || this.renderCreateButton;
     const renderUpdateButton = this.props.renderUpdateButton || this.renderUpdateButton;
-    const renderDeleteButton = this.props.renderDeleteButton || this.renderDeleteButton;
+    const renderConfirmDeleteButton = this.props.renderConfirmDeleteButton || this.renderConfirmDeleteButton;
 
     const renderFuncs = {
       renderForm: this.props.renderForm || this.renderForm,
@@ -174,6 +179,7 @@ class CrudModal extends Component {
       renderCancelButton: this.props.renderCancelButton || this.renderCancelButton,
       renderTitle: this.props.renderTitle || this.renderTitle,
       renderErrors: this.props.renderErrors || this.renderErrors,
+      renderDeleteButton: this.props.renderDeleteButton || this.renderDeleteButton,
     };
 
     return (
@@ -184,7 +190,7 @@ class CrudModal extends Component {
         document={document}
         renderCreateButton={renderCreateButton}
         renderUpdateButton={renderUpdateButton}
-        renderDeleteButton={renderDeleteButton}
+        renderDeleteButton={renderConfirmDeleteButton}
         onMutationSuccess={this.handleMutationSuccess}
       >
         {mutatorArg => (
@@ -210,6 +216,7 @@ CrudModal.propTypes = {
   renderCreateButton: PropTypes.func,
   renderUpdateButton: PropTypes.func,
   renderDeleteButton: PropTypes.func,
+  renderConfirmDeleteButton: PropTypes.func,
   renderCancelButton: PropTypes.func,
   renderTitle: PropTypes.func,
   renderErrors: PropTypes.func,
@@ -230,6 +237,7 @@ CrudModal.defaultProps = {
   renderCreateButton: null,
   renderUpdateButton: null,
   renderDeleteButton: null,
+  renderConfirmDeleteButton: null,
   renderCancelButton: null,
   renderError: null,
   renderTitle: null,

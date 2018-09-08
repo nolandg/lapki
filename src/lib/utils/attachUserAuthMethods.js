@@ -12,6 +12,8 @@ const extractPermsFromRole = (role) => {
 
 const getFlattenedPerms = (user) => {
   let perms = [];
+  if(!user.roles) return perms;
+  
   user.roles.forEach((r) => { perms = [...perms, ...extractPermsFromRole(r)]; });
   perms = _.uniqBy(perms, 'id');
   return perms;

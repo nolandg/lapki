@@ -26,17 +26,35 @@ class UserContextProvider extends Component {
     const { children } = this.props;
 
     return (
-      <Query query={currentUserQuery} errorPolicy="all">
-        {(result) => {
-          const user = _.get(result, 'data.currentUser');
-          let userWithMethods = null;
+      <Query query={currentUserQuery} errorPolicy="all" notifyOnNetworkStatusChange>
+        {({ networkStatus, error, data }) => {
+          let user;
 
-          if(user) {
-            userWithMethods = { ...user };
-            attachUserAuthMethods(userWithMethods);
+          if(data && data.currentUser) {
+            user = { ...data.currentUser };
+            attachUserAuthMethods(user);
+          }else{
+            user = {
+              isAuthenticated: false,
+              isAnnon: true,
+              canDo: () => false,
+              hasPerm: () => false,
+              hasRole: () => false,
+              canDoOnAny: () => false,
+              canDoOnOwn: () => false,
+              isOwner: () => false,
+            };
           }
 
-          return <UserContext.Provider value={userWithMethods}>{children}</UserContext.Provider>;
+          Object.freeze(user);
+
+          const value = {
+            loading: networkStatus !== 7,
+            error,
+            user,
+          };
+
+          return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
         }}
       </Query>
     );
