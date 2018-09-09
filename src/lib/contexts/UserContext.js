@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import { Mutator } from '../components/Mutator';
 import currentUserFragment from '../utils/currentUserFragment';
+import buildAnnonUser from '../utils/buildAnnonUser';
 import attachUserAuthMethods from '../utils/attachUserAuthMethods';
 
 const currentUserQuery = gql`
@@ -32,19 +33,10 @@ class UserContextProvider extends Component {
 
           if(data && data.currentUser) {
             user = { ...data.currentUser };
-            attachUserAuthMethods(user);
           }else{
-            user = {
-              isAuthenticated: false,
-              isAnnon: true,
-              canDo: () => false,
-              hasPerm: () => false,
-              hasRole: () => false,
-              canDoOnAny: () => false,
-              canDoOnOwn: () => false,
-              isOwner: () => false,
-            };
+            user = buildAnnonUser();
           }
+          attachUserAuthMethods(user);
 
           Object.freeze(user);
 

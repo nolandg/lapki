@@ -255,7 +255,7 @@ DocList.defaultProps = {
     top: ['pagination'],
     bottom: ['pagination'],
   },
-  first: 3,
+  first: 10,
 };
 
 DocList.queryCount = 0;
