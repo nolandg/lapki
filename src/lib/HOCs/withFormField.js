@@ -1,14 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import ErrorIcon from '@material-ui/icons/Error';
 
 /**
  * Base form field class HOC
  */
 const formFieldStyles = theme => ({
-  errorHelpText: {
+  errorMessage: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    color: 'white',
+    backgroundColor: theme.palette.error.main,
+    padding: theme.spacing.unit,
+    paddingRight: theme.spacing.unit * 2,
+    borderRadius: '3px',
+    marginTop: theme.spacing.unit,
     fontSize: '1.2em',
-    fontWeight: 'bold',
+  },
+  errorIcon: {
+    marginRight: theme.spacing.unit,
   },
 });
 
@@ -29,14 +40,20 @@ export const withFormField = function (WrappedComponent) {
        const theseFieldProps = { ...defaults, ...fieldProps.fields[name] };
        const { error } = theseFieldProps;
 
-       const helperTextWithError = (
-         <span>
-           <span className="helpText">{helperText}</span>
-           {error
-             ? <span className={classes.errorHelpText}><br /><br />{error}</span>
-             : null}
-         </span>
-       );
+       let helperTextWithError = helperText;
+
+       if(error) {
+         helperTextWithError = (
+           <Fragment>
+             {helperText}
+             {helperText ? <br /> : null}
+             <span className={classes.errorMessage}>
+               <ErrorIcon className={classes.errorIcon} />
+               {error}
+             </span>
+           </Fragment>
+         );
+       }
 
        delete theseFieldProps.touched;
        delete theseFieldProps.error;
