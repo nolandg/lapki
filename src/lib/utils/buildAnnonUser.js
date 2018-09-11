@@ -1,4 +1,4 @@
-export default {
+export default () => ({
   id: 0,
   email: 'anonymous@anonymous.invalid',
   name: 'anonymous',
@@ -7,4 +7,4 @@ export default {
   roles: [],
   isAuthenticated: false,
   isAnnon: true,
-};
+});

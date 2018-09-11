@@ -1,13 +1,46 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 import { Mutator } from '../components/Mutator';
-import currentUserFragment from '../utils/currentUserFragment';
+// import currentUserFragment from '../utils/currentUserFragment';
 import buildAnnonUser from '../utils/buildAnnonUser';
 import attachUserAuthMethods from '../utils/attachUserAuthMethods';
+
+const currentUserFragment = gql`
+  fragment PermissionFragment on Permission {
+    id
+    name
+    title
+  }
+
+  fragment CurrentUserFragment on User{
+    id
+    name
+    email
+    isAuthenticated
+    isAnnon
+    roles {
+      id
+      name
+      title
+      permissions {
+        ...PermissionFragment
+      }
+      roles {
+        id
+        name
+        title
+        permissions {
+          id
+          name
+          title
+        }
+      }
+    }
+  }
+`;
 
 const currentUserQuery = gql`
   ${currentUserFragment}
