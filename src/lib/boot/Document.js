@@ -6,14 +6,18 @@ import PropTypes from 'prop-types';
 import { JssProvider } from 'react-jss';
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles';
+// import { create as createJss } from 'jss';
+// import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
+// const jss = createJss();
 const sheetsRegistry = new SheetsRegistry();
 const sheetsManager = new WeakMap();
 const generateClassName = createGenerateClassName();
 
 export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) => {
+  // const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
   const [error, page] = await qatch(renderPage(After => props => (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
@@ -39,6 +43,7 @@ export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistr
   // get attributes from React Helmet
   const htmlAttrs = helmet.htmlAttributes.toComponent();
   const bodyAttrs = helmet.bodyAttributes.toComponent();
+  const css = sheetsRegistry.toString();
 
   return (
     <html {...htmlAttrs} lang="en">
@@ -57,7 +62,7 @@ export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistr
         {assets.client.css && (
           <link rel="stylesheet" href={assets.client.css} />
         )}
-        <style type="text/css" id="jss-server-side">{sheetsRegistry.toString()}</style>
+        <style type="text/css" id="jss-server-side" dangerouslySetInnerHTML={{ __html: sheetsRegistry.toString() }} />
       </head>
       <body {...bodyAttrs}>
         <AfterRoot />
