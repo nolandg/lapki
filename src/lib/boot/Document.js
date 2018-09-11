@@ -5,9 +5,9 @@ import qatch from 'await-to-js';
 import PropTypes from 'prop-types';
 import { JssProvider } from 'react-jss';
 import { SheetsRegistry } from 'react-jss/lib/jss';
-import { MuiThemeProvider, createGenerateClassName } from '@material-ui/core/styles';
-// import { create as createJss } from 'jss';
-// import jssExpand from 'jss-expand';
+import { MuiThemeProvider, createGenerateClassName, jssPreset } from '@material-ui/core/styles';
+import { create as createJss } from 'jss';
+import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
@@ -17,9 +17,9 @@ const sheetsManager = new WeakMap();
 const generateClassName = createGenerateClassName();
 
 export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) => {
-  // const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
+  const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
   const [error, page] = await qatch(renderPage(After => props => (
-    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
       <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
         <UserContextProvider>
           <After {...props} />
