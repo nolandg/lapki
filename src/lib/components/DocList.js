@@ -71,9 +71,9 @@ class DocList extends Component {
     const fields = [];
     _.forOwn(doc, (fieldValue, fieldName) => {
       fields.push((
-        <div key={fieldValue} className="field">
-          <span className="field-name">{fieldName}:&nbsp;</span>
-          <span className="field-value">{JSON.stringify(fieldValue)}</span>
+        <div key={fieldValue}>
+          <span>{fieldName}:&nbsp;</span>
+          <span>{JSON.stringify(fieldValue)}</span>
         </div>
       ));
     });
@@ -81,7 +81,7 @@ class DocList extends Component {
   }
 
   renderDoc = doc => (
-    <div className="doc" key={doc.id}>
+    <div key={doc.id}>
       {this.renderFields(doc)}
     </div>
   )
@@ -105,7 +105,7 @@ class DocList extends Component {
     const hasPreviousPage = skip > 0;
 
     return (
-      <div className="pagination">
+      <div>
         <Button onClick={gotoPreviousPage} disabled={!hasPreviousPage}><ChevronLeftIcon />Prev</Button>
         <Typography variant="body1" component="span">Page {pageNumber} of {totalPages}</Typography>
         <Button onClick={gotoNextPage} disabled={!hasNextPage}>Next<ChevronRightIcon /></Button>
@@ -130,7 +130,7 @@ class DocList extends Component {
     };
 
     return (
-      <div className="doc-list-controls">
+      <div>
         {showPagination ? renderPaginationControls(location, paginationFuncs, result) : null}
         {showWhere ? renderWhereControls(location, result) : null}
         {showOrderBy ? renderOrderByControls(location, result) : null}
@@ -169,29 +169,36 @@ class DocList extends Component {
       renderNoResults: this.props.renderNoResults || this.renderNoResults,
     };
 
+    const docs = result.docs;
+
+    console.log('Doc count: ', docs ? docs.length : 'Docs undefined!!');
+
     if(error) {
+      console.log('error');
       return renderFuncs.renderError(error, result);
     }
     if(loading) {
+      console.log('loading');
       return renderFuncs.renderLoading(result);
     }
 
     if(renderLoaded) {
       // Parent will render everything after docs are loaded
-      return renderLoaded(result.docs, renderFuncs, result);
+      return renderLoaded(docs, renderFuncs, result);
     }
 
     // We will render individual docs using our or parent-supplied doc render function
     return (
-      <div className="doc-list">
-        {renderFuncs.renderControls('top', renderFuncs, result)}
-        <div className="list">
-          {result.docs.length
-            ? result.docs.map(renderFuncs.renderDoc)
+      <div>
+        {/* <Typography variant="display2">Hi</Typography> */}
+        {/* {renderFuncs.renderControls('top', renderFuncs, result)}
+        <div>
+          {docs.length
+            ? docs.map(renderFuncs.renderDoc)
             : renderFuncs.renderNoResults(result)
           }
         </div>
-        {renderFuncs.renderControls('bottom', renderFuncs, result)}
+        {renderFuncs.renderControls('bottom', renderFuncs, result)} */}
       </div>
     );
   }

@@ -1,5 +1,5 @@
 Arguments: 
-  /home/noland/.nvm/versions/node/v10.8.0/bin/node /usr/share/yarn/bin/yarn.js add @material-ui/icons: ^2.0.3,
+  /home/noland/.nvm/versions/node/v10.8.0/bin/node /usr/share/yarn/bin/yarn.js install
 
 PATH: 
   /home/noland/.nvm/versions/node/v10.8.0/bin:/usr/lib64/qt-3.3/bin:/home/noland/perl5/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/home/noland/Android/Sdk/tools:/home/noland/Android/Sdk/platform-tools:/home/noland/.local/bin:/home/noland/bin:/home/noland/Android/Sdk/tools:/home/noland/Android/Sdk/platform-tools
@@ -14,17 +14,12 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@material-ui%2ficons:: Not found
-      at Request.params.callback [as _callback] (/usr/share/yarn/lib/cli.js:64202:18)
-      at Request.self.callback (/usr/share/yarn/lib/cli.js:137468:22)
-      at Request.emit (events.js:182:13)
-      at Request.<anonymous> (/usr/share/yarn/lib/cli.js:138440:10)
-      at Request.emit (events.js:182:13)
-      at IncomingMessage.<anonymous> (/usr/share/yarn/lib/cli.js:138362:12)
-      at Object.onceWrapper (events.js:273:13)
-      at IncomingMessage.emit (events.js:187:15)
-      at endReadableNT (_stream_readable.js:1081:12)
-      at process._tickCallback (internal/process/next_tick.js:63:19)
+  SyntaxError: /home/noland/projects/powtown/lapki/package.json: Unexpected token } in JSON at position 889
+      at JSON.parse (<anonymous>)
+      at /usr/share/yarn/lib/cli.js:1130:59
+      at Generator.next (<anonymous>)
+      at step (/usr/share/yarn/lib/cli.js:92:30)
+      at /usr/share/yarn/lib/cli.js:103:13
 
 npm manifest: 
   {
@@ -40,12 +35,6 @@ npm manifest:
       "start": "babel --out-dir=build src -w"
     },
     "devDependencies": {
-      "@material-ui/core": "^1.4.2",
-      "apollo-cache-inmemory": "^1.2.5",
-      "apollo-client": "^2.3.5",
-      "apollo-link-batch-http": "^1.2.2",
-      "apollo-link-error": "^1.1.0",
-      "apollo-link-http": "^1.5.4",
       "babel-cli": "^6.26.0",
       "babel-core": "^6.26.3",
       "babel-eslint": "^8.2.5",
@@ -60,38 +49,40 @@ npm manifest:
       "eslint-plugin-import": "^2.12.0",
       "eslint-plugin-jsx-a11y": "^6.0.3",
       "eslint-plugin-react": "^7.9.1",
-      "express": "^4.16.3",
-      "graphql": "^0.13.2",
-      "graphql-tag": "^2.9.2",
-      "prop-types": "^15.6.2",
-      "react": "^16.4.1",
-      "react-apollo": "^2.1.9",
-      "react-dom": "^16.4.1",
-      "react-dom-server": "^0.0.5",
-      "react-jss": "^8.6.1"
     },
     "peerDependencies": {
+    },
+    "dependencies": {
+      "express": "^4.16.3",
       "@jaredpalmer/after": "^1.3.1",
       "@material-ui/core": "^1.4.2",
-      "apollo-client": "^2.3.5",
       "graphql": "^0.13.2",
       "graphql-tag": "^2.9.2",
       "lodash": "^4.17.10",
       "react": "^16.4.1",
       "react-apollo": "^2.1.9",
       "react-dom": "^16.4.1",
-      "react-jss": "^8.6.1"
-    },
-    "dependencies": {
+      "react-jss": "^8.6.1",
       "apollo-link": "^1.2.2",
-      "apollo-link-context": "^1.0.8",
+      "apollo-link-state": "^0.4.1",
+      "apollo-cache-inmemory": "^1.2.5",
+      "apollo-client": "^2.3.5",
+      "apollo-link": "^1.2.2",
+      "apollo-link-batch-http": "^1.2.2",
+      "apollo-link-error": "^1.1.0",
+      "apollo-link-http": "^1.5.4",
       "await-to-js": "^2.0.1",
       "babel-polyfill": "^6.26.0",
+      "browser-or-node": "^1.1.0",
       "chalk": "^2.4.1",
-      "isomorphic-fetch": "^2.2.1",
+      "cookie": "^0.3.1",
       "json-stringify-safe": "^5.0.1",
+      "jss": "^9.8.7",
+      "jss-expand": "^5.3.0",
+      "node-fetch": "^2.2.0",
       "pluralize": "^7.0.0",
       "react-router-dom": "^4.3.1",
+      "react-router": "^4.3.1",
       "youch": "git+https://github.com/nolandg/youch.git#896474c"
     }
   }
@@ -147,6 +138,12 @@ Lockfile:
       chalk "^2.0.0"
       esutils "^2.0.2"
       js-tokens "^3.0.0"
+  
+  "@babel/runtime@7.0.0", "@babel/runtime@^7.0.0":
+    version "7.0.0"
+    resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
+    dependencies:
+      regenerator-runtime "^0.12.0"
   
   "@babel/runtime@^7.0.0-beta.42":
     version "7.0.0-beta.55"
@@ -219,6 +216,13 @@ Lockfile:
       recompose "^0.27.0"
       warning "^4.0.1"
   
+  "@material-ui/icons@^3.0.1":
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-3.0.1.tgz#671fb3d04dcaf9351dbbd2bf82ae2ae72e3d93cd"
+    dependencies:
+      "@babel/runtime" "7.0.0"
+      recompose "^0.29.0"
+  
   "@types/async@2.0.49":
     version "2.0.49"
     resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.49.tgz#92e33d13f74c895cb9a7f38ba97db8431ed14bc0"
@@ -246,9 +250,9 @@ Lockfile:
     dependencies:
       csstype "^2.2.0"
   
-  "@types/zen-observable@^0.5.3":
-    version "0.5.4"
-    resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.5.4.tgz#b863a4191e525206819e008097ebf0fb2e3a1cdc"
+  "@types/zen-observable@^0.8.0":
+    version "0.8.0"
+    resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"
   
   abbrev@1:
     version "1.1.1"
@@ -325,21 +329,27 @@ Lockfile:
       apollo-utilities "^1.0.16"
       graphql-anywhere "^4.1.14"
   
+  apollo-cache@1.1.16:
+    version "1.1.16"
+    resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.16.tgz#0c7460ee8eff1898462979143b4e922aaba73cf8"
+    dependencies:
+      apollo-utilities "^1.0.20"
+  
   apollo-cache@^1.1.12:
     version "1.1.12"
     resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.12.tgz#070015c9051b2ebb69676beb10466a9c0b259f91"
     dependencies:
       apollo-utilities "^1.0.16"
   
-  apollo-client@^2.3.5:
-    version "2.3.5"
-    resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.3.5.tgz#74b62bd7e7bd7030d01c35e2e221ed65a807af23"
+  apollo-client@^2.4.1:
+    version "2.4.1"
+    resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.4.1.tgz#d2ebaac1831fa170f7d0070bb9d581cccb5f64e3"
     dependencies:
-      "@types/zen-observable" "^0.5.3"
-      apollo-cache "^1.1.12"
+      "@types/zen-observable" "^0.8.0"
+      apollo-cache "1.1.16"
       apollo-link "^1.0.0"
       apollo-link-dedup "^1.0.0"
-      apollo-utilities "^1.0.16"
+      apollo-utilities "1.0.20"
       symbol-observable "^1.0.2"
       zen-observable "^0.8.0"
     optionalDependencies:
@@ -356,12 +366,6 @@ Lockfile:
   apollo-link-batch@^1.1.3:
     version "1.1.3"
     resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-1.1.3.tgz#c1d04256ef41af43e23854fab72cd3986a7648ad"
-    dependencies:
-      apollo-link "^1.2.2"
-  
-  apollo-link-context@^1.0.8:
-    version "1.0.8"
-    resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.8.tgz#c967a56ac6ed32add748937735bcb57c5cc64c95"
     dependencies:
       apollo-link "^1.2.2"
   
@@ -390,6 +394,13 @@ Lockfile:
       apollo-link "^1.2.2"
       apollo-link-http-common "^0.2.4"
   
+  apollo-link-state@^0.4.1:
+    version "0.4.1"
+    resolved "https://registry.yarnpkg.com/apollo-link-state/-/apollo-link-state-0.4.1.tgz#65e9e0e12c67936b8c4b12b8438434f393104579"
+    dependencies:
+      apollo-utilities "^1.0.8"
+      graphql-anywhere "^4.1.0-alpha.0"
+  
   apollo-link@^1.0.0, apollo-link@^1.2.2:
     version "1.2.2"
     resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.2.tgz#54c84199b18ac1af8d63553a68ca389c05217a03"
@@ -397,6 +408,12 @@ Lockfile:
       "@types/graphql" "0.12.6"
       apollo-utilities "^1.0.0"
       zen-observable-ts "^0.8.9"
+  
+  apollo-utilities@1.0.20, apollo-utilities@^1.0.20, apollo-utilities@^1.0.8:
+    version "1.0.20"
+    resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.20.tgz#b14318686cb67838279fb5f009cca0ec97a4d140"
+    dependencies:
+      fast-json-stable-stringify "^2.0.0"
   
   apollo-utilities@^1.0.0, apollo-utilities@^1.0.16:
     version "1.0.16"
@@ -1088,6 +1105,10 @@ Lockfile:
   brcast@^3.0.1:
     version "3.0.1"
     resolved "https://registry.yarnpkg.com/brcast/-/brcast-3.0.1.tgz#6256a8349b20de9eed44257a9b24d71493cd48dd"
+  
+  browser-or-node@^1.1.0:
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/browser-or-node/-/browser-or-node-1.1.0.tgz#e47e8d7701c42d83edab02abc1f6b532a4d6b66d"
   
   browserslist@^3.2.6:
     version "3.2.8"
@@ -1870,6 +1891,12 @@ Lockfile:
     version "4.1.11"
     resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
   
+  graphql-anywhere@^4.1.0-alpha.0:
+    version "4.1.18"
+    resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.18.tgz#29bfc5d42bf8ee1f5cdc9a9857c98c3eb4b7fab4"
+    dependencies:
+      apollo-utilities "^1.0.20"
+  
   graphql-anywhere@^4.1.14:
     version "4.1.14"
     resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.14.tgz#89664cb885faaec1cbc66905351fadae8cc85a04"
@@ -2312,7 +2339,7 @@ Lockfile:
     dependencies:
       css-vendor "^0.3.8"
   
-  jss@^9.3.3, jss@^9.7.0:
+  jss@^9.3.3, jss@^9.7.0, jss@^9.8.7:
     version "9.8.7"
     resolved "https://registry.yarnpkg.com/jss/-/jss-9.8.7.tgz#ed9763fc0f2f0260fc8260dac657af61e622ce05"
     dependencies:
@@ -2517,6 +2544,10 @@ Lockfile:
     dependencies:
       encoding "^0.1.11"
       is-stream "^1.0.1"
+  
+  node-fetch@^2.2.0:
+    version "2.2.0"
+    resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.2.0.tgz#4ee79bde909262f9775f731e3656d0db55ced5b5"
   
   node-pre-gyp@^0.10.0:
     version "0.10.3"
@@ -2984,6 +3015,17 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.27.1.tgz#1a49e931f183634516633bbb4f4edbfd3f38a7ba"
     dependencies:
       babel-runtime "^6.26.0"
+      change-emitter "^0.1.2"
+      fbjs "^0.8.1"
+      hoist-non-react-statics "^2.3.1"
+      react-lifecycles-compat "^3.0.2"
+      symbol-observable "^1.0.4"
+  
+  recompose@^0.29.0:
+    version "0.29.0"
+    resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.29.0.tgz#f1a4e20d5f24d6ef1440f83924e821de0b1bccef"
+    dependencies:
+      "@babel/runtime" "^7.0.0"
       change-emitter "^0.1.2"
       fbjs "^0.8.1"
       hoist-non-react-statics "^2.3.1"

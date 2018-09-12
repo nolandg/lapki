@@ -117,7 +117,7 @@ class CrudModal extends Component {
     const { create, update } = mutationComponents;
 
     return (
-      <div className="buttons">
+      <div>
         {renderFuncs.renderCancelButton(this.close, loading, result)}
         {renderFuncs.renderDeleteButton(this.handleConfirmDialogOpen, loading, result)}
         {isNew ? create : update}

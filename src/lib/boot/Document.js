@@ -11,12 +11,11 @@ import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
-// const jss = createJss();
-const sheetsRegistry = new SheetsRegistry();
-const sheetsManager = new WeakMap();
-const generateClassName = createGenerateClassName();
 
 export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) => {
+  const sheetsRegistry = new SheetsRegistry();
+  const sheetsManager = new WeakMap();
+  const generateClassName = createGenerateClassName();
   const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
   const [error, page] = await qatch(renderPage(After => props => (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
@@ -62,7 +61,7 @@ export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistr
         {assets.client.css && (
           <link rel="stylesheet" href={assets.client.css} />
         )}
-        <style type="text/css" id="jss-server-side" dangerouslySetInnerHTML={{ __html: sheetsRegistry.toString() }} />
+        <style type="text/css" id="jss-server-side" dangerouslySetInnerHTML={{ __html: css }} />
       </head>
       <body {...bodyAttrs}>
         <AfterRoot />

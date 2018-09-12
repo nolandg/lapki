@@ -27,6 +27,7 @@ function createApolloClient(options, request) {
   };
   options = { ...defaultOptions, ...options };
 
+
   const cache = options.ssrMode
     ? new InMemoryCache()
     : new InMemoryCache().restore(window.__APOLLO_STATE__);
@@ -101,11 +102,13 @@ function createApolloClient(options, request) {
   const links = [stateLink, errorLink, httpLink];
   const link = ApolloLink.from(links);
 
-  return new ApolloClient({
+  const apolloClientOptions = {
     ssrMode: options.ssrMode,
     link,
     cache,
-  });
+  };
+
+  return new ApolloClient(apolloClientOptions);
 }
 
 
