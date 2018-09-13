@@ -22,6 +22,7 @@ function withUser(WrappedComponent) {
         <UserContext.Consumer>
           { ({ user, loading, error }) => (
             <WrappedComponent
+              isAuthenticated={user && user.isAuthenticated}
               currentUser={user}
               currentUserLoading={loading}
               currentUserError={error}

@@ -5,6 +5,7 @@
   rules: {
     strict: 0,
     no-class-assign: 0,
+    react/no-unescaped-entities: [2, {"forbid": [">", "}", "\\"]}],
     no-unused-vars: ["error", {"args": "none", "ignoreRestSiblings": true}],
     jsx-a11y/href-no-hash: 0,
     no-unreachable: 1,

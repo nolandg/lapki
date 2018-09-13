@@ -171,8 +171,6 @@ class DocList extends Component {
 
     const docs = result.docs;
 
-    console.log('Doc count: ', docs ? docs.length : 'Docs undefined!!');
-
     if(error) {
       console.log('error');
       return renderFuncs.renderError(error, result);
