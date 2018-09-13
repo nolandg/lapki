@@ -188,15 +188,14 @@ class DocList extends Component {
     // We will render individual docs using our or parent-supplied doc render function
     return (
       <div>
-        {/* <Typography variant="display2">Hi</Typography> */}
-        {/* {renderFuncs.renderControls('top', renderFuncs, result)}
+        {renderFuncs.renderControls('top', renderFuncs, result)}
         <div>
           {docs.length
             ? docs.map(renderFuncs.renderDoc)
             : renderFuncs.renderNoResults(result)
           }
         </div>
-        {renderFuncs.renderControls('bottom', renderFuncs, result)} */}
+        {renderFuncs.renderControls('bottom', renderFuncs, result)}
       </div>
     );
   }
