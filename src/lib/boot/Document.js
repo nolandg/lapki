@@ -9,19 +9,27 @@ import { SheetsRegistry } from 'react-jss/lib/jss';
 import { MuiThemeProvider, createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import { create as createJss } from 'jss';
 import jssExpand from 'jss-expand';
+import _ from 'lodash';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
 const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
 
+/**
+ * The problem is After wraps our Document in ReactRouter's StaticRouter which seems to render our Document
+   once with an empty this.context and then again with this.context.router. This causes JssProvider
+   to run all components through the name generator twice thus royaly fucking things up.
+   So we prevent this by restarting the name generator and (maybe redundantly)
+   passing a flag to tell JssProvider to skip name generation.
+ */
 class RerenderGuard extends React.Component {
   render() {
-    console.log('RerenderGuard rendering...');
-
     const sheetsManager = new WeakMap();
     const generateClassName = createGenerateClassName();
 
-    return this.props.children({ generateClassName, sheetsManager, jss });
+    const disableStylesGeneration = !(this.context && this.context.router);
+
+    return this.props.children({ generateClassName, sheetsManager, disableStylesGeneration });
   }
 }
 RerenderGuard.propTypes = {
@@ -32,8 +40,8 @@ export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apol
   const sheetsRegistry = new SheetsRegistry();
   const [error, page] = await qatch(renderPage(After => props => (
     <RerenderGuard>
-      {({ sheetsManager, generateClassName, jss }) => (
-        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
+      {({ sheetsManager, generateClassName, disableStylesGeneration }) => (
+        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss} disableStylesGeneration={disableStylesGeneration}>
           <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
             <ApolloProvider client={apolloClient}>
               <UserContextProvider>
