@@ -28,9 +28,10 @@ export const create = (options, server) => {
     disablePoweredByLapki: false,
     appHeaders: {}, // object of form {field1: value1, field2: value2} or a function returning such an object
     document: Document,
+    production: false,
   };
   options = { ...defaultOptions, ...options };
-  options.apolloClientOptions = { ...options.apolloClientOptions, ssrMode: true };
+  options.apolloClientOptions = { ...options.apolloClientOptions, ssrMode: true, target: 'server' };
 
   const assets = require(options.razzleAssetsManifestPath);
 
@@ -38,7 +39,7 @@ export const create = (options, server) => {
 
   server
     .use(express.static(options.razzlePublicDir))
-    .get('/', async (req, res, next) => {
+    .get('/*', async (req, res, next) => {
       if(!options.disablePoweredByLapki) res.set('Powered-By', 'Lapki');
       if(typeof options.appHeaders === 'function') res.set(options.appHeaders(req, res));
       else res.set(options.appHeaders);
@@ -75,6 +76,7 @@ export const create = (options, server) => {
           document: options.document,
           muiTheme: options.muiTheme,
           apolloClient: client,
+          production: options.production,
           ...options.customGetInitialPropsArgs,
         });
         res.send(html);

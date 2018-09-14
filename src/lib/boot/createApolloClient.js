@@ -6,12 +6,8 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import chalk from 'chalk';
-import { isNode } from 'browser-or-node';
 import { withClientState } from 'apollo-link-state';
-import fetch from 'node-fetch';
 
-// const cookie = isNode ? require('cookie') : null;
-const cookie = require('cookie');
 
 // Create the Apollo Client
 function createApolloClient(options, request) {
@@ -26,6 +22,15 @@ function createApolloClient(options, request) {
     tokenExchangeScheme: 'cookie',
   };
   options = { ...defaultOptions, ...options };
+  if(!options.target) {
+    throw new Error('You must pass target (client or server) to createApolloClient options arg.');
+  }
+
+  const isServer = options.target === 'server';
+  const cookie = isServer ? require('cookie') : undefined;
+  // const cookie = require('cookie');
+  const fetch = isServer ? require('node-fetch') : undefined;
+  // const fetch = require('node-fetch');
 
 
   const cache = options.ssrMode
@@ -36,12 +41,12 @@ function createApolloClient(options, request) {
   const httpLinkSettings = {
     uri: options.uri,
     credentials: 'include',
-    fetch: isNode ? fetch : undefined,
+    fetch,
   };
 
   const antiCsrfHeaders = { 'x-requested-with': 'XmlHttpRequest' };
 
-  if(isNode) {
+  if(isServer) {
     // Server/Node
     const cookiesReceived = cookie.parse(request.headers.cookie || '');
     const { lapki_auth_token, lapki_auth_token_insecure } = cookiesReceived;

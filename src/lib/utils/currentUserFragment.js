@@ -1,19 +1,19 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  fragment PermissionFragment on Permission{
+  fragment PermissionFragment on Permission {
     id
     name
     title
     description
   }
 
-  fragment RoleFragment on Role{
+  fragment RoleFragment on Role {
     id
     name
     title
     description
-    permissions{
+    permissions {
       ...PermissionFragment
     }
   }
@@ -24,11 +24,16 @@ export default gql`
     email
     isAuthenticated
     isAnnon
-    lastLogin
     roles {
       ...RoleFragment
-      roles{
+      roles {
         ...RoleFragment
+        roles {
+          ...RoleFragment
+          roles {
+            ...RoleFragment
+          }
+        }
       }
     }
   }

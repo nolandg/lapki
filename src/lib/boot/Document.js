@@ -9,7 +9,6 @@ import { SheetsRegistry } from 'react-jss/lib/jss';
 import { MuiThemeProvider, createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 import { create as createJss } from 'jss';
 import jssExpand from 'jss-expand';
-import _ from 'lodash';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
@@ -24,24 +23,35 @@ const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
  */
 class RerenderGuard extends React.Component {
   render() {
+    const { sheetsRegistry, children } = this.props;
     const sheetsManager = new WeakMap();
     const generateClassName = createGenerateClassName();
 
-    const disableStylesGeneration = !(this.context && this.context.router);
+    const disableStylesGeneration = !!(this.context && this.context.router);
 
-    return this.props.children({ generateClassName, sheetsManager, disableStylesGeneration });
+    sheetsRegistry.reset();
+
+    return children({ generateClassName, sheetsManager, disableStylesGeneration });
   }
 }
 RerenderGuard.propTypes = {
   children: PropTypes.func.isRequired,
+  sheetsRegistry: PropTypes.object.isRequired,
+};
+RerenderGuard.defaultProps = {
 };
 
-export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apolloClient }) => {
+export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apolloClient, production }) => {
   const sheetsRegistry = new SheetsRegistry();
   const [error, page] = await qatch(renderPage(After => props => (
-    <RerenderGuard>
+    <RerenderGuard sheetsRegistry={sheetsRegistry}>
       {({ sheetsManager, generateClassName, disableStylesGeneration }) => (
-        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss} disableStylesGeneration={disableStylesGeneration}>
+        <JssProvider
+          registry={sheetsRegistry}
+          generateClassName={generateClassName}
+          jss={jss}
+          disableStylesGeneration={disableStylesGeneration}
+        >
           <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
             <ApolloProvider client={apolloClient}>
               <UserContextProvider>
@@ -106,7 +116,6 @@ export class Document extends React.Component {
   }
 
   render() {
-    console.log('!!Rendering Document...');
     const { helmet, assets, data, initialApolloState, sheetsRegistry, error } = this.props;
     return render({ helmet, assets, data, initialApolloState, sheetsRegistry, error });
   }

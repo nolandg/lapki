@@ -8,39 +8,7 @@ import { Mutator } from '../components/Mutator';
 import buildAnnonUser from '../utils/buildAnnonUser';
 import attachUserAuthMethods from '../utils/attachUserAuthMethods';
 
-const currentUserFragment = gql`
-  fragment PermissionFragment on Permission {
-    id
-    name
-    title
-  }
-
-  fragment CurrentUserFragment on User{
-    id
-    name
-    email
-    isAuthenticated
-    isAnnon
-    roles {
-      id
-      name
-      title
-      permissions {
-        ...PermissionFragment
-      }
-      roles {
-        id
-        name
-        title
-        permissions {
-          id
-          name
-          title
-        }
-      }
-    }
-  }
-`;
+import currentUserFragment from '../utils/currentUserFragment';
 
 const currentUserQuery = gql`
   ${currentUserFragment}
@@ -58,12 +26,10 @@ const UserContext = React.createContext();
 class UserContextProvider extends Component {
   render() {
     const { children } = this.props;
-    console.log('UserContext rendering...');
 
     return (
       <Query query={currentUserQuery} errorPolicy="all" notifyOnNetworkStatusChange>
         {({ networkStatus, error, data }) => {
-          console.log('Query render prop of UserContext rendering...');
           let user;
 
           if(data && data.currentUser) {
