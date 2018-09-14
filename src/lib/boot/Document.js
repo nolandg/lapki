@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 import * as React from 'react';
 import { AfterRoot, AfterData } from '@jaredpalmer/after';
+import { ApolloProvider } from 'react-apollo';
 import qatch from 'await-to-js';
 import PropTypes from 'prop-types';
 import { JssProvider } from 'react-jss';
@@ -11,21 +12,59 @@ import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
+class RerenderGuard extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('Should RerenderGuard rerender??');
+    return true;
+  }
 
-export const getInitialProps = async ({ assets, data, renderPage, muiTheme }) => {
+  render() {
+    console.log('RerenderGuard rendering...');
+
+    const generateClassName = createGenerateClassName();
+    const sheetsManager = new WeakMap();
+    const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
+
+    return this.props.children({ generateClassName, sheetsManager, jss });
+  }
+}
+RerenderGuard.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const Logger = ({ label, children }) => {
+  console.log(`In::: ${label}...`);
+  return children;
+};
+
+
+export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apolloClient }) => {
+  console.log('Get initial props func');
   const sheetsRegistry = new SheetsRegistry();
-  const sheetsManager = new WeakMap();
-  const generateClassName = createGenerateClassName();
-  const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
-  const [error, page] = await qatch(renderPage(After => props => (
-    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
-      <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
-        <UserContextProvider>
-          <After {...props} />
-        </UserContextProvider>
-      </MuiThemeProvider>
-    </JssProvider>
-  )));
+  const [error, page] = await qatch(renderPage(After => (props) => {
+    console.log(' rendering...');
+    return(
+      <RerenderGuard>
+        {({ sheetsManager, generateClassName, jss }) => (
+          <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
+            <Logger label="JssProvider">
+              <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
+                <ApolloProvider client={apolloClient}>
+                  <Logger label="MuiThemeProvider">
+                    <UserContextProvider>
+                      <Logger label="UserContext">
+                        <After {...props} />
+                      </Logger>
+                    </UserContextProvider>
+                  </Logger>
+                </ApolloProvider>
+              </MuiThemeProvider>
+            </Logger>
+          </JssProvider>
+        )}
+      </RerenderGuard>
+    );
+  }));
 
   if(error) {
     // ToDo: decide if error is fatal?

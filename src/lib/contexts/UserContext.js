@@ -58,10 +58,12 @@ const UserContext = React.createContext();
 class UserContextProvider extends Component {
   render() {
     const { children } = this.props;
+    console.log('UserContext rendering...');
 
     return (
       <Query query={currentUserQuery} errorPolicy="all" notifyOnNetworkStatusChange>
         {({ networkStatus, error, data }) => {
+          console.log('Query render prop of UserContext rendering...');
           let user;
 
           if(data && data.currentUser) {

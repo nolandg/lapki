@@ -1,12 +1,10 @@
-import React from 'react';
 import express from 'express';
 import { render } from '@jaredpalmer/after';
 import { renderToString } from 'react-dom/server';
-import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { getDataFromTree } from 'react-apollo';
 import stringifySafe from 'json-stringify-safe';
 import chalk from 'chalk';
 import qatch from 'await-to-js';
-import Youch from 'youch';
 
 import createApolloClient from './createApolloClient';
 import { Document, getInitialProps, render as documentRender } from './Document';
@@ -40,7 +38,7 @@ export const create = (options, server) => {
 
   server
     .use(express.static(options.razzlePublicDir))
-    .get('/*', async (req, res, next) => {
+    .get('/', async (req, res, next) => {
       if(!options.disablePoweredByLapki) res.set('Powered-By', 'Lapki');
       if(typeof options.appHeaders === 'function') res.set(options.appHeaders(req, res));
       else res.set(options.appHeaders);
@@ -48,7 +46,7 @@ export const create = (options, server) => {
       const client = createApolloClient(options.apolloClientOptions, req);
 
       const customRenderer = async (node) => {
-        const App = <ApolloProvider client={client}>{node}</ApolloProvider>;
+        const App = node;
 
         const [treeError] = await qatch(getDataFromTree(App));
         if(treeError) {
@@ -76,20 +74,13 @@ export const create = (options, server) => {
           customRenderer: options.customRenderer || customRenderer,
           document: options.document,
           muiTheme: options.muiTheme,
+          apolloClient: client,
           ...options.customGetInitialPropsArgs,
         });
         res.send(html);
       } catch (error) {
         if(options.onError) options.onError(error, res);
         if(options.overrideDefaultErrorHandler) return;
-
-        const youch = new Youch(error, req);
-
-        youch
-          .toHTML()
-          .then((html) => {
-            res.send(html);
-          });
 
         let errorStr;
         if(error instanceof Error) errorStr = error.stack;
