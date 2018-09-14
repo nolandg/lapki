@@ -12,59 +12,39 @@ import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
 
-class RerenderGuard extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('Should RerenderGuard rerender??');
-    return true;
-  }
+const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
 
+class RerenderGuard extends React.Component {
   render() {
     console.log('RerenderGuard rendering...');
 
-    const generateClassName = createGenerateClassName();
     const sheetsManager = new WeakMap();
-    const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
+    const generateClassName = createGenerateClassName();
 
     return this.props.children({ generateClassName, sheetsManager, jss });
   }
 }
 RerenderGuard.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
 };
-
-const Logger = ({ label, children }) => {
-  console.log(`In::: ${label}...`);
-  return children;
-};
-
 
 export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apolloClient }) => {
-  console.log('Get initial props func');
   const sheetsRegistry = new SheetsRegistry();
-  const [error, page] = await qatch(renderPage(After => (props) => {
-    console.log(' rendering...');
-    return(
-      <RerenderGuard>
-        {({ sheetsManager, generateClassName, jss }) => (
-          <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
-            <Logger label="JssProvider">
-              <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
-                <ApolloProvider client={apolloClient}>
-                  <Logger label="MuiThemeProvider">
-                    <UserContextProvider>
-                      <Logger label="UserContext">
-                        <After {...props} />
-                      </Logger>
-                    </UserContextProvider>
-                  </Logger>
-                </ApolloProvider>
-              </MuiThemeProvider>
-            </Logger>
-          </JssProvider>
-        )}
-      </RerenderGuard>
-    );
-  }));
+  const [error, page] = await qatch(renderPage(After => props => (
+    <RerenderGuard>
+      {({ sheetsManager, generateClassName, jss }) => (
+        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName} jss={jss}>
+          <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
+            <ApolloProvider client={apolloClient}>
+              <UserContextProvider>
+                <After {...props} />
+              </UserContextProvider>
+            </ApolloProvider>
+          </MuiThemeProvider>
+        </JssProvider>
+      )}
+    </RerenderGuard>
+  )));
 
   if(error) {
     // ToDo: decide if error is fatal?
@@ -118,6 +98,7 @@ export class Document extends React.Component {
   }
 
   render() {
+    console.log('!!Rendering Document...');
     const { helmet, assets, data, initialApolloState, sheetsRegistry, error } = this.props;
     return render({ helmet, assets, data, initialApolloState, sheetsRegistry, error });
   }
