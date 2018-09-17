@@ -34,32 +34,32 @@ class CrudModal extends Component {
 
   isNew = () => !_.get(this.props, 'document.id')
 
-  renderCreateButton = (handleCreateDoc, loading, result) => (
-    <Button onClick={handleCreateDoc} variant="contained" color="primary" disabled={loading}>
+  renderCreateButton = ({ handleClick, loading, result }) => (
+    <Button onClick={handleClick} variant="contained" color="primary" disabled={loading}>
       <SaveIcon />Save
     </Button>
   )
 
-  renderUpdateButton = (handleUpdateDoc, loading, result) => (
-    <Button onClick={handleUpdateDoc} variant="contained" color="primary" disabled={loading}>
+  renderUpdateButton = ({ handleClick, loading, result }) => (
+    <Button onClick={handleClick} variant="contained" color="primary" disabled={loading}>
       <SaveIcon /> Save
     </Button>
   )
 
-  renderConfirmDeleteButton = (handleDeleteDoc, loading, result) => (
-    <Button onClick={handleDeleteDoc} disabled={loading} autoFocus>
+  renderConfirmDeleteButton = ({ handleClick, loading, result }) => (
+    <Button onClick={handleClick} disabled={loading} autoFocus>
       <DeleteIcon /> Delete
     </Button>
   )
 
-  renderDeleteButton = (handleConfirmDialogOpen, loading, result) => (
-    <Button onClick={handleConfirmDialogOpen} disabled={loading}>
+  renderDeleteButton = ({ handleClick, loading, result }) => (
+    <Button onClick={handleClick} disabled={loading}>
       <DeleteIcon /> Delete
     </Button>
   )
 
-  renderCancelButton = handleClose => (
-    <Button onClick={handleClose}>
+  renderCancelButton = ({ handleClick, loading, result }) => (
+    <Button onClick={handleClick}>
       <CancelIcon /> Cancel
     </Button>
   )
@@ -118,8 +118,8 @@ class CrudModal extends Component {
 
     return (
       <div>
-        {renderFuncs.renderCancelButton(this.close, loading, result)}
-        {renderFuncs.renderDeleteButton(this.handleConfirmDialogOpen, loading, result)}
+        {renderFuncs.renderCancelButton({ handleClick: this.close, loading, result })}
+        {renderFuncs.renderDeleteButton({ handleClick: this.handleConfirmDialogOpen, loading, result })}
         {isNew ? create : update}
       </div>
     );

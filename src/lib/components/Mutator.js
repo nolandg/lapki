@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
+import { Mutation, withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import qatch from 'await-to-js';
 import gqlError from '../utils/gqlError';
+
+const resetStoreEachOnEveryMutation = true;
 
 class Mutator extends Component {
   static registerQuery(queryName) {
@@ -182,12 +184,16 @@ class Mutator extends Component {
     if(onMutationSuccess && this.callMutationSuccess) this.callMutationSuccess();
   }
 
-  handleMutationSuccess = (result) => {
-    const { onMutationSuccess } = this.props;
+  handleMutationSuccess = (data) => {
+    const { onMutationSuccess, client } = this.props;
+
+    if(resetStoreEachOnEveryMutation) {
+      client.resetStore();
+    }
 
     this.finishMutation();
     if(onMutationSuccess) {
-      this.callMutationSuccess = () => onMutationSuccess(result);
+      this.callMutationSuccess = () => onMutationSuccess(data);
       this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
     }
     console.log('Mutation successful');
@@ -204,6 +210,21 @@ class Mutator extends Component {
     console.error('Mutation Error: ', error);
   }
 
+  buildMutationRenderProp = op => (mutate, result) => {
+    const { loading } = this.state;
+    const handleClickFuncs = {
+      assembleDoc: this.assembleDoc,
+      validateDoc: this.validateDoc,
+      prepareToSaveDoc: this.prepareToSaveDoc,
+      startMutation: this.startMutation,
+      finishMutation: this.finishMutation,
+      clearErrors: this.clearErrors,
+    };
+
+    const handleClick = () => op.handleClick(mutate, handleClickFuncs, result);
+    return op.renderButton({ handleClick, loading, result, isNew: this.isNew() });
+  }
+
   render() {
     const isNew = this.isNew();
     const { children, operations } = this.props;
@@ -218,22 +239,18 @@ class Mutator extends Component {
     const commonMutationProps = {
       onCompleted: this.handleMutationSuccess,
       onError: this.handleMutationError,
-      refetchQueries: result => Mutator.queryRegistry,
-    };
-
-    const handleClickFuncs = {
-      assembleDoc: this.assembleDoc,
-      validateDoc: this.validateDoc,
-      prepareToSaveDoc: this.prepareToSaveDoc,
-      startMutation: this.startMutation,
-      finishMutation: this.finishMutation,
-      clearErrors: this.clearErrors,
+      refetchQueries: (result) => {
+        if(resetStoreEachOnEveryMutation) {
+          return [];
+        }
+        return Mutator.queryRegistry;
+      },
     };
 
     const mutationComponents = _.mapValues(operations, op => (
       <Mutation
         mutation={op.mutationQuery}
-        children={(mutate, result) => op.renderButton(() => op.handleClick(mutate, handleClickFuncs, result), loading, result)}
+        children={this.buildMutationRenderProp(op)}
         {...commonMutationProps}
       />
     ));
@@ -262,6 +279,9 @@ Mutator.defaultProps = {
   expectedRequestTime: 500,
 };
 
+console.log('Initializing query registry...');
 Mutator.queryRegistry = [];
+
+Mutator = withApollo(Mutator);
 
 export { Mutator };

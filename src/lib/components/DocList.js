@@ -8,10 +8,23 @@ import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withStyles } from '@material-ui/core/styles';
+
 
 import { Mutator } from './Mutator';
 import { pascalToCamel } from '../utils/stringUtils';
 // import gqlError from '../utils/gqlError';
+
+const styles = theme => ({
+  loading: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing.unit * 8,
+  },
+});
 
 class DocList extends Component {
   buildQuery = (collection, fragmentName) => {
@@ -61,7 +74,15 @@ class DocList extends Component {
     Mutator.registerQuery(operationName);
   }
 
-  renderLoading = result => <div>Loading...</div>
+  renderLoading = (result) => {
+    const { classes } = this.props;
+    return (
+      <div className={classes.loading}>
+        <CircularProgress size={60} />
+        <Typography variant="body1">Loading...</Typography>
+      </div>
+    );
+  };
 
   renderError = (error, result) => <div>Error: {error.message}</div>
 
@@ -176,7 +197,6 @@ class DocList extends Component {
       return renderFuncs.renderError(error, result);
     }
     if(loading) {
-      console.log('loading');
       return renderFuncs.renderLoading(result);
     }
 
@@ -240,6 +260,7 @@ DocList.propTypes = {
   renderNoResults: PropTypes.func,
   locations: PropTypes.object,
   first: PropTypes.number,
+  classes: PropTypes.object.isRequired,
 };
 DocList.defaultProps = {
   fragmentName: 'default',
@@ -264,5 +285,6 @@ DocList.defaultProps = {
 
 DocList.queryCount = 0;
 
+DocList = withStyles(styles)(DocList);
 
 export { DocList };
