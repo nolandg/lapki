@@ -18,18 +18,24 @@ class Mutator extends Component {
   }
 
   buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues }) => {
+    if(!collection) {
+      throw new Error('No collection passed to <Mutator>');
+    }
     const { schema } = collection;
     const fields = {};
 
     fieldsToInclude.forEach((fieldName) => {
       const schemaField = schema.fields[fieldName];
+      if(!schemaField) {
+        throw new Error(`Cannot find field "${fieldName}" in schema for type "${collection.type}"`);
+      }
 
-      // Firs try to get initial value from document
+      // First try to get initial value from document
       let value = document ? document[fieldName] : undefined;
       if(value === undefined) {
         // No document available or this field isn't in the document
 
-        // First try a default value from passed in defaultValues
+        // Then try a default value from passed in defaultValues
         // otherwise fallback to schema default
         value = _.get(defaultValues, fieldName, schemaField.default());
       }
@@ -279,7 +285,6 @@ Mutator.defaultProps = {
   expectedRequestTime: 500,
 };
 
-console.log('Initializing query registry...');
 Mutator.queryRegistry = [];
 
 Mutator = withApollo(Mutator);

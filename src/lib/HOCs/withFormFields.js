@@ -23,8 +23,8 @@ const formFieldStyles = theme => ({
   },
 });
 
-export const withFormField = function (WrappedComponent) {
-  class withFormFieldClass extends Component {
+export const withFormFields = function (WrappedComponent) {
+  class withFormFieldsClass extends Component {
      onChange = (e) => {
        const value = e.target.value;
        this.props.fieldProps.onChange(e, this.props.name, value);
@@ -70,17 +70,17 @@ export const withFormField = function (WrappedComponent) {
        );
      }
   }
-  withFormFieldClass.propTypes = {
+  withFormFieldsClass.propTypes = {
     fieldProps: PropTypes.object.isRequired,
     name: PropTypes.string.isRequired,
     defaultValue: PropTypes.any,
     helperText: PropTypes.node,
     classes: PropTypes.object.isRequired,
   };
-  withFormFieldClass.defaultProps = {
+  withFormFieldsClass.defaultProps = {
     defaultValue: undefined,
     helperText: '',
   };
 
-  return withStyles(formFieldStyles)(withFormFieldClass);
+  return withStyles(formFieldStyles)(withFormFieldsClass);
 };

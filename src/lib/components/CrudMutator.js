@@ -31,7 +31,6 @@ class CrudMutator extends Component {
   }
 
   handleCreateDoc = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
-    console.log(result);
     const doc = await prepareToSaveDoc();
     if(!doc) return; // must have failed validation
 
@@ -76,7 +75,7 @@ class CrudMutator extends Component {
 
   render() {
     const { fields, ...rest } = this.props;
-    if(!fields.includes('id')) fields.push('id');
+    // if(!fields.includes('id')) fields.push('id');
 
     return (
       <Mutator operations={this.operations} fields={fields} {...rest} />

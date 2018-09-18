@@ -1,19 +1,27 @@
 import React from 'react';
 import MuiTextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
-import { withFormField } from '../HOCs/withFormField';
+
+import { withFormFields } from '../HOCs/withFormFields';
+
+/**
+ * Select
+ */
+export { Select } from './Select';
+
 
 /**
  * TextField
  */
-const TextFieldWithoutHOCs = ({ value, ...rest }) => {
+const TextField = ({ value, ...rest }) => {
   if(!value) value = '';
   return <MuiTextField value={value} {...rest} />;
 };
-TextFieldWithoutHOCs.propTypes = {
+TextField.propTypes = {
   value: PropTypes.any,
 };
-TextFieldWithoutHOCs.defaultProps = {
+TextField.defaultProps = {
   value: '',
 };
-export const TextField = withFormField(TextFieldWithoutHOCs);
+const EnhancedTextField = withFormFields(TextField);
+export { EnhancedTextField as TextField };

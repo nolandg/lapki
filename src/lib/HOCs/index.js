@@ -1,4 +1,4 @@
 import 'babel-polyfill';
 
-export * from './withFormField';
+export * from './withFormFields';
 export * from './withUser';
