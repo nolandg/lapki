@@ -13,9 +13,9 @@ export { Select } from './Select';
 /**
  * TextField
  */
-const TextField = ({ value, ...rest }) => {
+const TextField = ({ value, onChange, ...rest }) => {
   if(!value) value = '';
-  return <MuiTextField value={value} {...rest} />;
+  return <MuiTextField value={value} onChange={event => onChange(event.target.value)} {...rest} />;
 };
 TextField.propTypes = {
   value: PropTypes.any,

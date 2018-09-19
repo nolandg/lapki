@@ -1,18 +1,42 @@
+const messages = {
+  auth: 'Sorry, you are not authorized to perform this action. Try logging in first and then try again.',
+  unknown: 'Sorry, an error ocurred.',
+};
 
-const gqlError = (error) => {
-  const obj = {};
+const getType = (msg) => {
+  if(/authori/i.test(msg)) return 'auth';
+
+  return 'unknown';
+};
+
+const getBestMessage = (error) => {
+  let message = '';
 
   if(error.graphQLErrors && error.graphQLErrors.length) {
     const e = error.graphQLErrors[0];
-    obj.message = e.message;
+    message = e.message;
     if(e.path && e.path.length) {
-      obj.message += ` in "${e.path[0]}"`;
+      message += ` in "${e.path[0]}"`;
     }
   }else if(error.message) {
-    obj.message = error.message;
+    message = error.message;
   }else{
-    obj.message = 'Unknown';
+    message = 'Unknown';
   }
+
+  return message;
+};
+
+const gqlError = (error) => {
+  const unfriendlyMessage = getBestMessage(error);
+  const type = getType(error);
+
+
+  const obj = {
+    message: messages[type],
+    unfriendlyMessage,
+    type,
+  };
 
   return obj;
 };

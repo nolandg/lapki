@@ -25,9 +25,8 @@ const formFieldStyles = theme => ({
 
 export const withFormFields = function (WrappedComponent) {
   class withFormFieldsClass extends Component {
-     onChange = (e) => {
-       const value = e.target.value;
-       this.props.fieldProps.onChange(e, this.props.name, value);
+     onChange = (value) => {
+       this.props.fieldProps.onChange(this.props.name, value);
      }
 
      render() {

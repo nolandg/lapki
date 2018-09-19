@@ -8,16 +8,13 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import MuiSelect from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
+import { withFormFields } from '../HOCs/withFormFields';
 
 const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
   formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120,
-    maxWidth: 300,
+
   },
   muiSelect: {
   },
@@ -33,11 +30,6 @@ const styles = theme => ({
 });
 
 class Select extends React.Component {
-  state = {
-    values: [],
-    open: false,
-  };
-
   constructor(props) {
     super(props);
 
@@ -45,21 +37,28 @@ class Select extends React.Component {
     this.paperStyle = {
       padding: theme.spacing.unit * 0,
     };
+
+    this.state = {
+      values: props.value || [],
+      open: false,
+    };
   }
 
   handleChange = (event) => {
     const newValues = event.target.value;
-    const { multiple, maxSelections, minSelections } = this.props;
+    const { multiple, maxSelections, minSelections, onChange } = this.props;
 
     if(multiple) {
       if(newValues.length > maxSelections) return;
       if(newValues.length < minSelections) return;
       this.setState({ values: newValues });
+      onChange(newValues);
     }else{
       this.setState({
         values: [newValues],
         open: false,
       });
+      onChange([newValues]);
     }
   };
 
@@ -102,37 +101,37 @@ class Select extends React.Component {
 
   render() {
     const { values: currentValues, open } = this.state;
-    const { classes, options, label, multiple } = this.props;
+    const { classes, options, label, multiple, helperText, error, disabled } = this.props;
 
     return (
-      <div className={classes.root}>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
-          <MuiSelect
-            open={open}
-            onOpen={() => this.setState({ open: true })}
-            onClose={() => this.setState({ open: false })}
-            autoWidth
-            multiple={multiple}
-            value={currentValues}
-            onChange={this.handleChange}
-            input={<Input id="select-multiple-checkbox" />}
-            MenuProps={{
-              PaperProps: { style: this.paperStyle },
-            }}
-            className={classes.muiSelect}
-            renderValue={this.renderValues}
-          >
-            {options.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {multiple && <Checkbox checked={!!this.state.values.find(v => v === option.value)} /> }
-                {option.icon}
-                <ListItemText primary={option.text} />
-              </MenuItem>
-            ))}
-          </MuiSelect>
-        </FormControl>
-      </div>
+      <FormControl className={classes.formControl} error={error} disabled={disabled}>
+        <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
+        <MuiSelect
+          open={open}
+          onOpen={() => this.setState({ open: true })}
+          onClose={() => this.setState({ open: false })}
+          autoWidth
+          disabled={disabled}
+          multiple={multiple}
+          value={currentValues}
+          onChange={this.handleChange}
+          input={<Input id="select-multiple-checkbox" />}
+          MenuProps={{
+            PaperProps: { style: this.paperStyle },
+          }}
+          className={classes.muiSelect}
+          renderValue={this.renderValues}
+        >
+          {options.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {multiple && <Checkbox checked={!!this.state.values.find(v => v === option.value)} /> }
+              {option.icon}
+              <ListItemText primary={option.text} />
+            </MenuItem>
+          ))}
+        </MuiSelect>
+        <FormHelperText>{helperText}</FormHelperText>
+      </FormControl>
     );
   }
 }
@@ -150,12 +149,21 @@ Select.propTypes = {
   label: PropTypes.string.isRequired,
   minSelections: PropTypes.number,
   maxSelections: PropTypes.number,
+  helperText: PropTypes.node,
+  error: PropTypes.bool,
+  disabled: PropTypes.bool,
+  value: PropTypes.any,
+  onChange: PropTypes.func.isRequired,
 };
 Select.defaultProps = {
   multiple: false,
   minSelections: 1,
   maxSelections: undefined,
+  helperText: undefined,
+  error: undefined,
+  disabled: undefined,
+  value: undefined,
 };
 
-const SelectEnhanced = withStyles(styles, { withTheme: true })(Select);
+const SelectEnhanced = withFormFields(withStyles(styles, { withTheme: true })(Select));
 export { SelectEnhanced as Select };

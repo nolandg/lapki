@@ -100,7 +100,7 @@ class Mutator extends Component {
     }, cb);
   }
 
-  handleFieldValueChange = (e, name, value) => {
+  handleFieldValueChange = (name, value) => {
     this.setFieldValue(name, value, () => {
       if(this.state.firstSaveAttempted) this.recheckForErrors();
     });
@@ -113,6 +113,8 @@ class Mutator extends Component {
   }
 
   validateDoc = async (doc, setErrors = true) => {
+    if(this.props.validateDoc) return this.props.validateDoc(doc, setErrors);
+
     const { schema } = this.props.collection;
     const [error, castDoc] = await qatch(schema.validate(doc, { abortEarly: false }));
 
@@ -134,6 +136,8 @@ class Mutator extends Component {
       _.set(doc, field.name, field.value);
     });
 
+    if(this.props.assembleDoc) return this.props.assembleDoc(doc);
+
     return doc;
   }
 
@@ -153,8 +157,7 @@ class Mutator extends Component {
   }
 
   prepareToSaveDoc = async ({ assembleDoc = this.assembleDoc, validateDoc = this.validateDoc } = {}) => {
-    // assembleDoc = assembleDoc || this.assembleDoc;
-    // validateDoc = validateDoc || this.validateDoc;
+    if(this.props.prepareToSaveDoc) return this.props.prepareToSaveDoc({ assembleDoc, validateDoc });
 
     this.setState({ firstSaveAttempted: true });
     this.clearErrors();
@@ -276,6 +279,7 @@ Mutator.propTypes = {
   fields: PropTypes.array.isRequired,
   expectedRequestTime: PropTypes.number,
   operations: PropTypes.object.isRequired,
+  assembleDoc: PropTypes.func,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -283,6 +287,7 @@ Mutator.defaultProps = {
   onMutationError: null,
   onMutationSuccess: null,
   expectedRequestTime: 500,
+  assembleDoc: null,
 };
 
 Mutator.queryRegistry = [];
