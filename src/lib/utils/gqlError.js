@@ -1,10 +1,12 @@
 const messages = {
   auth: 'Sorry, you are not authorized to perform this action. Try logging in first and then try again.',
+  'invalid-email': 'Sorry, that email address appears to be invalid.',
   unknown: 'Sorry, an error ocurred.',
 };
 
 const getType = (msg) => {
   if(/authori/i.test(msg)) return 'auth';
+  if(/email is invalid/i.test(msg)) return 'invalid-email';
 
   return 'unknown';
 };

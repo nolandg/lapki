@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Mutation, withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import qatch from 'await-to-js';
 import gqlError from '../utils/gqlError';
+
+import Snackbar from './Snackbar';
 
 const resetStoreEachOnEveryMutation = true;
 
@@ -57,6 +59,11 @@ class Mutator extends Component {
     firstSaveAttempted: false,
     loading: false,
     expectedProgress: 0,
+    snackbar: {
+      open: false,
+      message: '',
+      type: 'success',
+    },
   })
 
   componentDidUpdate = (prevProps) => {
@@ -203,8 +210,11 @@ class Mutator extends Component {
     this.finishMutation();
     if(onMutationSuccess) {
       this.callMutationSuccess = () => onMutationSuccess(data);
-      this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
+      this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 0);
     }
+
+    this.openSnackbar({ data, hackToGetDoc: this.assembleDoc() });
+
     console.log('Mutation successful');
   }
 
@@ -216,6 +226,9 @@ class Mutator extends Component {
 
     error = gqlError(error);
     this.setGlobalError(error.message);
+
+    this.openSnackbar({ error });
+
     console.error('Mutation Error: ', error);
   }
 
@@ -232,6 +245,33 @@ class Mutator extends Component {
 
     const handleClick = () => op.handleClick(mutate, handleClickFuncs, result);
     return op.renderButton({ handleClick, loading, result, isNew: this.isNew() });
+  }
+
+  openSnackbar = ({ data, error, hackToGetDoc }) => {
+    this.setState({ snackbar: {
+      open: true,
+      type: error ? 'error' : 'success',
+      ...this.getSnackbarMessageAndAction({ data, error, hackToGetDoc }),
+    } });
+  }
+
+  closeSnackbar = () => this.setState({ snackbar: { open: false } })
+
+  getSnackbarMessageAndAction = ({ data, error, hackToGetDoc }) => {
+    if(this.props.getSnackbarMessageAndAction) return this.props.getSnackbarMessageAndAction({ data, error });
+    if(!error && this.props.getSuccessMessageAndAction) return this.props.getSuccessMessageAndAction({ data, hackToGetDoc });
+
+    return {
+      message: error ? error.message : 'Success!',
+      action: undefined,
+    };
+  }
+
+  renderSnackbars = () => {
+    const { snackbar: { open, message, type, action } } = this.state;
+
+    if(open) return <Snackbar open message={message} type={type} action={action} onClose={this.closeSnackbar} />;
+    return null;
   }
 
   render() {
@@ -264,8 +304,12 @@ class Mutator extends Component {
       />
     ));
 
-
-    return children({ fieldProps, errors, globalErrors, mutationComponents, isNew, loading, expectedProgress });
+    return (
+      <Fragment>
+        {children({ fieldProps, errors, globalErrors, mutationComponents, isNew, loading, expectedProgress })}
+        {this.renderSnackbars()}
+      </Fragment>
+    );
   }
 }
 
@@ -280,6 +324,7 @@ Mutator.propTypes = {
   expectedRequestTime: PropTypes.number,
   operations: PropTypes.object.isRequired,
   assembleDoc: PropTypes.func,
+  getSuccessMessageAndAction: PropTypes.func,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -288,6 +333,7 @@ Mutator.defaultProps = {
   onMutationSuccess: null,
   expectedRequestTime: 500,
   assembleDoc: null,
+  getSuccessMessageAndAction: null,
 };
 
 Mutator.queryRegistry = [];
