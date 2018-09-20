@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 
-import common from './lib/common';
 import startClientApp from './lib/boot/startClientApp';
+import common from './lib/common';
 
 module.exports = {
   startClientApp,

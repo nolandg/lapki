@@ -4,10 +4,8 @@ import { Query } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { Mutator } from '../components/Mutator';
-// import currentUserFragment from '../utils/currentUserFragment';
 import buildAnnonUser from '../utils/buildAnnonUser';
 import attachUserAuthMethods from '../utils/attachUserAuthMethods';
-
 import currentUserFragment from '../utils/currentUserFragment';
 
 const currentUserQuery = gql`

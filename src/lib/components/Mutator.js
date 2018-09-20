@@ -3,11 +3,22 @@ import { Mutation, withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import qatch from 'await-to-js';
-import gqlError from '../utils/gqlError';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 
+
+import gqlError from '../utils/gqlError';
+import { AuthenticationModal } from '../auth';
 import Snackbar from './Snackbar';
 
 const resetStoreEachOnEveryMutation = true;
+
+const styles = theme => ({
+  snackbarAction: {
+    color: '#FFF',
+    marginBottom: theme.spacing.unit * 1,
+  },
+});
 
 class Mutator extends Component {
   static registerQuery(queryName) {
@@ -64,6 +75,7 @@ class Mutator extends Component {
       message: '',
       type: 'success',
     },
+    authModalOpen: false,
   })
 
   componentDidUpdate = (prevProps) => {
@@ -255,15 +267,35 @@ class Mutator extends Component {
     } });
   }
 
-  closeSnackbar = () => this.setState({ snackbar: { open: false } })
+  closeSnackbar = (event, reason) => {
+    this.setState({ snackbar: { open: false } });
+  }
 
   getSnackbarMessageAndAction = ({ data, error, hackToGetDoc }) => {
     if(this.props.getSnackbarMessageAndAction) return this.props.getSnackbarMessageAndAction({ data, error });
     if(!error && this.props.getSuccessMessageAndAction) return this.props.getSuccessMessageAndAction({ data, hackToGetDoc });
+    if(error && this.props.getErrorMessageAndAction) return this.props.getErrorMessageAndAction({ error, hackToGetDoc });
+
+    let action;
+    if(error) {
+      if(error.type === 'auth') {
+        action = (
+          <Button
+            onClick={() => {
+              this.setState({ authModalOpen: true });
+              this.closeSnackbar();
+            }}
+            className={this.props.classes.snackbarAction}
+          >
+          Login Now
+          </Button>
+        );
+      }
+    }
 
     return {
       message: error ? error.message : 'Success!',
-      action: undefined,
+      action,
     };
   }
 
@@ -278,7 +310,7 @@ class Mutator extends Component {
     const isNew = this.isNew();
     const { children, operations } = this.props;
     const errors = this.extractErrorsFromFields();
-    const { globalErrors, loading, expectedProgress } = this.state;
+    const { globalErrors, loading, expectedProgress, authModalOpen } = this.state;
     const fieldProps = {
       onChange: this.handleFieldValueChange,
       fields: this.state.fields,
@@ -308,12 +340,14 @@ class Mutator extends Component {
       <Fragment>
         {children({ fieldProps, errors, globalErrors, mutationComponents, isNew, loading, expectedProgress })}
         {this.renderSnackbars()}
+        <AuthenticationModal open={authModalOpen} onClose={() => this.setState({ authModalOpen: false })} />
       </Fragment>
     );
   }
 }
 
 Mutator.propTypes = {
+  classes: PropTypes.object.isRequired,
   document: PropTypes.object,
   collection: PropTypes.object.isRequired,
   fragmentName: PropTypes.string,
@@ -325,6 +359,7 @@ Mutator.propTypes = {
   operations: PropTypes.object.isRequired,
   assembleDoc: PropTypes.func,
   getSuccessMessageAndAction: PropTypes.func,
+  getErrorMessageAndAction: PropTypes.func,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -334,10 +369,11 @@ Mutator.defaultProps = {
   expectedRequestTime: 500,
   assembleDoc: null,
   getSuccessMessageAndAction: null,
+  getErrorMessageAndAction: null,
 };
 
 Mutator.queryRegistry = [];
 
-Mutator = withApollo(Mutator);
+Mutator = withApollo(withStyles(styles)(Mutator));
 
 export { Mutator };

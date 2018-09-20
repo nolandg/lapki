@@ -39,7 +39,7 @@ class GenericSnackbar extends Component {
   }
 
   render() {
-    const { message, classes, autoHideDuration, icon, open, type } = this.props;
+    const { message, classes, autoHideDuration, icon, open, type, action } = this.props;
 
     return (
       <Snackbar
@@ -56,6 +56,7 @@ class GenericSnackbar extends Component {
               {message}
             </Fragment>
           )}
+          action={action}
         />
       </Snackbar>
     );
@@ -69,12 +70,14 @@ GenericSnackbar.propTypes = {
   onClose: PropTypes.func,
   icon: PropTypes.node,
   type: PropTypes.string,
+  action: PropTypes.node,
 };
 GenericSnackbar.defaultProps = {
   autoHideDuration: 30000,
   onClose: null,
   type: 'success',
   icon: undefined,
+  action: null,
 };
 
 export default withStyles(styles)(GenericSnackbar);
