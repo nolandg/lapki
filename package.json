@@ -67,7 +67,6 @@
     "resolve-url-loader": "^2.3.1",
     "sass-loader": "^7.0.3",
     "serialize-javascript": "^1.5.0",
-    "youch": "git+https://github.com/nolandg/youch.git#896474c",
     "yup": "^0.26.5"
   }
 }
