@@ -49,13 +49,13 @@ function createApolloClient(options, request) {
   if(isServer) {
     // Server/Node
     const cookiesReceived = cookie.parse(request.headers.cookie || '');
-    const { lapki_auth_token, lapki_auth_token_insecure } = cookiesReceived;
+    const { lapki_auth_token, lapki_auth_token_httpOnly } = cookiesReceived;
     let cookieStr = '';
     if(lapki_auth_token) {
       cookieStr += `${cookie.serialize('lapki_auth_token', lapki_auth_token)}; `;
     }
-    if(lapki_auth_token_insecure) {
-      cookieStr += `${cookie.serialize('lapki_auth_token_insecure', lapki_auth_token_insecure)}; `;
+    if(lapki_auth_token_httpOnly) {
+      cookieStr += `${cookie.serialize('lapki_auth_token_httpOnly', lapki_auth_token_httpOnly)}; `;
     }
 
     httpLinkSettings.headers = {

@@ -86,7 +86,7 @@ class DocList extends Component {
 
   renderError = (error, result) => <div>Error: {error.message}</div>
 
-  renderNoResults = result => <div>No results to show :-(</div>
+  renderNoResults = result => <Typography variant="body1">No results to show :-(</Typography>
 
   renderFields = (doc) => {
     const fields = [];

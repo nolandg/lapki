@@ -24,7 +24,7 @@ const styles = theme => ({
 const registerQuery = gql`
   mutation Login($data: SignupInput!) {
     signup(data: $data){
-      token
+      id
     }
   }
 `;
