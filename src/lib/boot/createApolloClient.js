@@ -19,7 +19,6 @@ function createApolloClient(options, request) {
     batchInterval: 100,
     onError: null,
     overrideDefaultErrorHandler: false,
-    tokenExchangeScheme: 'cookie',
   };
   options = { ...defaultOptions, ...options };
   if(!options.target) {
