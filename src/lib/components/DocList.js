@@ -167,11 +167,11 @@ class DocList extends Component {
 
     // Normalize the result a bit
     const queryName = `${pascalToCamel(pluralize.plural(collection.type))}Connection`;
-    let queryData; 
+    let queryData;
     if(!error) {
       queryData = _.get(data, `${queryName}`, []);
     }
-    if(queryData.edges && queryData.edges.length) {
+    if(queryData && queryData.edges && queryData.edges.length) {
       result.docs = queryData.edges.map(edge => edge.node);
       result.totalDocs = queryData.aggregate.count;
       result.pageInfo = queryData.pageInfo;

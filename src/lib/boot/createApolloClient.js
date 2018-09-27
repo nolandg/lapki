@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import chalk from 'chalk';
 import { withClientState } from 'apollo-link-state';
+import { createUploadLink } from 'apollo-upload-client';
 
 
 // Create the Apollo Client
@@ -68,7 +69,10 @@ function createApolloClient(options, request) {
     };
   }
 
-  const httpLink = options.useBatchHttpLink ? new BatchHttpLink(httpLinkSettings) : createHttpLink(httpLinkSettings);
+  // Can't seem to use batching link and file upload link at the same time.
+  // See https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
+  // for solution
+  // const httpLink = options.useBatchHttpLink ? new BatchHttpLink(httpLinkSettings) : createHttpLink(httpLinkSettings);
 
   //* ************** Error Link ***************
   const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -102,8 +106,11 @@ function createApolloClient(options, request) {
     defaults: stateLinkDefaults,
   });
 
+  //* ************** Local state link ***************
+  const fileUploadLink = createUploadLink(httpLinkSettings);
+
   //* ************** Build composed link **************
-  const links = [stateLink, errorLink, httpLink];
+  const links = [errorLink, stateLink, fileUploadLink];
   const link = ApolloLink.from(links);
 
   const apolloClientOptions = {
@@ -117,3 +124,29 @@ function createApolloClient(options, request) {
 
 
 export default createApolloClient;
+
+
+/*
+import { getMainDefinition } from 'apollo-utilities';
+import { split } from 'apollo-link';
+import { httpLink } from './httpLink.js';
+import { wsLink } from './wsLink.js';
+import { uploadLink } from './uploadLink.js';
+
+const isFile = value => (
+  (typeof File !== 'undefined' && value instanceof File) ||
+  (typeof Blob !== 'undefined' && value instanceof Blob)
+);
+
+const isUpload = ({ variables }) =>
+  Object.values(variables).some(isFile);
+
+const isSubscriptionOperation = ({ query }) => {
+  const { kind, operation } = getMainDefinition(query);
+  return kind === 'OperationDefinition' && operation === 'subscription';
+};
+
+const requestLink = split(isSubscriptionOperation, wsLink, httpLink);
+
+export const terminalLink = split(isUpload, uploadLink, requestLink);
+*/

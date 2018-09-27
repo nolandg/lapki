@@ -42,4 +42,6 @@ export default function startClientApp({ routes, muiTheme, apolloClientOptions, 
     </JssProvider>,
     document.getElementById('root'),
   ));
+
+  return { apolloClient: client };
 }

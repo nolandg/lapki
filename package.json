@@ -40,6 +40,7 @@
     "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.4",
     "apollo-link-state": "^0.4.1",
+    "apollo-upload-client": "^9.0.0",
     "await-to-js": "^2.0.1",
     "babel-polyfill": "^6.26.0",
     "browser-or-node": "^1.1.0",
