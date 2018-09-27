@@ -34,13 +34,14 @@ class DocList extends Component {
     const queryName = `${pluralize.plural(pascalToCamel(collection.type))}Connection`;
     const fragment = collection.fragments[fragmentName];
     const fragmentDefinitionName = fragment.definitions[0].name.value;
+    const whereInputType = `${collection.type}WhereInput`;
 
     const query = gql`
       ${fragment}
 
-      query ${operationName}($skip: Int!, $first: Int!)
+      query ${operationName}($skip: Int!, $first: Int!, $where: ${whereInputType}!)
       {
-        ${queryName}(first: $first, skip: $skip){
+        ${queryName}(first: $first, skip: $skip, where: $where){
           aggregate {
             count
           }
@@ -162,15 +163,19 @@ class DocList extends Component {
   renderProp = (result) => {
     const { renderLoaded, render, collection } = this.props;
     const { data, networkStatus, error } = result;
-    const loading = networkStatus === 1;
+    let loading = networkStatus === 1;
 
     // Normalize the result a bit
     const queryName = `${pascalToCamel(pluralize.plural(collection.type))}Connection`;
-    if(!loading && !error) {
-      const queryData = data[queryName];
+    let queryData; 
+    if(!error) {
+      queryData = _.get(data, `${queryName}`, []);
+    }
+    if(queryData.edges && queryData.edges.length) {
       result.docs = queryData.edges.map(edge => edge.node);
       result.totalDocs = queryData.aggregate.count;
       result.pageInfo = queryData.pageInfo;
+      loading = !result.docs.length;
     }
 
     if(render) {
@@ -283,7 +288,7 @@ DocList.defaultProps = {
     bottom: ['pagination'],
   },
   first: 10,
-  where: undefined,
+  where: {},
 };
 
 DocList.queryCount = 0;

@@ -22,10 +22,9 @@ class OneDoc extends Component {
     return result;
   };
 
-  renderNoResult = () => <Typography variant="body1">Sorry, that content could not be found.</Typography>
+  renderNoResult = () => <Typography variant="body1">Sorry, this content could not be found.</Typography>
 
   renderLoaded = (docs, renderFuncs, result) => {
-    console.log(docs.length);
     const renderNoResult = this.props.renderNoResult || this.renderNoResult;
 
     if(!docs || !docs.length) return renderNoResult;
@@ -34,9 +33,6 @@ class OneDoc extends Component {
 
   render() {
     const { render, where, ...rest } = this.props;
-    if(!where) {
-      console.warn('You must supply a where parameter to OneDoc.');
-    }
     const oneDocRender = render ? result => render(this.normalizeResult(result)) : render;
 
     return (
@@ -56,6 +52,7 @@ OneDoc.propTypes = {
   render: PropTypes.func,
   renderLoading: PropTypes.func,
   renderNoResult: PropTypes.func,
+  where: PropTypes.object.isRequired,
 };
 OneDoc.defaultProps = {
   renderDoc: null,
