@@ -45,7 +45,7 @@ class CrudMutator extends Component {
   handleUpdateDoc = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
     const doc = await prepareToSaveDoc();
     if(!doc) return; // must have failed validation
-    const id = doc.id;
+    const id = _.get(this.props, 'document.id');
     if(!id) throw Error('Cannot update a document without id.');
 
     // We can't send id for updates
@@ -75,6 +75,7 @@ class CrudMutator extends Component {
 
   render() {
     const { fields, ...rest } = this.props;
+
     return (
       <Mutator operations={this.operations} fields={fields} {...rest} />
     );

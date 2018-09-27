@@ -221,13 +221,14 @@ class DocList extends Component {
   }
 
   render() {
-    const { collection, fragmentName, errorPolicy, first, variables, ...rest } = this.props;
+    const { collection, fragmentName, errorPolicy, first, variables, where, ...rest } = this.props;
     const { skip } = this.state;
 
     const controlledVariables = {
       ...variables,
       skip,
       first,
+      where,
     };
 
     return (
@@ -261,6 +262,7 @@ DocList.propTypes = {
   locations: PropTypes.object,
   first: PropTypes.number,
   classes: PropTypes.object.isRequired,
+  where: PropTypes.object,
 };
 DocList.defaultProps = {
   fragmentName: 'default',
@@ -281,6 +283,7 @@ DocList.defaultProps = {
     bottom: ['pagination'],
   },
   first: 10,
+  where: undefined,
 };
 
 DocList.queryCount = 0;

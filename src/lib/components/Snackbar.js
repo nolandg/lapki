@@ -80,4 +80,5 @@ GenericSnackbar.defaultProps = {
   action: null,
 };
 
-export default withStyles(styles)(GenericSnackbar);
+const SnackbarEnhanced = withStyles(styles)(GenericSnackbar);
+export { SnackbarEnhanced as Snackbar };

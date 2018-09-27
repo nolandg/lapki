@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import gqlError from '../utils/gqlError';
 import { AuthenticationModal } from '../auth';
-import Snackbar from './Snackbar';
+import { Snackbar } from './Snackbar';
 
 const resetStoreEachOnEveryMutation = true;
 
@@ -30,6 +30,16 @@ class Mutator extends Component {
     this.state = this.buildInitialState(props);
   }
 
+  getFormValueFromDoc = (fieldName) => {
+    const { document, mapDocValuesToFormValues } = this.props;
+    if(!document) return undefined;
+    
+    const defaultMapFunc = () => document[fieldName] || undefined;
+    const mapFunc = _.get(mapDocValuesToFormValues, fieldName, defaultMapFunc);
+
+    return mapFunc(document[fieldName], document, fieldName);
+  }
+
   buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues }) => {
     if(!collection) {
       throw new Error('No collection passed to <Mutator>');
@@ -44,7 +54,7 @@ class Mutator extends Component {
       }
 
       // First try to get initial value from document
-      let value = document ? document[fieldName] : undefined;
+      let value = this.getFormValueFromDoc(fieldName);
       if(value === undefined) {
         // No document available or this field isn't in the document
 
@@ -360,6 +370,7 @@ Mutator.propTypes = {
   assembleDoc: PropTypes.func,
   getSuccessMessageAndAction: PropTypes.func,
   getErrorMessageAndAction: PropTypes.func,
+  mapDocValuesToFormValues: PropTypes.object,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -370,6 +381,7 @@ Mutator.defaultProps = {
   assembleDoc: null,
   getSuccessMessageAndAction: null,
   getErrorMessageAndAction: null,
+  mapDocValuesToFormValues: null,
 };
 
 Mutator.queryRegistry = [];
