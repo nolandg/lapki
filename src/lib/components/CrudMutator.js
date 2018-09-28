@@ -33,7 +33,6 @@ class CrudMutator extends Component {
   handleCreateDoc = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
     const doc = await prepareToSaveDoc();
     if(!doc) return; // must have failed validation
-    console.log('Starting mutation: ', doc);
     startMutation();
     mutate({
       variables: {
