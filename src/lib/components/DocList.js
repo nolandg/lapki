@@ -171,12 +171,13 @@ class DocList extends Component {
     if(!error) {
       queryData = _.get(data, `${queryName}`, []);
     }
-    if(queryData && queryData.edges && queryData.edges.length) {
+    if(queryData && queryData.edges) {
       result.docs = queryData.edges.map(edge => edge.node);
       result.totalDocs = queryData.aggregate.count;
       result.pageInfo = queryData.pageInfo;
-      loading = !result.docs.length;
     }
+
+    if(loading && result.docs && result.docs.length) loading = false;
 
     if(render) {
       // Parent handles rendering everything in all cases

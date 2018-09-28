@@ -27,7 +27,7 @@ class OneDoc extends Component {
   renderLoaded = (docs, renderFuncs, result) => {
     const renderNoResult = this.props.renderNoResult || this.renderNoResult;
 
-    if(!docs || !docs.length) return renderNoResult;
+    if(!docs || !docs.length) return renderNoResult();
     return renderFuncs.renderDoc(docs[0]);
   }
 
