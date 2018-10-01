@@ -27,6 +27,18 @@ class CrudMutator extends Component {
       delete: buildOperation('delete'),
     };
 
+    if(!operations.create.renderButton && props.renderSaveButton) {
+      operations.create.renderButton = props.renderSaveButton;
+    }
+    if(!operations.update.renderButton && props.renderSaveButton) {
+      operations.update.renderButton = props.renderSaveButton;
+    }
+
+    operations.delete.renderButton = (...args) => {
+      if(args[0].isNew) return null;
+      return props.renderDeleteButton(...args);
+    };
+
     return operations;
   }
 
@@ -87,9 +99,10 @@ CrudMutator.propTypes = {
   collection: PropTypes.object.isRequired,
   fragmentName: PropTypes.string,
   children: PropTypes.func.isRequired,
-  renderCreateButton: PropTypes.func.isRequired,
-  renderUpdateButton: PropTypes.func.isRequired,
+  renderCreateButton: PropTypes.func,
+  renderUpdateButton: PropTypes.func,
   renderDeleteButton: PropTypes.func.isRequired,
+  renderSaveButton: PropTypes.func,
   onMutationError: PropTypes.func,
   onMutationSuccess: PropTypes.func,
   fields: PropTypes.array.isRequired,
@@ -101,6 +114,9 @@ CrudMutator.defaultProps = {
   onMutationError: null,
   onMutationSuccess: null,
   expectedRequestTime: 500,
+  renderSaveButton: null,
+  renderUpdateButton: null,
+  renderCreateButton: null,
 };
 
 export { CrudMutator };

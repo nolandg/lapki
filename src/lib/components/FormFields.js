@@ -9,6 +9,10 @@ import { withFormFields } from '../HOCs/withFormFields';
  */
 export { Select } from './Select';
 
+/**
+ * Date picker
+ */
+export { DatePicker } from './DatePicker';
 
 /**
  * TextField

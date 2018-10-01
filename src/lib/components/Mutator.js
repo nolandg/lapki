@@ -33,7 +33,7 @@ class Mutator extends Component {
   getFormValueFromDoc = (fieldName) => {
     const { document, mapDocValuesToFormValues } = this.props;
     if(!document) return undefined;
-    
+
     const defaultMapFunc = () => document[fieldName] || undefined;
     const mapFunc = _.get(mapDocValuesToFormValues, fieldName, defaultMapFunc);
 
@@ -345,6 +345,7 @@ class Mutator extends Component {
         {...commonMutationProps}
       />
     ));
+    mutationComponents.save = isNew ? mutationComponents.create : mutationComponents.update;
 
     return (
       <Fragment>

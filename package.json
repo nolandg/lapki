@@ -13,7 +13,8 @@
   "browser": "build/client.js",
   "dependencies": {
     "babel-cli": "^6.26.0",
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "material-ui-pickers": "^1.0.0-rc.17"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
@@ -54,6 +55,7 @@
     "jss-expand": "^5.3.0",
     "lodash": "^4.17.10",
     "mini-css-extract-plugin": "^0.4.1",
+    "moment": "^2.22.2",
     "node-fetch": "^2.2.0",
     "node-sass": "^4.9.2",
     "pluralize": "^7.0.0",

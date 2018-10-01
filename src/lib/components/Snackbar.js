@@ -73,7 +73,7 @@ GenericSnackbar.propTypes = {
   action: PropTypes.node,
 };
 GenericSnackbar.defaultProps = {
-  autoHideDuration: 30000,
+  autoHideDuration: 3000,
   onClose: null,
   type: 'success',
   icon: undefined,

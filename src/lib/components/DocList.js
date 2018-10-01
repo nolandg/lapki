@@ -35,13 +35,14 @@ class DocList extends Component {
     const fragment = collection.fragments[fragmentName];
     const fragmentDefinitionName = fragment.definitions[0].name.value;
     const whereInputType = `${collection.type}WhereInput`;
+    const orderByInputType = `${collection.type}OrderByInput`;
 
     const query = gql`
       ${fragment}
 
-      query ${operationName}($skip: Int!, $first: Int!, $where: ${whereInputType}!)
+      query ${operationName}($skip: Int!, $first: Int!, $where: ${whereInputType}!, $orderBy: ${orderByInputType}!)
       {
-        ${queryName}(first: $first, skip: $skip, where: $where){
+        ${queryName}(first: $first, skip: $skip, where: $where, orderBy: $orderBy){
           aggregate {
             count
           }
@@ -227,14 +228,15 @@ class DocList extends Component {
   }
 
   render() {
-    const { collection, fragmentName, errorPolicy, first, variables, where, ...rest } = this.props;
+    const { collection, fragmentName, errorPolicy, first, variables, where, orderBy, ...rest } = this.props;
     const { skip } = this.state;
 
     const controlledVariables = {
+      where,
+      orderBy,
       ...variables,
       skip,
       first,
-      where,
     };
 
     return (
@@ -269,6 +271,7 @@ DocList.propTypes = {
   first: PropTypes.number,
   classes: PropTypes.object.isRequired,
   where: PropTypes.object,
+  orderBy: PropTypes.string,
 };
 DocList.defaultProps = {
   fragmentName: 'default',
@@ -290,6 +293,7 @@ DocList.defaultProps = {
   },
   first: 10,
   where: {},
+  orderBy: {},
 };
 
 DocList.queryCount = 0;
