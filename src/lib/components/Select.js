@@ -51,11 +51,9 @@ class Select extends React.Component {
     if(multiple) {
       if(newValues.length > maxSelections) return;
       if(newValues.length < minSelections) return;
-      this.setState({ values: newValues });
       onChange(newValues);
     }else{
       this.setState({
-        values: [newValues],
         open: false,
       });
       onChange([newValues]);
@@ -101,10 +99,8 @@ class Select extends React.Component {
   }
 
   render() {
-    const { values: currentValues, open } = this.state;
-    const { classes, options, label, multiple, helperText, error, disabled, className } = this.props;
-
-    console.log('select: ', currentValues);
+    const { open } = this.state;
+    const { classes, options, label, multiple, helperText, error, disabled, className, value } = this.props;
 
     return (
       <FormControl className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
@@ -116,7 +112,7 @@ class Select extends React.Component {
           autoWidth
           disabled={disabled}
           multiple={multiple}
-          value={currentValues}
+          value={value}
           onChange={this.handleChange}
           input={<Input id="select-multiple-checkbox" />}
           MenuProps={{
@@ -127,7 +123,7 @@ class Select extends React.Component {
         >
           {options.map(option => (
             <MenuItem key={option.value} value={option.value}>
-              {multiple && <Checkbox checked={!!this.state.values.find(v => v === option.value)} /> }
+              {multiple && <Checkbox checked={!!value.find(v => v === option.value)} /> }
               {option.icon}
               <ListItemText primary={option.text} />
             </MenuItem>

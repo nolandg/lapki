@@ -47,8 +47,8 @@ class YearMonthDayPicker extends React.Component {
 
    static intToMoment(int) {
      const { year, month, day } = YearMonthDayPicker.intToDate(int);
-     const m = moment().utc().year(year).month(month - 1)
-       .day(day);
+     const m = moment.utc().year(year).month(month - 1)
+       .date(day);
      return m;
    }
 
@@ -87,8 +87,6 @@ class YearMonthDayPicker extends React.Component {
   render() {
     const { classes, label, helperText, error, disabled, value } = this.props;
     const { year, month, day } = YearMonthDayPicker.intToDate(value);
-
-    console.log('render: ', { year, month, day });
 
     return (
       <FormControl className={classes.formControl} error={error} disabled={disabled}>
