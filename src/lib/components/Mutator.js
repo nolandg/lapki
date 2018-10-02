@@ -192,7 +192,9 @@ class Mutator extends Component {
     this.clearErrors();
 
     const doc = assembleDoc();
+    console.log('assembled doc: ', doc);
     const castDoc = await validateDoc(doc);
+    console.log('cast doc: ', doc);
 
     return castDoc;
   }

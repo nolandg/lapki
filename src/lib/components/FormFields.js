@@ -7,6 +7,7 @@ import { withFormFields } from '../HOCs/withFormFields';
 export { Select } from './Select';
 export { DatePicker } from './DatePicker';
 export { YearMonthDayPicker } from './YearMonthDayPicker';
+export { FileUploader } from './FileUploader';
 
 /**
  * TextField
