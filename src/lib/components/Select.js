@@ -68,7 +68,7 @@ class Select extends React.Component {
     if(typeof valueOrOption === 'object') value = valueOrOption.value;
 
     const option = options.find(o => o.value === value);
-    if(option === undefined) throw new Error(`No option for value "${value}" found in <Select>`);
+    // if(option === undefined) throw new Error(`No option for value "${value}" found in <Select>`);
 
     return option;
   }
@@ -81,6 +81,7 @@ class Select extends React.Component {
   renderValue = (value) => {
     const { classes } = this.props;
     const option = this.getOption(value);
+    if(!option) return null;
     return (
       <div className={classes.value}>{option.icon}{option.text}</div>
     );
@@ -101,10 +102,12 @@ class Select extends React.Component {
 
   render() {
     const { values: currentValues, open } = this.state;
-    const { classes, options, label, multiple, helperText, error, disabled } = this.props;
+    const { classes, options, label, multiple, helperText, error, disabled, className } = this.props;
+
+    console.log('select: ', currentValues);
 
     return (
-      <FormControl className={classes.formControl} error={error} disabled={disabled}>
+      <FormControl className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
         <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
         <MuiSelect
           open={open}
@@ -144,6 +147,7 @@ Select.propTypes = {
     }).isRequired,
   ).isRequired,
   classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
   theme: PropTypes.object.isRequired,
   multiple: PropTypes.bool,
   label: PropTypes.string.isRequired,
@@ -163,6 +167,7 @@ Select.defaultProps = {
   error: undefined,
   disabled: undefined,
   value: undefined,
+  className: '',
 };
 
 const SelectEnhanced = withFormFields(withStyles(styles, { withTheme: true })(Select));

@@ -29,8 +29,15 @@ export const withFormFields = function (WrappedComponent) {
        this.props.fieldProps.onChange(this.props.name, value);
      }
 
+     renderUncontrolledComponent = () => {
+       const { classes, ...rest } = this.props;
+       return <WrappedComponent {...rest} />;
+     }
+
      render() {
        const { fieldProps, name, defaultValue, helperText, classes, ...rest } = this.props;
+       if(!fieldProps) return this.renderUncontrolledComponent();
+
        const defaults = {
          value: typeof defaultValue !== 'undefined' ? defaultValue : '',
          error: false,
@@ -70,8 +77,8 @@ export const withFormFields = function (WrappedComponent) {
      }
   }
   withFormFieldsClass.propTypes = {
-    fieldProps: PropTypes.object.isRequired,
-    name: PropTypes.string.isRequired,
+    fieldProps: PropTypes.object,
+    name: PropTypes.string,
     defaultValue: PropTypes.any,
     helperText: PropTypes.node,
     classes: PropTypes.object.isRequired,
@@ -79,6 +86,8 @@ export const withFormFields = function (WrappedComponent) {
   withFormFieldsClass.defaultProps = {
     defaultValue: undefined,
     helperText: '',
+    fieldProps: null,
+    name: '',
   };
 
   return withStyles(formFieldStyles)(withFormFieldsClass);

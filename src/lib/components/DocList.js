@@ -14,7 +14,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { Mutator } from './Mutator';
 import { pascalToCamel } from '../utils/stringUtils';
-// import gqlError from '../utils/gqlError';
 
 const styles = theme => ({
   loading: {
@@ -230,10 +229,11 @@ class DocList extends Component {
   render() {
     const { collection, fragmentName, errorPolicy, first, variables, where, orderBy, ...rest } = this.props;
     const { skip } = this.state;
+    const defaultOrderBy = collection.schema.defaultOrderBy || 'id_ASC';
 
     const controlledVariables = {
       where,
-      orderBy,
+      orderBy: orderBy || defaultOrderBy,
       ...variables,
       skip,
       first,
@@ -293,7 +293,7 @@ DocList.defaultProps = {
   },
   first: 10,
   where: {},
-  orderBy: {},
+  orderBy: null,
 };
 
 DocList.queryCount = 0;

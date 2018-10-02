@@ -4,15 +4,9 @@ import PropTypes from 'prop-types';
 
 import { withFormFields } from '../HOCs/withFormFields';
 
-/**
- * Select
- */
 export { Select } from './Select';
-
-/**
- * Date picker
- */
 export { DatePicker } from './DatePicker';
+export { YearMonthDayPicker } from './YearMonthDayPicker';
 
 /**
  * TextField
