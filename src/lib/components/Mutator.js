@@ -31,13 +31,15 @@ class Mutator extends Component {
   }
 
   getFormValueFromDoc = (fieldName) => {
-    const { document, mapDocValuesToFormValues } = this.props;
+    const { document, mapDocValuesToFormValues, collection } = this.props;
     if(!document) return undefined;
 
     const defaultMapFunc = () => document[fieldName] || undefined;
-    const mapFunc = _.get(mapDocValuesToFormValues, fieldName, defaultMapFunc);
+    const mapFunc = _.get(collection, `maps.${fieldName}.docToForm`)
+      || _.get(mapDocValuesToFormValues, fieldName)
+      || defaultMapFunc;
 
-    return mapFunc(document[fieldName], document, fieldName);
+    return mapFunc(document[fieldName], fieldName, document);
   }
 
   buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues }) => {
@@ -160,9 +162,15 @@ class Mutator extends Component {
   }
 
   assembleDoc = () => {
+    const { collection, document } = this.props;
     const doc = {};
-    this.getFields().forEach((field) => {
-      _.set(doc, field.name, field.value);
+    const fields = this.getFields();
+
+    fields.forEach((field) => {
+      const defaultMapFunc = () => field.value;
+      const mapFunc = _.get(collection, `maps.${field.name}.formToDoc.preValidation`) || defaultMapFunc;
+      const value = mapFunc(field.value, field.name, fields, document);
+      _.set(doc, field.name, value);
     });
 
     if(this.props.assembleDoc) return this.props.assembleDoc(doc);

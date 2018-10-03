@@ -72,22 +72,25 @@ const previewStyles = theme => ({
 });
 
 class PreviewFileList extends React.Component {
-  renderFile = ({ loaded, src, file, id }) => {
+  renderFile = ({ isNew, newFileData, existingFileData }) => {
     const { classes, removeFile } = this.props;
+    const data = isNew ? newFileData : existingFileData;
+    const name = isNew ? data.name : data.filename;
+    const { location, id } = data;
 
     return(
       <Card key={id} className={classes.card}>
         <CardActionArea className={classes.actionArea}>
-          {loaded
-            ? <CardMedia image={src} title={`Preview for ${file.name}`} className={classes.media} />
+          {location
+            ? <CardMedia image={location} title={`Preview for ${name}`} className={classes.media} />
             : <CircularProgress className={classes.progress} size={50} />
           }
           <CardContent>
-            <Typography variant="body1">{file.name}</Typography>
+            <Typography variant="body1">{name}</Typography>
           </CardContent>
         </CardActionArea>
         <CardActions className={classes.actions}>
-          <Button style={{ color: red[500] }} onClick={() => removeFile(file)} size="small">
+          <Button style={{ color: red[500] }} onClick={() => removeFile(id)} size="small">
             <DeleteIcon /><span>Remove</span>
           </Button>
         </CardActions>
@@ -118,108 +121,133 @@ class FileUploader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      previews: {},
-      inputKey: Math.random().toString(36),
+      files: {},
+      prevValue: props.value,
+      inputKey: FileUploader.generateInputKey(),
+      errors: [],
     };
   }
 
-  removeFile = (file) => {
-    const { previews } = this.state;
-    const { onChange, multiple } = this.props;
-    const id = this.getId(file);
+  resetInput = () => {
+    this.setState({ inputKey: FileUploader.generateInputKey });
+  }
 
-    delete previews[id];
-    this.setState({ previews });
+  static generateInputKey = () => Math.random().toString(36)
 
-    let value = _.map(previews, p => p.file);
-    if(!multiple) value = value[0];
+  buildFileId = (file) => {
+    if(file.isExisting) return file.id;
+
+    if(file.name) return file.name;
+    if(file.filename) return file.filename;
+    if(file.preview) return file.preview;
+
+    console.error('Could not build an id for file: ', file);
+    return 'none';
+  }
+
+  removeFile = (id) => {
+    const { files } = this.state;
+    const { onChange } = this.props;
+
+    delete files[id];
+    this.setState({ files });
+
+    onChange(files);
+  }
+
+  onDrop = (accepted, rejected) => {
+    const { files } = this.state;
+    const { onChange } = this.props;
+
+    // Add any new accepted files
+    accepted.forEach((file) => {
+      const id = this.buildFileId(file);
+      if(files[id]) {
+        // We already know about this file, nothing to do
+        return;
+      }
+
+      // New file, add it to state
+      const newFile = {
+        isNew: true,
+        newFileData: { id, ...file, file },
+        existingFileData: null,
+      };
+      newFile.reader = new window.FileReader();
+      newFile.reader.onload = (e) => {
+        newFile.newFileData.location = e.target.result;
+        this.forceUpdate();
+      };
+      newFile.reader.readAsDataURL(file);
+
+      files[id] = newFile;
+    });
+
+    // Generate errors for all rejected files
+    const errors = rejected.map(file => `Rejected "${file.name}".`);
+
+    // Update the state
+    this.setState({ files, errors });
+
+    // Notify the parent of changes
+    const value = FileUploader.convertFilesToValue(files);
     onChange(value);
   }
 
-  getId = file => file.name
+  static convertFilesToValue = (files) => {
+    const newFiles = _.map(_.filter(files, f => f.isNew), f => f.newFileData);
+    const existingFiles = _.map(_.filter(files, f => !f.isNew), f => f.existingFileData);
+    return { newFiles, existingFiles };
+  }
 
-  onDrop = (files, supressUpstream = false) => {
-    const { previews } = this.state;
-    const { onChange, multiple } = this.props;
-    const value = multiple ? files : files[0];
-    if(!supressUpstream) onChange(value);
+  static convertValueToFiles = (value) => {
+    const files = {};
 
-    let modifiedPreviews = false;
-
-    _.forEach(previews, (preview) => {
-      const file = files.find(f => this.getId(f) === this.getId(preview.id));
-      if(!file) {
-        delete previews[preview.id];
-        modifiedPreviews = true;
-      }
-    });
-
-    files.forEach((file) => {
-      const id = this.getId(file);
-      const preview = previews[id];
-
-      if(!preview) {
-        const newPreview = {
-          id,
-          file,
-          src: file.src,
-          loaded: file.loaded,
+    if(Array.isArray(value)) {
+      value.forEach((f) => {
+        files[f.id] = {
+          id: f.id,
+          isNew: f.isNew,
+          newFileData: f.isNew ? f : null,
+          existingFileData: f.isNew ? null : f,
         };
-
-        if(!newPreview.loaded) {
-          const reader = new window.FileReader();
-          reader.onload = (e) => {
-            newPreview.src = e.target.result;
-            newPreview.loaded = true;
-            this.forceUpdate();
-          };
-          reader.readAsDataURL(file);
-        }
-        previews[id] = newPreview;
-        modifiedPreviews = true;
-      }
-    });
-
-    if(modifiedPreviews) this.setState({ previews });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { value } = this.props;
-
-    if(!_.isEqual(prevProps.value, value)) {
-      this.setState({ inputKey: Math.random().toString(36) }); // eslint-disable-line
-      const files = this.convertInputValueToFiles(value);
-      this.onDrop(files, true);
+      });
+    }else{
+      _.forEach(value.newFiles, (f) => {
+        files[f.id] = {
+          id: f.id,
+          isNew: true,
+          newFileData: f,
+        };
+      });
+      _.forEach(value.existingFiles, (f) => {
+        files[f.id] = {
+          id: f.id,
+          isNew: false,
+          existingFileData: f,
+        };
+      });
     }
-  }
-
-  convertInputValueToFiles = (value) => {
-    const files = [];
-
-    if(!Array.isArray(value)) value = [value];
-
-    value.forEach((f) => {
-      if(!f) return;
-
-      if(!f.filename) {
-        console.log(value);
-      }
-
-      const file = {
-        name: f.filename,
-        src: f.location,
-        loaded: true,
-      };
-      files.push(file);
-    });
 
     return files;
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if(!_.isEqual(props.value, state.prevValue)) {
+      return {
+        inputKey: FileUploader.generateInputKey(),
+        prevValue: props.value,
+        files: FileUploader.convertValueToFiles(props.value),
+      };
+    }
+
+    return null;
+  }
+
+
   render() {
-    const { previews, inputKey } = this.state;
-    const { classes, label, helperText, error, disabled, multiple, ...rest } = this.props;
-    const { value } = this.props;
+    const { files, inputKey, errors } = this.state;
+    const { classes, label, helperText, error, disabled, multiple } = this.props;
 
 
     return (
@@ -236,15 +264,17 @@ class FileUploader extends React.Component {
           maxSize={20e6}
           multiple={multiple}
           inputProps={{ key: inputKey }}
-          {...rest}
         >
           <UploadIcon style={{ fontSize: 50 }} color="primary" />
           <Typography variant="headline" gutterBottom>Drag & Drop files here or</Typography>
           <Button color="primary" variant="contained" size="large">
             <FolderIcon /><span>Browse for files</span>
           </Button>
+          <div className={classes.errors}>
+            {errors.map(e => <div>{e}</div>)}
+          </div>
         </Dropzone>
-        <PreviewFileList files={previews} removeFile={this.removeFile} />
+        <PreviewFileList files={files} removeFile={this.removeFile} />
         <FormHelperText>{helperText}</FormHelperText>
       </FormControl>
     );
@@ -260,12 +290,13 @@ FileUploader.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   multiple: PropTypes.bool,
+  value: PropTypes.any,
 };
 FileUploader.defaultProps = {
   helperText: undefined,
   error: undefined,
   disabled: undefined,
-  value: undefined,
+  value: [],
   multiple: false,
 };
 
