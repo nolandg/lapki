@@ -254,11 +254,11 @@ class FileUploader extends React.Component {
 
   render() {
     const { files, inputKey, errors } = this.state;
-    const { classes, label, helperText, error, disabled, multiple } = this.props;
+    const { classes, label, helperText, error, disabled, multiple, className } = this.props;
 
 
     return (
-      <FormControl className={classes.formControl} error={error} disabled={disabled}>
+      <FormControl className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
         <Typography variant="body1">{label}</Typography>
         <Dropzone
           onDrop={this.onDrop}
@@ -298,6 +298,7 @@ FileUploader.propTypes = {
   label: PropTypes.string.isRequired,
   multiple: PropTypes.bool,
   value: PropTypes.any,
+  className: PropTypes.string,
 };
 FileUploader.defaultProps = {
   helperText: undefined,
@@ -305,6 +306,7 @@ FileUploader.defaultProps = {
   disabled: undefined,
   value: [],
   multiple: false,
+  className: '',
 };
 
 const FileUploaderEnhanced = withFormFields(withStyles(styles)(FileUploader));
