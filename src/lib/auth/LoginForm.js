@@ -49,11 +49,10 @@ class LoginForm extends Component {
     </Button>
   )
 
-  handleLoginClick = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleLoginClick = async (mutate, { prepareToSaveDoc }, result) => {
     const loginDetails = await prepareToSaveDoc();
     if(!loginDetails) return; // must have failed validation
 
-    startMutation();
     mutate({
       variables: { ...loginDetails },
     });
@@ -84,6 +83,8 @@ class LoginForm extends Component {
   }
 
   render() {
+    const { classes, ...rest } = this.props;
+
     return (
       <Mutator
         collection={LoginCollection}
@@ -93,7 +94,7 @@ class LoginForm extends Component {
         onMutationSuccess={this.handleLoginSuccess}
         defaultValues={{ email: 'noland.germain@gmail.com', password: 'powtowngetdown9875' }}
         getSuccessMessageAndAction={this.getSuccessMessageAndAction}
-        {...this.props}
+        {...rest}
       />
     );
   }

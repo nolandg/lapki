@@ -172,7 +172,8 @@ class Mutator extends Component {
       _.set(doc, field.name, value);
     });
 
-    if(this.props.assembleDoc) return this.props.assembleDoc(doc);
+
+    if(this.props.assembleDoc) return this.props.assembleDoc(doc, fields);
 
     return doc;
   }
@@ -204,7 +205,7 @@ class Mutator extends Component {
     return castDoc;
   }
 
-  startMutation = () => {
+  signalStartOfMutation = () => {
     this.setState({ loading: true, expectedProgress: 0 });
     const intervalTime = 50;
     const step = 100 / (this.props.expectedRequestTime / intervalTime);
@@ -267,12 +268,16 @@ class Mutator extends Component {
       assembleDoc: this.assembleDoc,
       validateDoc: this.validateDoc,
       prepareToSaveDoc: this.prepareToSaveDoc,
-      startMutation: this.startMutation,
       finishMutation: this.finishMutation,
       clearErrors: this.clearErrors,
     };
 
-    const handleClick = () => op.handleClick(mutate, handleClickFuncs, result);
+    const handleClick = () => {
+      op.handleClick((...mutationArgs) => {
+        this.signalStartOfMutation();
+        mutate(...mutationArgs);
+      }, handleClickFuncs, result);
+    };
     return op.renderButton({ handleClick, loading, result, isNew: this.isNew() });
   }
 

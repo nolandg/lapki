@@ -52,10 +52,8 @@ class ConfirmEmailButton extends Component {
     </Button>
   )
 
-  handleClick = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleClick = async (mutate, { prepareToSaveDoc }, result) => {
     const params = this.props.match.params;
-
-    startMutation();
     mutate({
       variables: {
         email: params.email,
@@ -92,6 +90,8 @@ class ConfirmEmailButton extends Component {
   }
 
   render() {
+    const { classes, ...rest } = this.props;
+
     return (
       <Mutator
         collection={ConfirmEmailCollection}
@@ -100,7 +100,7 @@ class ConfirmEmailButton extends Component {
         operations={this.operations}
         onMutationSuccess={this.handleSuccess}
         getSnackbarMessageAndAction={this.getSnackbarMessageAndAction}
-        {...this.props}
+        {...rest}
       />
     );
   }

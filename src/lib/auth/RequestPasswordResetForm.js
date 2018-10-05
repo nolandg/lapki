@@ -49,11 +49,9 @@ class RequestPasswordResetForm extends Component {
     </Button>
   )
 
-  handleClick = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleClick = async (mutate, { prepareToSaveDoc }, result) => {
     const requestDetails = await prepareToSaveDoc();
     if(!requestDetails) return; // must have failed validation
-
-    startMutation();
     mutate({
       variables: { ...requestDetails },
     });
@@ -83,6 +81,8 @@ class RequestPasswordResetForm extends Component {
   }
 
   render() {
+    const { classes, ...rest } = this.props;
+
     return (
       <Mutator
         collection={RequestPasswordResetCollection}
@@ -92,7 +92,7 @@ class RequestPasswordResetForm extends Component {
         onMutationSuccess={this.handleSuccess}
         defaultValues={{ email: 'noland@advancedwebapps.ca' }}
         getSuccessMessageAndAction={this.getSuccessMessageAndAction}
-        {...this.props}
+        {...rest}
       />
     );
   }

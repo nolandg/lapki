@@ -76,7 +76,7 @@ class ResetPasswordForm extends Component {
     };
   }
 
-  handleClick = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleClick = async (mutate, { prepareToSaveDoc }, result) => {
     let formValues = await prepareToSaveDoc();
     if(!formValues) return; // must have failed validation
 
@@ -88,7 +88,6 @@ class ResetPasswordForm extends Component {
       token,
     };
 
-    startMutation();
     mutate({
       variables: { ...formValues },
     });
@@ -144,6 +143,8 @@ class ResetPasswordForm extends Component {
   }
 
   render() {
+    const { classes, ...rest } = this.props;
+
     return (
       <Mutator
         collection={ResetPasswordCollection}
@@ -153,7 +154,7 @@ class ResetPasswordForm extends Component {
         onMutationSuccess={this.handleSuccess}
         defaultValues={{ email: 'noland.germain@gmail.com' }}
         getSnackbarMessageAndAction={this.getSnackbarMessageAndAction}
-        {...this.props}
+        {...rest}
       />
     );
   }

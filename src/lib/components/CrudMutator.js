@@ -57,10 +57,9 @@ class CrudMutator extends Component {
     return operations;
   }
 
-  handleCreateDoc = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleCreateDoc = async (mutate, { prepareToSaveDoc }, result) => {
     const doc = await prepareToSaveDoc();
     if(!doc) return; // must have failed validation
-    startMutation();
     mutate({
       variables: {
         data: doc,
@@ -68,7 +67,7 @@ class CrudMutator extends Component {
     });
   }
 
-  handleUpdateDoc = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleUpdateDoc = async (mutate, { prepareToSaveDoc }, result) => {
     const doc = await prepareToSaveDoc();
     if(!doc) return; // must have failed validation
     const id = _.get(this.props, 'document.id');
@@ -77,7 +76,6 @@ class CrudMutator extends Component {
     // We can't send id for updates
     delete doc.id;
 
-    startMutation();
     mutate({
       variables: {
         where: { id },
@@ -86,12 +84,11 @@ class CrudMutator extends Component {
     });
   }
 
-  handleDeleteDoc = async (mutate, { startMutation, clearErrors }, result) => {
+  handleDeleteDoc = async (mutate, { clearErrors }, result) => {
     clearErrors();
     const id = _.get(this.props, 'document.id');
     if(!id) throw Error('Cannot delete a document without id.');
 
-    startMutation();
     mutate({
       variables: {
         where: { id },

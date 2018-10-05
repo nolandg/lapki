@@ -49,13 +49,12 @@ class RegisterForm extends Component {
     </Button>
   )
 
-  handleRegisterClick = async (mutate, { prepareToSaveDoc, startMutation }, result) => {
+  handleRegisterClick = async (mutate, { prepareToSaveDoc }, result) => {
     const formValues = await prepareToSaveDoc();
     if(!formValues) return; // must have failed validation
 
     delete formValues.passwordConfirm;
 
-    startMutation();
     mutate({
       variables: { data: { ...formValues } },
     });
@@ -95,6 +94,8 @@ class RegisterForm extends Component {
   }
 
   render() {
+    const { classes, ...rest } = this.props;
+
     return (
       <Mutator
         collection={RegisterCollection}
@@ -104,7 +105,7 @@ class RegisterForm extends Component {
         onMutationSuccess={this.handleSuccess}
         defaultValues={{ email: 'noland@advancedwebapps.ca', password: '88888888', name: 'noland' }}
         getSuccessMessageAndAction={this.getSuccessMessageAndAction}
-        {...this.props}
+        {...rest}
       />
     );
   }
