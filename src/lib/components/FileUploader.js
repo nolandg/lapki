@@ -160,7 +160,13 @@ class FileUploader extends React.Component {
   }
 
   onDrop = (accepted, rejected) => {
-    const { files } = this.state;
+    const { multiple } = this.props;
+    let { files } = this.state;
+
+    // If we're only a one-file uploader then remove existing files
+    if(!multiple && accepted.length) {
+      files = {};
+    }
 
     // Add any new accepted files
     accepted.forEach((file) => {

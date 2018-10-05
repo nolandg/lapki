@@ -31,15 +31,13 @@ class Mutator extends Component {
   }
 
   getFormValueFromDoc = (fieldName) => {
-    const { document, mapDocValuesToFormValues, collection } = this.props;
+    const { document, collection } = this.props;
     if(!document) return undefined;
 
-    const defaultMapFunc = () => document[fieldName] || undefined;
-    const mapFunc = _.get(collection, `maps.${fieldName}.docToForm`)
-      || _.get(mapDocValuesToFormValues, fieldName)
-      || defaultMapFunc;
+    const defaultTransformFunc = () => document[fieldName] || undefined;
+    const transform = _.get(collection, `transforms.${fieldName}.docValueToFormValue`) || defaultTransformFunc;
 
-    return mapFunc(document[fieldName], fieldName, document);
+    return transform(document[fieldName], fieldName, document);
   }
 
   buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues }) => {
@@ -155,6 +153,7 @@ class Mutator extends Component {
           this.setFieldError(path, message);
         });
       }
+      console.warn('Errors validating document: ', error);
       return false;
     }
 
@@ -167,9 +166,9 @@ class Mutator extends Component {
     const fields = this.getFields();
 
     fields.forEach((field) => {
-      const defaultMapFunc = () => field.value;
-      const mapFunc = _.get(collection, `maps.${field.name}.formToDoc.preValidation`) || defaultMapFunc;
-      const value = mapFunc(field.value, field.name, fields, document);
+      const defaultTransform = () => field.value;
+      const transform = _.get(collection, `transforms.${field.name}.formValueToMutationArg.preValidation`) || defaultTransform;
+      const value = transform(field.value, field.name, fields, document);
       _.set(doc, field.name, value);
     });
 
@@ -352,6 +351,7 @@ class Mutator extends Component {
     };
 
     const mutationComponents = _.mapValues(operations, this.buildMutationComponent);
+    // Special case for "save" operation to make it easier to collapse update and create into save
     mutationComponents.save = isNew ? mutationComponents.create : mutationComponents.update;
 
     return (
@@ -368,17 +368,20 @@ Mutator.propTypes = {
   classes: PropTypes.object.isRequired,
   document: PropTypes.object,
   collection: PropTypes.object.isRequired,
-  fragmentName: PropTypes.string,
+  fragmentName: PropTypes.string, // eslint-disable-line
   children: PropTypes.func.isRequired,
   onMutationError: PropTypes.func,
   onMutationSuccess: PropTypes.func,
-  fields: PropTypes.array.isRequired,
+  fields: PropTypes.array.isRequired, // eslint-disable-line
   expectedRequestTime: PropTypes.number,
   operations: PropTypes.object.isRequired,
   assembleDoc: PropTypes.func,
   getSuccessMessageAndAction: PropTypes.func,
   getErrorMessageAndAction: PropTypes.func,
-  mapDocValuesToFormValues: PropTypes.object,
+  prepareToSaveDoc: PropTypes.func,
+  getSnackbarMessageAndAction: PropTypes.func,
+  client: PropTypes.object.isRequired,
+  validateDoc: PropTypes.func,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -389,7 +392,9 @@ Mutator.defaultProps = {
   assembleDoc: null,
   getSuccessMessageAndAction: null,
   getErrorMessageAndAction: null,
-  mapDocValuesToFormValues: null,
+  prepareToSaveDoc: null,
+  getSnackbarMessageAndAction: null,
+  validateDoc: null,
 };
 
 Mutator.queryRegistry = [];
