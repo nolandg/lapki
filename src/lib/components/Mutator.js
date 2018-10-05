@@ -326,6 +326,22 @@ class Mutator extends Component {
     return null;
   }
 
+
+  buildMutationComponent = op => (
+    <Mutation
+      mutation={op.mutationQuery}
+      children={this.buildMutationRenderProp(op)}
+      onCompleted={(data) => { this.handleMutationSuccess(data); if(op.onSuccess) op.onSuccess(data); }}
+      onError={(error) => { this.handleMutationError(error); if(op.onError) op.onError(error); }}
+      refetchQueries={(result) => {
+        if(resetStoreEachOnEveryMutation) {
+          return [];
+        }
+        return Mutator.queryRegistry;
+      }}
+    />
+  );
+
   render() {
     const isNew = this.isNew();
     const { children, operations } = this.props;
@@ -337,24 +353,7 @@ class Mutator extends Component {
       loading,
     };
 
-    const commonMutationProps = {
-      onCompleted: this.handleMutationSuccess,
-      onError: this.handleMutationError,
-      refetchQueries: (result) => {
-        if(resetStoreEachOnEveryMutation) {
-          return [];
-        }
-        return Mutator.queryRegistry;
-      },
-    };
-
-    const mutationComponents = _.mapValues(operations, op => (
-      <Mutation
-        mutation={op.mutationQuery}
-        children={this.buildMutationRenderProp(op)}
-        {...commonMutationProps}
-      />
-    ));
+    const mutationComponents = _.mapValues(operations, this.buildMutationComponent);
     mutationComponents.save = isNew ? mutationComponents.create : mutationComponents.update;
 
     return (

@@ -145,19 +145,22 @@ class FileUploader extends React.Component {
     return 'none';
   }
 
+  updateParentValueWithFiles = (files) => {
+    const value = FileUploader.convertFilesToValue(files);
+    this.props.onChange(value);
+  }
+
   removeFile = (id) => {
     const { files } = this.state;
-    const { onChange } = this.props;
 
     delete files[id];
     this.setState({ files });
 
-    onChange(files);
+    this.updateParentValueWithFiles(files);
   }
 
   onDrop = (accepted, rejected) => {
     const { files } = this.state;
-    const { onChange } = this.props;
 
     // Add any new accepted files
     accepted.forEach((file) => {
@@ -189,9 +192,7 @@ class FileUploader extends React.Component {
     // Update the state
     this.setState({ files, errors });
 
-    // Notify the parent of changes
-    const value = FileUploader.convertFilesToValue(files);
-    onChange(value);
+    this.updateParentValueWithFiles(files);
   }
 
   static convertFilesToValue = (files) => {

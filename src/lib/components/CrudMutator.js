@@ -13,12 +13,14 @@ class CrudMutator extends Component {
   }
 
   buildOperations = (props) => {
-    const { collection, fragmentName } = props;
+    const { collection, fragmentName, onSaveSuccess, onSaveError } = props;
 
     const buildOperation = op => ({
       mutationQuery: buildMutation(op, collection, fragmentName),
       renderButton: props[`render${camelToPascal(op)}Button`],
       handleClick: this[`handle${camelToPascal(op)}Doc`],
+      onSuccess: props[`on${camelToPascal(op)}Success`],
+      onError: props[`on${camelToPascal(op)}Error`],
     });
 
     const operations = {
@@ -27,6 +29,8 @@ class CrudMutator extends Component {
       delete: buildOperation('delete'),
     };
 
+    // If not provided with create or update buttons, use provided save button instead
+    // Allows collapsing create and update into save
     if(!operations.create.renderButton && props.renderSaveButton) {
       operations.create.renderButton = props.renderSaveButton;
     }
@@ -34,6 +38,17 @@ class CrudMutator extends Component {
       operations.update.renderButton = props.renderSaveButton;
     }
 
+    // If provided with onSave[Success/Error], use that instead
+    if(onSaveSuccess) {
+      operations.create.onSuccess = onSaveSuccess;
+      operations.update.onSuccess = onSaveSuccess;
+    }
+    if(onSaveError) {
+      operations.create.onError = onSaveError;
+      operations.update.onError = onSaveError;
+    }
+
+    // Automatically supress rendering of delete button for new docs
     operations.delete.renderButton = (...args) => {
       if(args[0].isNew) return null;
       return props.renderDeleteButton(...args);
@@ -106,6 +121,10 @@ CrudMutator.propTypes = {
   renderDeleteButton: PropTypes.func.isRequired,
   renderSaveButton: PropTypes.func,
   onMutationError: PropTypes.func,
+  onDeleteSuccess: PropTypes.func,
+  onSaveSuccess: PropTypes.func,
+  onUpdateSuccess: PropTypes.func,
+  onCreateSuccess: PropTypes.func,
   onMutationSuccess: PropTypes.func,
   fields: PropTypes.array.isRequired,
   expectedRequestTime: PropTypes.number,
@@ -119,6 +138,10 @@ CrudMutator.defaultProps = {
   renderSaveButton: null,
   renderUpdateButton: null,
   renderCreateButton: null,
+  onSaveSuccess: null,
+  onDeleteSuccess: null,
+  onUpdateSuccess: null,
+  onCreateSuccess: null,
 };
 
 export { CrudMutator };
