@@ -10,6 +10,28 @@ export { YearMonthDayPicker } from './YearMonthDayPicker';
 export { FileUploader } from './FileUploader';
 
 /**
+ * Masked Text Field
+ */
+const onChangeCleanInput = ({ onChange, blacklist }) => (event) => {
+  let value = event.target.value;
+  value = value.replace(blacklist, '');
+  onChange(value);
+};
+const MaskedTextField = ({ value, onChange, blacklist, ...rest }) => {
+  if(!value) value = '';
+  return <MuiTextField value={value} onChange={onChangeCleanInput({ onChange, blacklist })} {...rest} />;
+};
+MaskedTextField.propTypes = {
+  value: PropTypes.any,
+  blacklist: PropTypes.instanceOf(RegExp).isRequired,
+};
+MaskedTextField.defaultProps = {
+  value: '',
+};
+const EnhancedMaskedTextField = withFormFields(MaskedTextField);
+export { EnhancedMaskedTextField as MaskedTextField };
+
+/**
  * TextField
  */
 const TextField = ({ value, onChange, ...rest }) => {

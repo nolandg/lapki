@@ -174,7 +174,6 @@ class Mutator extends Component {
 
 
     if(this.props.assembleDoc) return this.props.assembleDoc(doc, fields);
-
     return doc;
   }
 
