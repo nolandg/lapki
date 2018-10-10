@@ -38,9 +38,6 @@ const client = {
   target: 'web',
   entry: {
     client: './src/client.js',
-    // HOCs: './src/lib/HOCs/index.js',
-    // components: './src/lib/components/index.js',
-    // auth: './src/lib/auth/index.js',
   },
   output: {
     path: outputPath,

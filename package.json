@@ -8,9 +8,10 @@
   "browser": "build/client.js",
   "scripts": {
     "build": "babel --out-dir=build src",
-    "build-webpack": "webpack",
+    "build-webpack": "webpack --mode development --watch",
     "start": "babel --out-dir=build src -w",
-    "link": "node ./scripts/link.js"
+    "link": "node ./scripts/link.js",
+    "unlink": "node ./scripts/unlink.js"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -21,6 +22,7 @@
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-react-jsx": "^7.0.0",

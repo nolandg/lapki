@@ -2,7 +2,7 @@ import React from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import { UserContext } from '../contexts/UserContext';
+import { UserContextConsumer } from '../contexts/UserContext';
 
 const deleteAuthCookie = () => {
   document.cookie = 'lapki_auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -19,15 +19,9 @@ function withUser(WrappedComponent) {
       const { client } = this.props;
 
       return (
-        <UserContext.Consumer>
+        <UserContextConsumer>
           { (value) => {
-            console.log('@@@@@ Consumer value: ', value);
-            console.log('UserContext: ', UserContext);
-            console.log('UserContext.Consumer: ', UserContext.Consumer);
-            // const { user, loading, error } = value;
-            const user = null;
-            const error = null;
-            const loading = false;
+            const { user, loading, error } = value;
 
             return (
               <WrappedComponent
@@ -40,7 +34,7 @@ function withUser(WrappedComponent) {
               />
             );
           }}
-        </UserContext.Consumer>
+        </UserContextConsumer>
       );
     }
   }

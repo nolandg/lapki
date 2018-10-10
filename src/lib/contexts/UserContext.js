@@ -20,12 +20,11 @@ const currentUserQuery = gql`
 Mutator.registerQuery('CurrentUser_for_UserContext');
 
 const UserContext = React.createContext();
+const UserContextConsumer = UserContext.Consumer;
 
 class UserContextProvider extends Component {
   render() {
     const { children } = this.props;
-
-    console.log('UserContextProvider rendering: ', this.props);
 
     return (
       <Query query={currentUserQuery} errorPolicy="all" notifyOnNetworkStatusChange>
@@ -47,10 +46,6 @@ class UserContextProvider extends Component {
             user,
           };
 
-          console.log('value: ', value);
-          console.log('error: ', error);
-          console.log('data: ', data);
-
           return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
         }}
       </Query>
@@ -62,5 +57,4 @@ UserContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-
-export { UserContext, UserContextProvider };
+export { UserContext, UserContextProvider, UserContextConsumer };
