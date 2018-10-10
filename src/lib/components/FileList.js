@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import _ from 'lodash';
+// import _ from 'lodash';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -34,6 +34,7 @@ const styles = theme => ({
   },
   actionArea: {
     width: '100%',
+    textAlign: 'center',
   },
   mediaImg: {
     width: '100%',
@@ -100,7 +101,7 @@ class FileList extends React.Component {
 
     return (
       <div className={classes.root}>
-        {_.map(files, this.renderFile)}
+        {files.map(this.renderFile)}
       </div>
     );
   }
@@ -108,8 +109,7 @@ class FileList extends React.Component {
 
 FileList.propTypes = {
   classes: PropTypes.object.isRequired,
-  files: PropTypes.object.isRequired,
-  removeFile: PropTypes.func.isRequired,
+  files: PropTypes.array.isRequired,
 };
 FileList = withStyles(styles)(FileList);
 export { FileList };

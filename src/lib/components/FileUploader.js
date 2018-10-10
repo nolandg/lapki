@@ -177,11 +177,12 @@ class FileUploader extends React.Component {
     const { files, inputKey, errors } = this.state;
     const { classes, label, helperText, error, disabled, multiple, className } = this.props;
 
-    const previewFiles = files.map((file) => {
+    const previewFiles = _.map(files, (file) => {
       let ret;
       if(file.isNew) {
         ret = file.newFileData;
-        ret.filename = file.name;
+        ret.filename = ret.file.name;
+        ret.mimetype = ret.file.type;
       }else {
         ret = file.existingFileData;
       }
