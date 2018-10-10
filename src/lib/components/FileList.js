@@ -11,10 +11,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
 
-// import wordIcon from '../../../images/icon-word.png';
-// import excelIcon from '../../../images/icon-excel.png';
-// import pdfIcon from '../../../images/icon-pdf.png';
-// import fileIcon from '../../../images/icon-file.png';
+import wordIcon from '../../../images/icon-word.png';
+import excelIcon from '../../../images/icon-excel.png';
+import pdfIcon from '../../../images/icon-pdf.png';
+import fileIcon from '../../../images/icon-file.png';
 
 const styles = theme => ({
   root: {
@@ -27,7 +27,7 @@ const styles = theme => ({
   },
   card: {
     padding: 0,
-    width: 200,
+    width: 250,
     margin: theme.spacing.unit * 2,
     '&:last-child': { marginRight: 0 },
     '&:first-child': { marginLeft: 0 },
@@ -40,7 +40,7 @@ const styles = theme => ({
     width: '100%',
   },
   media: {
-    height: 150,
+    height: 100,
   },
 });
 
@@ -52,31 +52,31 @@ class FileList extends React.Component {
   }
 
   getImageSrc = ({ location, mimetype, filename }) => {
-    if(mimetype.startsWith('image')) return location;
+    if(mimetype.startsWith('image')) return { src: location, isImage: true };
 
     const ext = this.getFilenameExtension(filename);
     switch(ext) {
       case 'doc': case 'docx': case 'docm': case 'odt':
-        return 'wordIcon';
-      // case 'xls': case 'xlsx': case 'xlsm': case 'ods':
-      //   return excelIcon;
-      // case 'pdf':
-      //   return pdfIcon;
-      // default: return fileIcon;
-      default: return '';
+        return { src: wordIcon, isImage: false };
+      case 'xls': case 'xlsx': case 'xlsm': case 'ods':
+        return { src: excelIcon, isImage: false };
+      case 'pdf':
+        return { src: pdfIcon, isImage: false };
+      default: return { src: fileIcon, isImage: false };
     }
   }
 
   renderFile = (file) => {
     const { id, filename } = file;
     const { classes, actions } = this.props;
-    const src = this.getImageSrc(file);
+    const { src, isImage } = this.getImageSrc(file);
+    const backgroundSize = isImage ? 'cover' : 'contain';
 
     return(
       <Card key={id} className={classes.card}>
         <CardActionArea className={classes.actionArea}>
           {src
-            ? <CardMedia image={src} title={`Preview for ${filename}`} className={classes.media} />
+            ? <CardMedia image={src} style={{ backgroundSize }} title={`Preview for ${filename}`} className={classes.media} />
             : <CircularProgress className={classes.progress} size={50} />
           }
           <CardContent>
