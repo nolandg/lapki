@@ -5,24 +5,28 @@
   "license": "MIT",
   "author": "Noland Germain",
   "main": "build/server.js",
+  "browser": "build/client.js",
   "scripts": {
     "build": "babel --out-dir=build src",
+    "build-webpack": "webpack",
     "start": "babel --out-dir=build src -w",
     "link": "node ./scripts/link.js"
   },
-  "browser": "build/client.js",
   "dependencies": {
-    "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "keycode": "^2.2.0",
     "material-ui-pickers": "^1.0.0-rc.17"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "babel-eslint": "^9.0.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
+    "babel-loader": "^8.0.4",
     "chalk": "^2.4.1",
     "command-line-args": "^5.0.2",
     "eslint": "^5.5.0",
@@ -30,7 +34,11 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "react-dropzone": "^6.0.0"
+    "file-loader": "^2.0.0",
+    "react-dropzone": "^6.0.0",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   },
   "peerDependencies": {
     "@jaredpalmer/after": "https://github.com/jaredpalmer/after.js.git#46065426226ef84eeed999b03c49ddc2ce7a3327",

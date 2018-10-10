@@ -1,1 +1,1 @@
-module.exports = require('./build/lib/HOCs');
+module.exports = require('./build/client').HOCs;

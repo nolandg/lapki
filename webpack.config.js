@@ -1,12 +1,11 @@
 const path = require('path');
 
-module.exports = {
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'index.js',
-    libraryTarget: 'commonjs2',
-  },
+const outputPath = path.resolve(__dirname, 'build');
+const libraryTarget = 'commonjs2';
+
+const common = {
+  // devtool: 'cheap-module-eval-source-map',
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -16,13 +15,52 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
+            presets: ['@babel/preset-env'],
           },
         },
       },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              limit: 20e6,
+            },
+          },
+        ],
+      },
     ],
   },
-  externals: {
-    react: 'commonjs react',
-  },
 };
+
+const client = {
+  target: 'web',
+  entry: {
+    client: './src/client.js',
+    // HOCs: './src/lib/HOCs/index.js',
+    // components: './src/lib/components/index.js',
+    // auth: './src/lib/auth/index.js',
+  },
+  output: {
+    path: outputPath,
+    filename: '[name].js',
+    libraryTarget,
+  },
+  ...common,
+};
+
+const server = {
+  target: 'node',
+  entry: {
+    server: './src/server.js',
+  },
+  output: {
+    path: outputPath,
+    filename: '[name].js',
+    libraryTarget,
+  },
+  ...common,
+};
+
+module.exports = [client, server];

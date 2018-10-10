@@ -6,9 +6,8 @@ import qatch from 'await-to-js';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
-
 import gqlError from '../utils/gqlError';
-import { AuthenticationModal } from '../auth';
+import { AuthenticationModal } from '../auth/AuthenticationModal';
 import { Snackbar } from './Snackbar';
 
 const resetStoreEachOnEveryMutation = true;
@@ -137,15 +136,13 @@ class Mutator extends Component {
 
   recheckForErrors = () => {
     this.clearErrors();
-    const doc = this.assembleDoc();
-    this.validateDoc(doc);
+    this.validateDoc();
   }
 
-  validateDoc = async (doc, setErrors = true) => {
-    if(this.props.validateDoc) return this.props.validateDoc(doc, setErrors);
-
+  validateDoc = async (setErrors = true) => {
+    let doc = this.assembleDoc('preValidation');
     const { schema } = this.props.collection;
-    const [error, castDoc] = await qatch(schema.validate(doc, { abortEarly: false }));
+    const [error] = await qatch(schema.validate(doc, { abortEarly: false }));
 
     if(error) {
       if(setErrors) {
@@ -157,23 +154,26 @@ class Mutator extends Component {
       return false;
     }
 
-    return castDoc;
+    doc = this.assembleDoc('postValidation');
+
+    return doc;
   }
 
-  assembleDoc = () => {
+  assembleDoc = (stage) => {
+    if(stage !== 'preValidation' && stage !== 'postValidation') throw new Error('assembleDoc stage must be either "preValidation" or "postValidation".');
+
     const { collection, document } = this.props;
     const doc = {};
     const fields = this.getFields();
 
     fields.forEach((field) => {
       const defaultTransform = () => field.value;
-      const transform = _.get(collection, `transforms.${field.name}.formValueToMutationArg.preValidation`) || defaultTransform;
+      const transform = _.get(collection, `transforms.${field.name}.formValueToMutationArg.${stage}`) || defaultTransform;
       const value = transform(field.value, field.name, fields, document);
       _.set(doc, field.name, value);
     });
 
-
-    if(this.props.assembleDoc) return this.props.assembleDoc(doc, fields);
+    if(this.props.assembleDoc) return this.props.assembleDoc(stage, doc, fields);
     return doc;
   }
 
@@ -192,16 +192,15 @@ class Mutator extends Component {
     return errors;
   }
 
-  prepareToSaveDoc = async ({ assembleDoc = this.assembleDoc, validateDoc = this.validateDoc } = {}) => {
-    if(this.props.prepareToSaveDoc) return this.props.prepareToSaveDoc({ assembleDoc, validateDoc });
+  prepareToSaveDoc = async ({ assembleDoc = this.assembleDoc } = {}) => {
+    if(this.props.prepareToSaveDoc) return this.props.prepareToSaveDoc({ assembleDoc, validateDoc: this.validateDoc });
 
-    this.setState({ firstSaveAttempted: true });
+    if(!this.state.firstSaveAttempted) this.setState({ firstSaveAttempted: true });
     this.clearErrors();
 
-    const doc = assembleDoc();
-    const castDoc = await validateDoc(doc);
+    const doc = await this.validateDoc();
 
-    return castDoc;
+    return doc;
   }
 
   signalStartOfMutation = () => {
@@ -224,8 +223,10 @@ class Mutator extends Component {
 
   componentWillUnmount = () => {
     const { onMutationSuccess } = this.props;
+    this.closeSnackbar();
     clearInterval(this.expectedProgressInterval);
     clearTimeout(this.onMutationsSuccessTimeout);
+    clearTimeout(this.resetStoreTimeout);
     if(onMutationSuccess && this.callMutationSuccess) this.callMutationSuccess();
   }
 
@@ -233,16 +234,16 @@ class Mutator extends Component {
     const { onMutationSuccess, client } = this.props;
 
     if(resetStoreEachOnEveryMutation) {
-      client.resetStore();
+      this.resetStoreTimeout = window.setTimeout(client.resetStore, 50);
     }
 
     this.finishMutation();
     if(onMutationSuccess) {
       this.callMutationSuccess = () => onMutationSuccess(data);
-      this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 0);
+      this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
     }
 
-    this.openSnackbar({ data, hackToGetDoc: this.assembleDoc() });
+    this.openSnackbar({ data, hackToGetDoc: this.assembleDoc('preValidation') });
 
     console.log('Mutation successful');
   }
@@ -265,7 +266,6 @@ class Mutator extends Component {
     const { loading } = this.state;
     const handleClickFuncs = {
       assembleDoc: this.assembleDoc,
-      validateDoc: this.validateDoc,
       prepareToSaveDoc: this.prepareToSaveDoc,
       finishMutation: this.finishMutation,
       clearErrors: this.clearErrors,
@@ -327,12 +327,22 @@ class Mutator extends Component {
     return null;
   }
 
+  getMutationOperationName = (mutation) => {
+    if(!mutation || !mutation.definitions) throw new Error('Must pass a graphql mutation AST to getMutationOperationName()');
+    const op = mutation.definitions.find(d => d.kind === 'OperationDefinition');
+    if(!op) throw new Error('No operation definition found in graphql AST.');
+    return op.name.value;
+  }
 
   buildMutationComponent = op => (
     <Mutation
       mutation={op.mutationQuery}
       children={this.buildMutationRenderProp(op)}
-      onCompleted={(data) => { this.handleMutationSuccess(data); if(op.onSuccess) op.onSuccess(data); }}
+      onCompleted={(data) => {
+        const doc = data[this.getMutationOperationName(op.mutationQuery)];
+        this.handleMutationSuccess(data);
+        if(op.onSuccess) op.onSuccess(doc);
+      }}
       onError={(error) => { this.handleMutationError(error); if(op.onError) op.onError(error); }}
       refetchQueries={(result) => {
         if(resetStoreEachOnEveryMutation) {
@@ -385,7 +395,6 @@ Mutator.propTypes = {
   prepareToSaveDoc: PropTypes.func,
   getSnackbarMessageAndAction: PropTypes.func,
   client: PropTypes.object.isRequired,
-  validateDoc: PropTypes.func,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -398,7 +407,6 @@ Mutator.defaultProps = {
   getErrorMessageAndAction: null,
   prepareToSaveDoc: null,
   getSnackbarMessageAndAction: null,
-  validateDoc: null,
 };
 
 Mutator.queryRegistry = [];

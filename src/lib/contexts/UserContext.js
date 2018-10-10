@@ -25,6 +25,8 @@ class UserContextProvider extends Component {
   render() {
     const { children } = this.props;
 
+    console.log('UserContextProvider rendering: ', this.props);
+
     return (
       <Query query={currentUserQuery} errorPolicy="all" notifyOnNetworkStatusChange>
         {({ networkStatus, error, data }) => {
@@ -44,6 +46,10 @@ class UserContextProvider extends Component {
             error,
             user,
           };
+
+          console.log('value: ', value);
+          console.log('error: ', error);
+          console.log('data: ', data);
 
           return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
         }}

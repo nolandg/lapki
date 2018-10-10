@@ -1,1 +1,1 @@
-module.exports = require('./build/lib/auth');
+module.exports = require('./build/client').auth;

@@ -17,7 +17,7 @@ export const create = (options, server) => {
     muiTheme: null,
     routes: [],
     razzlePublicDir: '',
-    razzleAssetsManifestPath: '',
+    assets: null,
     apolloClientOptions: {},
     customGetInitialPropsArgs: {},
     isDataTreeErrorFatal: error => false,
@@ -32,8 +32,7 @@ export const create = (options, server) => {
   };
   options = { ...defaultOptions, ...options };
   options.apolloClientOptions = { ...options.apolloClientOptions, ssrMode: true, target: 'server' };
-
-  const assets = require(options.razzleAssetsManifestPath);
+  if(!options.assets) throw new Error('You must pass assets in serverApp.create(options), eg: assets = require(options.razzleAssetsManifestPath)');
 
   if(options.disablePoweredByExpress) server.disable('x-powered-by');
 
@@ -71,7 +70,7 @@ export const create = (options, server) => {
           req,
           res,
           routes: options.routes,
-          assets,
+          assets: options.assets,
           customRenderer: options.customRenderer || customRenderer,
           document: options.document,
           muiTheme: options.muiTheme,

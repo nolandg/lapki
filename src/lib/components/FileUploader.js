@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -6,19 +6,13 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Dropzone from 'react-dropzone';
 import _ from 'lodash';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import DeleteIcon from '@material-ui/icons/Delete';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import FolderIcon from '@material-ui/icons/FolderOpen';
-import Card from '@material-ui/core/Card';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
-import CardMedia from '@material-ui/core/CardMedia';
+import DeleteIcon from '@material-ui/icons/Delete';
 import red from '@material-ui/core/colors/red';
 
-
+import { FileList } from './FileList';
 import { withFormFields } from '../HOCs/withFormFields';
 
 const styles = theme => ({
@@ -44,85 +38,12 @@ const styles = theme => ({
   },
 });
 
-const previewStyles = theme => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    padding: 0,
-    flexWrap: 'wrap',
-  },
-  card: {
-    padding: 0,
-    width: 200,
-    margin: theme.spacing.unit * 2,
-    '&:last-child': { marginRight: 0 },
-    '&:first-child': { marginLeft: 0 },
-  },
-  actionArea: {
-    width: '100%',
-  },
-  mediaImg: {
-    width: '100%',
-  },
-  media: {
-    height: 150,
-  },
-});
-
-class PreviewFileList extends React.Component {
-  renderFile = ({ isNew, newFileData, existingFileData }) => {
-    const { classes, removeFile } = this.props;
-    const data = isNew ? newFileData : existingFileData;
-    const name = isNew ? data.name : data.filename;
-    const { location, id } = data;
-
-    return(
-      <Card key={id} className={classes.card}>
-        <CardActionArea className={classes.actionArea}>
-          {location
-            ? <CardMedia image={location} title={`Preview for ${name}`} className={classes.media} />
-            : <CircularProgress className={classes.progress} size={50} />
-          }
-          <CardContent>
-            <Typography variant="body1">{name}</Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions className={classes.actions}>
-          <Button style={{ color: red[500] }} onClick={() => removeFile(id)} size="small">
-            <DeleteIcon /><span>Remove</span>
-          </Button>
-        </CardActions>
-      </Card>
-    );
-  }
-
-  render() {
-    const { files, classes } = this.props;
-
-    return (
-      <div className={classes.root}>
-        {_.map(files, this.renderFile)}
-      </div>
-    );
-  }
-}
-
-PreviewFileList.propTypes = {
-  classes: PropTypes.object.isRequired,
-  files: PropTypes.object.isRequired,
-  removeFile: PropTypes.func.isRequired,
-};
-PreviewFileList = withStyles(previewStyles)(PreviewFileList);
-
-
 class FileUploader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       files: {},
-      prevValue: props.value,
+      prevValue: null,
       inputKey: FileUploader.generateInputKey(),
       errors: [],
     };
@@ -256,6 +177,23 @@ class FileUploader extends React.Component {
     const { files, inputKey, errors } = this.state;
     const { classes, label, helperText, error, disabled, multiple, className } = this.props;
 
+    const previewFiles = files.map((file) => {
+      let ret;
+      if(file.isNew) {
+        ret = file.newFileData;
+        ret.filename = file.name;
+      }else {
+        ret = file.existingFileData;
+      }
+      return ret;
+    });
+
+    const previewActions = [{
+      name: 'remove',
+      func: this.removeFile,
+      buttonProps: { style: { color: red[500] } },
+      children: <Fragment><DeleteIcon /><span>Remove</span></Fragment>,
+    }];
 
     return (
       <FormControl className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
@@ -281,7 +219,7 @@ class FileUploader extends React.Component {
             {errors.map(e => <div>{e}</div>)}
           </div>
         </Dropzone>
-        <PreviewFileList files={files} removeFile={this.removeFile} />
+        <FileList files={previewFiles} actions={previewActions} />
         <FormHelperText>{helperText}</FormHelperText>
       </FormControl>
     );
@@ -297,7 +235,7 @@ FileUploader.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   multiple: PropTypes.bool,
-  value: PropTypes.any,
+  value: PropTypes.any, // eslint-disable-line
   className: PropTypes.string,
 };
 FileUploader.defaultProps = {

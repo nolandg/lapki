@@ -1,1 +1,1 @@
-module.exports = require('./build/lib/components');
+module.exports = require('./build/client').components;

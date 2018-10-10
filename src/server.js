@@ -1,9 +1,11 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 import * as serverApp from './lib/boot/serverApp';
-import common from './lib/common';
 
-module.exports = {
+export * as components from './lib/components';
+export * as HOCs from './lib/HOCs';
+export * as auth from './lib/auth';
+
+export {
   serverApp,
-  ...common,
 };

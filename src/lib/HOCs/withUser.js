@@ -20,16 +20,26 @@ function withUser(WrappedComponent) {
 
       return (
         <UserContext.Consumer>
-          { ({ user, loading, error }) => (
-            <WrappedComponent
-              isAuthenticated={user && user.isAuthenticated}
-              currentUser={user}
-              currentUserLoading={loading}
-              currentUserError={error}
-              logout={() => logout(client)}
-              {...this.props}
-            />
-          )}
+          { (value) => {
+            console.log('@@@@@ Consumer value: ', value);
+            console.log('UserContext: ', UserContext);
+            console.log('UserContext.Consumer: ', UserContext.Consumer);
+            // const { user, loading, error } = value;
+            const user = null;
+            const error = null;
+            const loading = false;
+
+            return (
+              <WrappedComponent
+                isAuthenticated={user && user.isAuthenticated}
+                currentUser={user}
+                currentUserLoading={loading}
+                currentUserError={error}
+                logout={() => logout(client)}
+                {...this.props}
+              />
+            );
+          }}
         </UserContext.Consumer>
       );
     }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-import { withUser } from '../HOCs'; // eslint-disable-line import/no-extraneous-dependencies
+import { withUser } from '../HOCs/withUser'; // eslint-disable-line import/no-extraneous-dependencies
 
 class LogoutButton extends Component {
   handleClick = () => {
