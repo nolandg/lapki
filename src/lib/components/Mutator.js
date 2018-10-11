@@ -231,10 +231,14 @@ class Mutator extends Component {
   }
 
   handleMutationSuccess = (data) => {
-    const { onMutationSuccess, client } = this.props;
+    const { onMutationSuccess, client, clearAfterSuccess } = this.props;
 
     if(resetStoreEachOnEveryMutation) {
       this.resetStoreTimeout = window.setTimeout(client.resetStore, 50);
+    }
+
+    if(clearAfterSuccess) {
+      this.setState(this.buildInitialState(this.props));
     }
 
     this.finishMutation();
@@ -395,6 +399,7 @@ Mutator.propTypes = {
   prepareToSaveDoc: PropTypes.func,
   getSnackbarMessageAndAction: PropTypes.func,
   client: PropTypes.object.isRequired,
+  clearAfterSuccess: PropTypes.bool,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -407,6 +412,7 @@ Mutator.defaultProps = {
   getErrorMessageAndAction: null,
   prepareToSaveDoc: null,
   getSnackbarMessageAndAction: null,
+  clearAfterSuccess: false,
 };
 
 Mutator.queryRegistry = [];

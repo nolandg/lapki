@@ -32,6 +32,7 @@ const styles = theme => ({
 class Select extends React.Component {
   constructor(props) {
     super(props);
+    const { multiple } = props;
 
     const { theme } = this.props;
     this.paperStyle = {
@@ -39,7 +40,7 @@ class Select extends React.Component {
     };
 
     this.state = {
-      values: props.value || [],
+      values: props.value !== undefined ? props.value : (multiple ? [] : null),
       open: false,
     };
   }
@@ -56,7 +57,7 @@ class Select extends React.Component {
       this.setState({
         open: false,
       });
-      onChange([newValues]);
+      onChange(newValues);
     }
   };
 
@@ -66,7 +67,7 @@ class Select extends React.Component {
     if(typeof valueOrOption === 'object') value = valueOrOption.value;
 
     const option = options.find(o => o.value === value);
-    // if(option === undefined) throw new Error(`No option for value "${value}" found in <Select>`);
+    if(option === undefined) console.warn(`No option for value "${value}" found in <Select>`);
 
     return option;
   }
@@ -95,7 +96,7 @@ class Select extends React.Component {
         </div>
       );
     }
-    return this.renderValue(values[0]);
+    return this.renderValue(values);
   }
 
   render() {
