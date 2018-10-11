@@ -2,7 +2,7 @@ import React from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import { UserContextConsumer } from '../contexts/UserContext';
+import { UserContextConsumer } from '../contexts';
 
 const deleteAuthCookie = () => {
   document.cookie = 'lapki_auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';

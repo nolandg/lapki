@@ -7,10 +7,10 @@
   "main": "build/server.js",
   "browser": "build/client.js",
   "scripts": {
-    "build": "babel --out-dir=build src",
     "build-webpack-prod": "webpack --mode production",
     "build-webpack-dev": "webpack --mode development --watch",
-    "start": "babel --out-dir=build src -w",
+    "start": "babel --verbose --source-maps inline --out-dir=build src -w",
+    "build": "babel --verbose --out-dir=build src -w",
     "link": "node ./scripts/link.js",
     "unlink": "node ./scripts/unlink.js"
   },
@@ -30,6 +30,7 @@
     "@babel/preset-env": "^7.1.0",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.4",
+    "babel-plugin-inline-import-data-uri": "^1.0.1",
     "chalk": "^2.4.1",
     "command-line-args": "^5.0.2",
     "eslint": "^5.5.0",

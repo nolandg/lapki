@@ -10,6 +10,8 @@ import Card from '@material-ui/core/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import CardMedia from '@material-ui/core/CardMedia';
+import DownloadIcon from '@material-ui/icons/CloudDownload';
+import { withRouter } from 'react-router';
 
 import wordIcon from '../../../images/icon-word.png';
 import excelIcon from '../../../images/icon-excel.png';
@@ -67,14 +69,15 @@ class FileList extends React.Component {
   }
 
   renderFile = (file) => {
-    const { id, filename } = file;
-    const { classes, actions } = this.props;
+    const { id, filename, location } = file;
+    const { classes, actions, showDownloadButton } = this.props;
     const { src, isImage } = this.getImageSrc(file);
     const backgroundSize = isImage ? 'cover' : 'contain';
+    const handleClick = location ? () => window.open(location) : null;
 
     return(
       <Card key={id} className={classes.card}>
-        <CardActionArea className={classes.actionArea}>
+        <CardActionArea className={classes.actionArea} to={src} onClick={handleClick}>
           {src
             ? <CardMedia image={src} style={{ backgroundSize }} title={`Preview for ${filename}`} className={classes.media} />
             : <CircularProgress className={classes.progress} size={50} />
@@ -83,15 +86,20 @@ class FileList extends React.Component {
             <Typography variant="body1">{filename}</Typography>
           </CardContent>
         </CardActionArea>
-        {actions && actions.length && (
+        {showDownloadButton || actions.length ? (
           <CardActions className={classes.actions}>
             {actions.map(({ name, buttonProps, children, func }) => (
               <Button {...buttonProps} key={name} onClick={() => func(id)} size="small">
                 {children}
               </Button>
             ))}
+            {showDownloadButton && location ? (
+              <Button key="__download" onClick={handleClick} size="small" color="primary">
+                <DownloadIcon /><span>Download</span>
+              </Button>
+            ) : null}
           </CardActions>
-        )}
+        ) : null}
       </Card>
     );
   }
@@ -110,6 +118,13 @@ class FileList extends React.Component {
 FileList.propTypes = {
   classes: PropTypes.object.isRequired,
   files: PropTypes.array.isRequired,
+  actions: PropTypes.array,
+  showDownloadButton: PropTypes.bool,
 };
-FileList = withStyles(styles)(FileList);
+FileList.defaultProps = {
+  actions: [],
+  showDownloadButton: true,
+};
+
+FileList = withRouter(withStyles(styles)(FileList));
 export { FileList };

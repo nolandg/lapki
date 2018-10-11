@@ -5,6 +5,12 @@
     "@babel/transform-react-jsx",
     "@babel/proposal-class-properties",
     "@babel/plugin-proposal-export-namespace-from",
-    "@babel/plugin-proposal-export-default-from"
+    "@babel/plugin-proposal-export-default-from",
+    ["inline-import-data-uri", {
+      "extensions": [
+        ".jpg",
+        ".png",
+      ]
+    }],
   ]
 }
