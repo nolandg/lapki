@@ -22,7 +22,7 @@ class OneDoc extends Component {
     return result;
   };
 
-  renderNoResult = () => <Typography variant="body1">Sorry, this content could not be found.</Typography>
+  renderNoResult = () => <Typography>Sorry, this content could not be found.</Typography>
 
   renderLoaded = (docs, renderFuncs, result) => {
     const renderNoResult = this.props.renderNoResult || this.renderNoResult;

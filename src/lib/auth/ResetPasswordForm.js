@@ -120,7 +120,7 @@ class ResetPasswordForm extends Component {
 
     return(
       <div className={`${classes.form} ${className}`}>
-        <Typography variant="body1">
+        <Typography>
           To reset your password, enter a new, strong password below.
           It must be at least 8 characters long and contain at least
           one lower case letter, one uperrcase letter, one number, and one symbol.

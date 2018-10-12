@@ -86,7 +86,7 @@ class AuthenticationForm extends Component {
       <LoginForm onSuccess={this.handleSuccess} />
       <div className={this.props.classes.extras}>
         <div>
-          <Typography variant="body1">
+          <Typography>
             Don't have an account?
           </Typography>
           <Button color="primary" onClick={() => this.handleTabChange(null, 'Register')}>
@@ -94,7 +94,7 @@ class AuthenticationForm extends Component {
           </Button>
         </div>
         <div>
-          <Typography variant="body1">
+          <Typography>
           Forgot your password?
           </Typography>
           <Button color="primary" onClick={() => this.handleTabChange(null, 'PasswordReset')}>
@@ -110,7 +110,7 @@ class AuthenticationForm extends Component {
       <RegisterForm onSuccess={this.handleSuccess} />
       <div className={this.props.classes.extras}>
         <div>
-          <Typography variant="body1">
+          <Typography>
             Already have an account?
           </Typography>
           <Button color="primary" onClick={() => this.handleTabChange(null, 'Login')}>

@@ -80,14 +80,14 @@ class DocList extends Component {
     return (
       <div className={classes.loading}>
         <CircularProgress size={60} />
-        <Typography variant="body1">Loading...</Typography>
+        <Typography>Loading...</Typography>
       </div>
     );
   };
 
   renderError = (error, result) => <div>Error: {error.message}</div>
 
-  renderNoResults = result => <Typography variant="body1">No results to show :-(</Typography>
+  renderNoResults = result => <Typography>No results to show :-(</Typography>
 
   renderFields = (doc) => {
     const fields = [];
@@ -129,7 +129,7 @@ class DocList extends Component {
     return (
       <div>
         <Button onClick={gotoPreviousPage} disabled={!hasPreviousPage}><ChevronLeftIcon />Prev</Button>
-        <Typography variant="body1" component="span">Page {pageNumber} of {totalPages}</Typography>
+        <Typography  component="span">Page {pageNumber} of {totalPages}</Typography>
         <Button onClick={gotoNextPage} disabled={!hasNextPage}>Next<ChevronRightIcon /></Button>
       </div>
     );

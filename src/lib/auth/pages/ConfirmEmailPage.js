@@ -28,7 +28,7 @@ const ConfirmEmailPage = ({ classes, Layout, match: { params: { name } } }) => (
     <Typography variant="display2" align="center" gutterBottom>Confirm Your Email</Typography>
     <br />
     <Typography variant="title">Hi {name},</Typography>
-    <Typography variant="body1">
+    <Typography>
       To keep your account active, you must confirm your email. Simply click the button below:
     </Typography>
     <div className={classes.buttons}><ConfirmEmailButton className={classes.button} /></div>

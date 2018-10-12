@@ -83,7 +83,7 @@ class FileList extends React.Component {
             : <CircularProgress className={classes.progress} size={50} />
           }
           <CardContent>
-            <Typography variant="body1">{filename}</Typography>
+            <Typography>{filename}</Typography>
           </CardContent>
         </CardActionArea>
         {showDownloadButton || actions.length ? (

@@ -90,7 +90,7 @@ class YearMonthDayPicker extends React.Component {
 
     return (
       <FormControl className={classes.formControl} error={error} disabled={disabled}>
-        <Typography variant="body1">{label}</Typography>
+        <Typography>{label}</Typography>
         <div className={classes.controls}>
           <MuiTextField
             className="year"

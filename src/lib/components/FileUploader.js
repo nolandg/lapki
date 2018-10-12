@@ -198,7 +198,7 @@ class FileUploader extends React.Component {
 
     return (
       <FormControl className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
-        <Typography variant="body1">{label}</Typography>
+        <Typography>{label}</Typography>
         <Dropzone
           onDrop={this.onDrop}
           disabled={disabled}
@@ -212,7 +212,7 @@ class FileUploader extends React.Component {
           inputProps={{ key: inputKey }}
         >
           <UploadIcon style={{ fontSize: 50 }} color="primary" />
-          <Typography variant="headline" gutterBottom>Drag & Drop files here or</Typography>
+          <Typography variant="h5" gutterBottom>Drag & Drop files here or</Typography>
           <Button color="primary" variant="contained" size="large">
             <FolderIcon /><span>Browse for files</span>
           </Button>
