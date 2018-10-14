@@ -56,6 +56,10 @@ class GenericSnackbar extends Component {
               {message}
             </Fragment>
           )}
+          headlineMapping={{
+            body1: 'div',
+            body2: 'div',
+          }}
           action={action}
         />
       </Snackbar>

@@ -101,10 +101,10 @@ class Select extends React.Component {
 
   render() {
     const { open } = this.state;
-    const { classes, options, label, multiple, helperText, error, disabled, className, value } = this.props;
+    const { classes, options, label, multiple, helperText, error, disabled, className, value, minSelections, maxSelections, ...rest } = this.props;
 
     return (
-      <FormControl className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
+      <FormControl {...rest} className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
         <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
         <MuiSelect
           open={open}

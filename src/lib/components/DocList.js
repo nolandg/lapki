@@ -23,6 +23,10 @@ const styles = theme => ({
     alignItems: 'center',
     padding: theme.spacing.unit * 8,
   },
+  paginationControls: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 });
 
 class DocList extends Component {
@@ -118,7 +122,7 @@ class DocList extends Component {
 
   renderPaginationControls = (location, { gotoPreviousPage, gotoNextPage }, { pageInfo, totalDocs }) => {
     const { skip } = this.state;
-    const { first } = this.props;
+    const { first, classes } = this.props;
     const totalPages = Math.ceil(totalDocs / first);
     const pageNumber = Math.ceil(skip / first) + 1;
 
@@ -127,9 +131,9 @@ class DocList extends Component {
     const hasPreviousPage = skip > 0;
 
     return (
-      <div>
+      <div className={classes.paginationControls}>
         <Button onClick={gotoPreviousPage} disabled={!hasPreviousPage}><ChevronLeftIcon />Prev</Button>
-        <Typography  component="span">Page {pageNumber} of {totalPages}</Typography>
+        <Typography>Page {pageNumber} of {totalPages}</Typography>
         <Button onClick={gotoNextPage} disabled={!hasNextPage}>Next<ChevronRightIcon /></Button>
       </div>
     );

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
@@ -36,43 +36,43 @@ class CrudModal extends Component {
 
   renderCreateButton = ({ handleClick, loading, result }) => (
     <Button onClick={handleClick} variant="contained" color="primary" disabled={loading}>
-      <SaveIcon />Save
+      <SaveIcon /><span>Save</span>
     </Button>
   )
 
   renderUpdateButton = ({ handleClick, loading, result }) => (
     <Button onClick={handleClick} variant="contained" color="primary" disabled={loading}>
-      <SaveIcon /> Save
+      <SaveIcon /><span>Save</span>
     </Button>
   )
 
   renderConfirmDeleteButton = ({ handleClick, loading, result }) => (
     <Button onClick={handleClick} disabled={loading} autoFocus>
-      <DeleteIcon /> Delete
+      <DeleteIcon /><span>Delete</span>
     </Button>
   )
 
   renderDeleteButton = ({ handleClick, loading, result }) => (
     <Button onClick={handleClick} disabled={loading}>
-      <DeleteIcon /> Delete
+      <DeleteIcon /><span>Delete</span>
     </Button>
   )
 
   renderCancelButton = ({ handleClick, loading, result }) => (
     <Button onClick={handleClick}>
-      <CancelIcon /> Cancel
+      <CancelIcon /><span>Cancel</span>
     </Button>
   )
 
   renderTrigger = handleOpen => (
-    <Button onClick={handleOpen} variant="contained" color="secondary">
+    <Button onClick={handleOpen} variant="contained" color="primary">
       {this.isNew() ? <AddIcon /> : <EditIcon /> }
-      {this.isNew() ? 'Create' : 'Edit / Delete'}
+      <span>{this.isNew() ? 'Create' : 'Edit / Delete'}</span>
     </Button>
   )
 
   renderTitle = document => (
-    <span><EditIcon />{this.props.title}</span>
+    <Fragment><EditIcon /><span>{this.props.title}</span></Fragment>
   )
 
   renderError = (error) => {
@@ -101,7 +101,7 @@ class CrudModal extends Component {
     const variant = (expectedProgress > 100) && loading ? 'indeterminate' : 'determinate';
 
     return [
-      <DialogTitle key="title">{renderFuncs.renderTitle(document)}</DialogTitle>,
+      <DialogTitle key="title" className={classes.title}>{renderFuncs.renderTitle(document)}</DialogTitle>,
       <DialogContent key="content">
         {renderFuncs.renderErrors(globalErrors)}
         {renderFuncs.renderForm(fieldProps)}
@@ -149,7 +149,7 @@ class CrudModal extends Component {
         onClose={this.handleClose}
         aria-labelledby="delete-confirm-dialog-title"
       >
-        <DialogTitle id="delete-confirm-dialog-title">{title}</DialogTitle>
+        <DialogTitle id="delete-confirm-dialog-title" className={classes.confirmDeleteTitle}>{title}</DialogTitle>
         <DialogContent>
           <DialogContentText>{content}</DialogContentText>
         </DialogContent>
@@ -165,7 +165,7 @@ class CrudModal extends Component {
 
   render() {
     const { open } = this.state;
-    const { collection, fragmentName, fields, document, classes } = this.props;
+    const { collection, fragmentName, fields, document, classes, ...rest } = this.props;
     const renderDialogParts = this.props.renderDialogParts || this.renderDialogParts;
     const renderTrigger = this.props.renderTrigger || this.renderTrigger;
 
@@ -184,6 +184,7 @@ class CrudModal extends Component {
 
     return (
       <CrudMutator
+        {...rest}
         collection={collection}
         fragmentName={fragmentName}
         fields={fields}
@@ -246,7 +247,7 @@ CrudModal.defaultProps = {
   fragmentName: 'default',
   document: undefined,
   fullScreen: false,
-  renderDeleteConfirmTitle: (doc, classes, Icon) => <span className={classes.confirmDeleteTitle}><Icon className={classes.confirmDeleteHelpIcon} />Confirm Delete</span>,
+  renderDeleteConfirmTitle: (doc, classes, Icon) => <Fragment><Icon />Confirm Delete</Fragment>,
   renderDeleteConfirmContent: doc => 'Are you sure you want to delete this?',
 };
 
@@ -262,9 +263,25 @@ CrudModal.defaultStyles = theme => ({
   circularProgress: {
     height: '.5em',
   },
-  confirmDeleteHelpIcon: {
-    fontSize: '35px',
-    marginRight: theme.spacing.unit,
+  title: {
+    '& > *': {
+      display: 'flex',
+      alignItems: 'center',
+      '& svg': {
+        fontSize: '35px',
+        marginRight: theme.spacing.unit,
+      },
+    },
+  },
+  confirmDeleteTitle: {
+    '& > *': {
+      display: 'flex',
+      alignItems: 'center',
+      '& svg': {
+        fontSize: '35px',
+        marginRight: theme.spacing.unit,
+      },
+    },
   },
   linearProgress: {
     position: 'absolute',

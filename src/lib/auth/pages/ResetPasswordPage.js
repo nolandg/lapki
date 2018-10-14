@@ -12,9 +12,9 @@ const styles = theme => ({
 
 const ResetPasswordPage = ({ classes, Layout, match: { params: { name } } }) => (
   <Layout>
-    <Typography variant="display2" align="center" gutterBottom>Reset Password</Typography>
+    <Typography variant="h3" align="center" gutterBottom>Reset Password</Typography>
     <br />
-    <Typography variant="title">Hi {name},</Typography>
+    <Typography variant="h6">Hi {name},</Typography>
     <ResetPasswordForm />
   </Layout>
 );

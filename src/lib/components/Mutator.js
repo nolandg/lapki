@@ -39,7 +39,7 @@ class Mutator extends Component {
     return transform(document[fieldName], fieldName, document);
   }
 
-  buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues }) => {
+  buildInitialFields = ({ document, collection, fields: fieldsToInclude, defaultValues, fixedValues }) => {
     if(!collection) {
       throw new Error('No collection passed to <Mutator>');
     }
@@ -61,6 +61,9 @@ class Mutator extends Component {
         // otherwise fallback to schema default
         value = _.get(defaultValues, fieldName, schemaField.default());
       }
+
+      // Override all of the above with a fixed value if provided
+      if(fixedValues && fixedValues[fieldName]) value = fixedValues[fieldName];
 
       _.set(fields, fieldName, {
         name: fieldName,
@@ -390,7 +393,7 @@ Mutator.propTypes = {
   children: PropTypes.func.isRequired,
   onMutationError: PropTypes.func,
   onMutationSuccess: PropTypes.func,
-  fields: PropTypes.array.isRequired, // eslint-disable-line
+  fields: PropTypes.array, // eslint-disable-line
   expectedRequestTime: PropTypes.number,
   operations: PropTypes.object.isRequired,
   assembleDoc: PropTypes.func,
@@ -413,10 +416,11 @@ Mutator.defaultProps = {
   prepareToSaveDoc: null,
   getSnackbarMessageAndAction: null,
   clearAfterSuccess: false,
+  fields: [],
 };
 
 Mutator.queryRegistry = [];
 
-Mutator = withApollo(withStyles(styles)(Mutator));
+const EnhancedMutator = withApollo(withStyles(styles)(Mutator));
 
-export { Mutator };
+export { EnhancedMutator as Mutator };
