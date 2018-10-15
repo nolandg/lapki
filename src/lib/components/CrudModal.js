@@ -96,14 +96,14 @@ class CrudModal extends Component {
   }
 
   renderDialogParts = (renderFuncs, mutatorArg) => {
-    const { fieldProps, globalErrors, expectedProgress, loading } = mutatorArg;
+    const { fieldProps, expectedProgress, loading } = mutatorArg;
     const { classes, document } = this.props;
     const variant = (expectedProgress > 100) && loading ? 'indeterminate' : 'determinate';
 
     return [
       <DialogTitle key="title" className={classes.title}>{renderFuncs.renderTitle(document)}</DialogTitle>,
       <DialogContent key="content">
-        {renderFuncs.renderErrors(globalErrors)}
+        {/* {renderFuncs.renderErrors(globalErrors)} */}
         {renderFuncs.renderForm(fieldProps)}
       </DialogContent>,
       <DialogActions key="actions" className={classes.dialogActions}>
@@ -139,8 +139,8 @@ class CrudModal extends Component {
 
   renderConfirmDialog = (deleteComponent) => {
     const { renderDeleteConfirmTitle, renderDeleteConfirmContent, document, classes } = this.props;
-    const title = renderDeleteConfirmTitle(document, classes, HelpIcon);
-    const content = renderDeleteConfirmContent(document);
+    const title = document ? renderDeleteConfirmTitle(document, classes, HelpIcon) : '';
+    const content = document ? renderDeleteConfirmContent(document) : '';
 
     return (
       <Dialog
