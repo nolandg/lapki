@@ -47,11 +47,12 @@ class Select extends React.Component {
 
   handleChange = (event) => {
     const newValues = event.target.value;
-    const { multiple, maxSelections, minSelections, onChange } = this.props;
+    console.log('Value in event: ', newValues);
+    const { multiple, maxSelections, minSelections, onChange, value: oldValue } = this.props;
 
     if(multiple) {
-      if(newValues.length > maxSelections) return;
-      if(newValues.length < minSelections) return;
+      // if(newValues.length > maxSelections) onChange(oldValue);
+      // else if(newValues.length < minSelections) onChange(oldValue);
       onChange(newValues);
     }else{
       this.setState({
@@ -82,7 +83,7 @@ class Select extends React.Component {
     const option = this.getOption(value);
     if(!option) return null;
     return (
-      <div className={classes.value}>{option.icon}{option.text}</div>
+      <div key={option.value} className={classes.value}>{option.icon}{option.text}</div>
     );
   }
 
@@ -103,6 +104,8 @@ class Select extends React.Component {
     const { open } = this.state;
     const { classes, options, label, multiple, helperText, error, disabled, className, value, minSelections, maxSelections, ...rest } = this.props;
 
+    console.log('Value in render: ', value);
+
     return (
       <FormControl {...rest} className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
         <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
@@ -122,13 +125,15 @@ class Select extends React.Component {
           className={classes.muiSelect}
           renderValue={this.renderValues}
         >
-          {options.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-              {multiple && <Checkbox checked={!!value.find(v => v === option.value)} /> }
-              {option.icon}
-              <ListItemText primary={option.text} />
-            </MenuItem>
-          ))}
+          {options.map((option) => { // eslint-disable-line
+            return (
+              <MenuItem key={option.value} value={option.value}>
+                {/* {multiple ? <Checkbox checked={!!value.find(v => v === option.value)} /> : null } */}
+                {option.icon}
+                <ListItemText primary={option.text} />
+              </MenuItem>
+            );
+          })}
         </MuiSelect>
         <FormHelperText>{helperText}</FormHelperText>
       </FormControl>
