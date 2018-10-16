@@ -134,8 +134,8 @@ class Mutator extends Component {
   }
 
   handleFieldValueChange = (name, value) => {
-    const currentValue = _.get(this.state, `fields.${name}.value`);
-    console.log(`${currentValue} vs. ${value}`);
+    // const currentValue = _.get(this.state, `fields.${name}.value`);
+    // console.log(`${currentValue} vs. ${value}`);
 
     this.setState({ touched: true });
     this.setFieldValue(name, value, () => {

@@ -81,13 +81,14 @@ export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistr
   const bodyAttrs = helmet.bodyAttributes.toComponent();
   const css = sheetsRegistry.toString();
 
+  console.log('$$$$$$$$$$$ data: ', data);
+
   return (
     <html {...htmlAttrs} lang="en">
       <head>
         <meta name="Made With Love By: " content="Noland Germain" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta charSet="utf-8" />
-        <title>After with Apollo !</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
