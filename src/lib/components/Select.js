@@ -47,12 +47,11 @@ class Select extends React.Component {
 
   handleChange = (event) => {
     const newValues = event.target.value;
-    console.log('Value in event: ', newValues);
     const { multiple, maxSelections, minSelections, onChange, value: oldValue } = this.props;
 
     if(multiple) {
-      // if(newValues.length > maxSelections) onChange(oldValue);
-      // else if(newValues.length < minSelections) onChange(oldValue);
+      if(newValues.length > maxSelections) onChange(oldValue);
+      else if(newValues.length < minSelections) onChange(oldValue);
       onChange(newValues);
     }else{
       this.setState({
@@ -102,9 +101,7 @@ class Select extends React.Component {
 
   render() {
     const { open } = this.state;
-    const { classes, options, label, multiple, helperText, error, disabled, className, value, minSelections, maxSelections, ...rest } = this.props;
-
-    console.log('Value in render: ', value);
+    const { classes, options, label, multiple, helperText, error, disabled, className, value, minSelections, maxSelections, fieldProps, ...rest } = this.props;
 
     return (
       <FormControl {...rest} className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
@@ -164,7 +161,7 @@ Select.propTypes = {
 Select.defaultProps = {
   multiple: false,
   minSelections: 1,
-  maxSelections: undefined,
+  maxSelections: 20,
   helperText: undefined,
   error: undefined,
   disabled: undefined,
