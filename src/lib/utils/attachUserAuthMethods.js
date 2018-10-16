@@ -13,7 +13,7 @@ const extractPermsFromRole = (role) => {
 const getFlattenedPerms = (user) => {
   let perms = [];
   if(!user.roles) return perms;
-  
+
   user.roles.forEach((r) => { perms = [...perms, ...extractPermsFromRole(r)]; });
   perms = _.uniqBy(perms, 'id');
   return perms;
@@ -31,8 +31,8 @@ const userCanDo = (user, operation, ownership = 'own', type) => {
 const attachUserAuthMethods = (user) => {
   const permissions = getFlattenedPerms(user);
 
-  user.hasPerm = function (perm) { return !!permissions.find(p => p.name === perm); };
-  user.hasRole = function (role) { return !!this.roles.find(r => r.name === role); };
+  user.hasPerm = function (perm) { return !!permissions.find(p => p.name === perm) || !!this.roles.find(r => r.name === 'super-user'); };
+  user.hasRole = function (role) { return !!this.roles.find(r => r.name === role) || !!this.roles.find(r => r.name === 'super-user'); };
   user.canDoOnAny = function (operation, type) { return userCanDo(this, operation, 'any', type); };
   user.canDoOnOwn = function (operation, type) { return userCanDo(this, operation, 'own', type); };
 
