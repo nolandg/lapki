@@ -52,12 +52,12 @@ class AuthenticationModal extends Component {
   }
 
   render() {
-    const { fullScreen, isAuthenticated, children, currentUser, open: openProp, classes } = this.props;
+    const { fullScreen, isAuthenticated, children, currentUser, open: openProp, classes, logout } = this.props;
     const open = this.isControlled() ? openProp : this.state.open;
 
     return (
       <React.Fragment>
-        {children && children({ isAuthenticated, currentUser, open: this.handleOpen })}
+        {children && children({ isAuthenticated, currentUser, open: this.handleOpen, logout })}
         <Dialog
           fullScreen={fullScreen}
           open={open}

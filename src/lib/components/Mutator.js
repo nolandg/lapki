@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Mutation, withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
+import { Prompt } from 'react-router';
 import _ from 'lodash';
 import qatch from 'await-to-js';
 import Button from '@material-ui/core/Button';
@@ -88,6 +89,7 @@ class Mutator extends Component {
       type: 'success',
     },
     authModalOpen: false,
+    touched: false,
   })
 
   componentDidUpdate = (prevProps) => {
@@ -132,6 +134,11 @@ class Mutator extends Component {
   }
 
   handleFieldValueChange = (name, value) => {
+    const currentValue = _.get(this.state, `fields.${name}.value`);
+    if(typeof value !== 'object' && value === currentValue) return;
+
+    console.log('handle value change', this.state.touched);
+    this.setState({ touched: true });
     this.setFieldValue(name, value, () => {
       if(this.state.firstSaveAttempted) this.recheckForErrors();
     });
@@ -224,6 +231,18 @@ class Mutator extends Component {
     clearInterval(this.expectedProgressInterval);
   }
 
+  componentDidMount() {
+    window.onbeforeunload = () => {
+      const { confirmLeavePage } = this.props;
+      const { touched } = this.state;
+      console.log(`touched? ${touched}  confirm? ${confirmLeavePage}`);
+      if(confirmLeavePage && touched) {
+        return 'You have unsaved changes, are you sure you want to leave?';
+      }
+      return undefined;
+    };
+  }
+
   componentWillUnmount = () => {
     const { onMutationSuccess } = this.props;
     this.closeSnackbar();
@@ -231,6 +250,7 @@ class Mutator extends Component {
     clearTimeout(this.onMutationsSuccessTimeout);
     clearTimeout(this.resetStoreTimeout);
     if(onMutationSuccess && this.callMutationSuccess) this.callMutationSuccess();
+    window.onbeforeunload = null;
   }
 
   handleMutationSuccess = (data) => {
@@ -245,6 +265,9 @@ class Mutator extends Component {
     }
 
     this.finishMutation();
+    console.log('current state before restting: ', this.state.touched);
+    this.setState({ touched: false });
+
     if(onMutationSuccess) {
       this.callMutationSuccess = () => onMutationSuccess(data);
       this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
@@ -362,9 +385,9 @@ class Mutator extends Component {
 
   render() {
     const isNew = this.isNew();
-    const { children, operations } = this.props;
+    const { children, operations, confirmLeavePage } = this.props;
     const errors = this.extractErrorsFromFields();
-    const { globalErrors, loading, expectedProgress, authModalOpen } = this.state;
+    const { globalErrors, loading, expectedProgress, authModalOpen, touched } = this.state;
     const fieldProps = {
       onChange: this.handleFieldValueChange,
       fields: this.state.fields,
@@ -379,6 +402,7 @@ class Mutator extends Component {
       <Fragment>
         {children({ fieldProps, errors, globalErrors, mutationComponents, isNew, loading, expectedProgress })}
         {this.renderSnackbars()}
+        <Prompt when={touched && confirmLeavePage} message="You have unsaved changes. Are you sure you want to leave?" />
         <AuthenticationModal open={authModalOpen} onClose={() => this.setState({ authModalOpen: false })} />
       </Fragment>
     );
@@ -403,6 +427,7 @@ Mutator.propTypes = {
   getSnackbarMessageAndAction: PropTypes.func,
   client: PropTypes.object.isRequired,
   clearAfterSuccess: PropTypes.bool,
+  confirmLeavePage: PropTypes.bool,
 };
 Mutator.defaultProps = {
   document: undefined,
@@ -417,6 +442,7 @@ Mutator.defaultProps = {
   getSnackbarMessageAndAction: null,
   clearAfterSuccess: false,
   fields: [],
+  confirmLeavePage: true,
 };
 
 Mutator.queryRegistry = [];

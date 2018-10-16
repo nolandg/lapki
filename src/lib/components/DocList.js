@@ -60,6 +60,13 @@ class DocList extends Component {
             }
           }
         }
+
+        full: ${queryName}{
+          aggregate{
+            count
+          }
+        }
+
       }
     `;
 
@@ -177,7 +184,7 @@ class DocList extends Component {
     }
     if(queryData && queryData.edges) {
       result.docs = queryData.edges.map(edge => edge.node);
-      result.totalDocs = queryData.aggregate.count;
+      result.totalDocs = _.get(data, 'full.aggregate.count', 0);
       result.pageInfo = queryData.pageInfo;
     }
 
@@ -198,6 +205,8 @@ class DocList extends Component {
       renderWhereControls: this.props.renderWhereControls || this.renderWhereControls,
       renderOrderByControls: this.props.renderOrderByControls || this.renderOrderByControls,
       renderNoResults: this.props.renderNoResults || this.renderNoResults,
+      gotoNextPage: this.gotoNextPage,
+      gotoPreviousPage: this.gotoPreviousPage,
     };
 
     const docs = result.docs;
@@ -295,7 +304,7 @@ DocList.defaultProps = {
     top: ['pagination'],
     bottom: ['pagination'],
   },
-  first: 10,
+  first: 3,
   where: {},
   orderBy: null,
 };
