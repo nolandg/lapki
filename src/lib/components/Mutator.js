@@ -135,9 +135,8 @@ class Mutator extends Component {
 
   handleFieldValueChange = (name, value) => {
     const currentValue = _.get(this.state, `fields.${name}.value`);
-    if(typeof value !== 'object' && value === currentValue) return;
+    console.log(`${currentValue} vs. ${value}`);
 
-    console.log('handle value change', this.state.touched);
     this.setState({ touched: true });
     this.setFieldValue(name, value, () => {
       if(this.state.firstSaveAttempted) this.recheckForErrors();
@@ -235,7 +234,6 @@ class Mutator extends Component {
     window.onbeforeunload = () => {
       const { confirmLeavePage } = this.props;
       const { touched } = this.state;
-      console.log(`touched? ${touched}  confirm? ${confirmLeavePage}`);
       if(confirmLeavePage && touched) {
         return 'You have unsaved changes, are you sure you want to leave?';
       }
@@ -253,7 +251,7 @@ class Mutator extends Component {
     window.onbeforeunload = null;
   }
 
-  handleMutationSuccess = (data) => {
+  handleMutationSuccess = (data, cb) => {
     const { onMutationSuccess, client, clearAfterSuccess } = this.props;
 
     if(resetStoreEachOnEveryMutation) {
@@ -265,13 +263,14 @@ class Mutator extends Component {
     }
 
     this.finishMutation();
-    console.log('current state before restting: ', this.state.touched);
-    this.setState({ touched: false });
+    this.setState({ touched: false }, () => {
+      if(onMutationSuccess) {
+        this.callMutationSuccess = () => onMutationSuccess(data);
+        this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
+      }
+      if(cb) cb();
+    });
 
-    if(onMutationSuccess) {
-      this.callMutationSuccess = () => onMutationSuccess(data);
-      this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
-    }
 
     this.openSnackbar({ data, hackToGetDoc: this.assembleDoc('preValidation') });
 
@@ -370,8 +369,9 @@ class Mutator extends Component {
       children={this.buildMutationRenderProp(op)}
       onCompleted={(data) => {
         const doc = data[this.getMutationOperationName(op.mutationQuery)];
-        this.handleMutationSuccess(data);
-        if(op.onSuccess) op.onSuccess(doc);
+        this.handleMutationSuccess(data, () => {
+          if(op.onSuccess) op.onSuccess(doc);
+        });
       }}
       onError={(error) => { this.handleMutationError(error); if(op.onError) op.onError(error); }}
       refetchQueries={(result) => {

@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import MuiSelect from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { withFormFields } from '../HOCs/withFormFields';
@@ -67,7 +67,7 @@ class Select extends React.Component {
     if(typeof valueOrOption === 'object') value = valueOrOption.value;
 
     const option = options.find(o => o.value === value);
-    if(option === undefined) console.warn(`No option for value "${value}" found in <Select>`);
+    // if(option === undefined) console.warn(`No option for value "${value}" found in <Select>`);
 
     return option;
   }

@@ -304,7 +304,7 @@ DocList.defaultProps = {
     top: ['pagination'],
     bottom: ['pagination'],
   },
-  first: 3,
+  first: 50,
   where: {},
   orderBy: null,
 };
