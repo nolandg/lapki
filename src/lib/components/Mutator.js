@@ -28,6 +28,7 @@ class Mutator extends Component {
   constructor(props) {
     super(props);
     this.state = this.buildInitialState(props);
+    this.saveFieldsSnapshot(this.state.fields);
   }
 
   getFormValueFromDoc = (fieldName) => {
@@ -70,12 +71,15 @@ class Mutator extends Component {
         name: fieldName,
         value,
         error: null,
-        touched: false,
       });
     });
 
     return fields;
   };
+
+  saveFieldsSnapshot = (fields) => {
+    this.fieldsSnapshot = JSON.parse(JSON.stringify(fields || this.state.fields));
+  }
 
   buildInitialState = props => ({
     fields: this.buildInitialFields(props),
@@ -89,7 +93,6 @@ class Mutator extends Component {
       type: 'success',
     },
     authModalOpen: false,
-    touched: false,
   })
 
   componentDidUpdate = (prevProps) => {
@@ -112,7 +115,6 @@ class Mutator extends Component {
   setFieldValue = (name, value, cb) => {
     this.setState((state) => {
       _.set(state.fields, `${name}.value`, value);
-      _.set(state.fields, `${name}.touched`, true);
       return state;
     }, cb);
   }
@@ -134,10 +136,6 @@ class Mutator extends Component {
   }
 
   handleFieldValueChange = (name, value) => {
-    // const currentValue = _.get(this.state, `fields.${name}.value`);
-    // console.log(`${currentValue} vs. ${value}`);
-
-    this.setState({ touched: true });
     this.setFieldValue(name, value, () => {
       if(this.state.firstSaveAttempted) this.recheckForErrors();
     });
@@ -230,11 +228,27 @@ class Mutator extends Component {
     clearInterval(this.expectedProgressInterval);
   }
 
+  checkIfTouched = () => {
+    // short circut if last pass through here we determined in was touched
+    // and nobody has reset this.fieldsSnapshot in the meantime
+    if(!this.fieldsSnapshot) return true;
+
+    const touched = JSON.stringify(this.state.fields) !== JSON.stringify(this.fieldsSnapshot);
+
+    if(touched) {
+      // Save postive results so that next time we don't have to deep compare the objects
+      // this.fieldsSnapshot will be reset to non-null after a mutation or something
+      this.fieldsSnapshot = null;
+    }
+
+    return touched;
+  }
+
   componentDidMount() {
     window.onbeforeunload = () => {
       const { confirmLeavePage } = this.props;
-      const { touched } = this.state;
-      if(confirmLeavePage && touched) {
+
+      if(confirmLeavePage && this.checkIfTouched()) {
         return 'You have unsaved changes, are you sure you want to leave?';
       }
       return undefined;
@@ -242,12 +256,11 @@ class Mutator extends Component {
   }
 
   componentWillUnmount = () => {
-    const { onMutationSuccess } = this.props;
     this.closeSnackbar();
     clearInterval(this.expectedProgressInterval);
     clearTimeout(this.onMutationsSuccessTimeout);
     clearTimeout(this.resetStoreTimeout);
-    if(onMutationSuccess && this.callMutationSuccess) this.callMutationSuccess();
+    if(this.callMutationSuccess) this.callMutationSuccess();
     window.onbeforeunload = null;
   }
 
@@ -262,14 +275,14 @@ class Mutator extends Component {
       this.setState(this.buildInitialState(this.props));
     }
 
+    this.saveFieldsSnapshot();
+
     this.finishMutation();
-    this.setState({ touched: false }, () => {
-      if(onMutationSuccess) {
-        this.callMutationSuccess = () => onMutationSuccess(data);
-        this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 1000);
-      }
+    this.callMutationSuccess = () => {
+      if(onMutationSuccess) onMutationSuccess(data);
       if(cb) cb();
-    });
+    };
+    this.onMutationsSuccessTimeout = setTimeout(this.callMutationSuccess, 500);
 
 
     this.openSnackbar({ data, hackToGetDoc: this.assembleDoc('preValidation') });
@@ -387,7 +400,7 @@ class Mutator extends Component {
     const isNew = this.isNew();
     const { children, operations, confirmLeavePage } = this.props;
     const errors = this.extractErrorsFromFields();
-    const { globalErrors, loading, expectedProgress, authModalOpen, touched } = this.state;
+    const { globalErrors, loading, expectedProgress, authModalOpen } = this.state;
     const fieldProps = {
       onChange: this.handleFieldValueChange,
       fields: this.state.fields,
@@ -402,7 +415,7 @@ class Mutator extends Component {
       <Fragment>
         {children({ fieldProps, errors, globalErrors, mutationComponents, isNew, loading, expectedProgress })}
         {this.renderSnackbars()}
-        <Prompt when={touched && confirmLeavePage} message="You have unsaved changes. Are you sure you want to leave?" />
+        <Prompt when={confirmLeavePage && this.checkIfTouched()} message="You have unsaved changes. Are you sure you want to leave?" />
         <AuthenticationModal open={authModalOpen} onClose={() => this.setState({ authModalOpen: false })} />
       </Fragment>
     );

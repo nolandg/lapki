@@ -9,7 +9,7 @@
   "scripts": {
     "build-webpack-prod": "webpack --mode production",
     "build-webpack-dev": "webpack --mode development --watch",
-    "start": "babel --verbose --source-maps inline --out-dir=build src -w",
+    "start": "babel --verbose --out-dir=build src -w",
     "build": "babel --verbose --out-dir=build src",
     "link": "node ./scripts/link.js",
     "unlink": "node ./scripts/unlink.js"

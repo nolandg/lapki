@@ -81,8 +81,6 @@ export const render = ({ helmet, assets, data, initialApolloState, sheetsRegistr
   const bodyAttrs = helmet.bodyAttributes.toComponent();
   const css = sheetsRegistry.toString();
 
-  console.log('$$$$$$$$$$$ data: ', data);
-
   return (
     <html {...htmlAttrs} lang="en">
       <head>
