@@ -148,10 +148,10 @@ class CrudMutator extends Component {
           <DialogContentText>{content}</DialogContentText>
         </DialogContent>
         <DialogActions>
+          {deleteMutationComponent}
           <Button onClick={() => this.setState({ confirmDialogOpen: false })} color="primary" autoFocus>
             <CancelIcon /><span>Cancel</span>
           </Button>
-          {deleteMutationComponent}
         </DialogActions>
       </Dialog>
     );

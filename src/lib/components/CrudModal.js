@@ -24,7 +24,6 @@ class CrudModal extends Component {
     super(props);
     this.state = {
       open: false,
-      confirmDialogOpen: false,
     };
   }
 
@@ -43,12 +42,6 @@ class CrudModal extends Component {
   renderUpdateButton = ({ handleClick, loading, result }) => (
     <Button onClick={handleClick} variant="contained" color="primary" disabled={loading}>
       <SaveIcon /><span>Save</span>
-    </Button>
-  )
-
-  renderConfirmDeleteButton = ({ handleClick, loading, result }) => (
-    <Button onClick={handleClick} disabled={loading} autoFocus>
-      <DeleteIcon /><span>Delete</span>
     </Button>
   )
 
@@ -113,13 +106,15 @@ class CrudModal extends Component {
     ];
   }
 
-  renderButtons = (renderFuncs, { isNew, mutationComponents, loading, result }) => {
+  renderButtons = (renderFuncs, { isNew, mutationComponents, loading, result, requestDelete }) => {
     const { create, update } = mutationComponents;
 
     return (
       <div>
         {renderFuncs.renderCancelButton({ handleClick: this.close, loading, result })}
-        {renderFuncs.renderDeleteButton({ handleClick: this.handleConfirmDialogOpen, loading, result })}
+        <Button onClick={requestDelete} disabled={loading}>
+          <DeleteIcon /><span>Delete</span>
+        </Button>
         {isNew ? create : update}
       </div>
     );
@@ -127,40 +122,6 @@ class CrudModal extends Component {
 
   handleMutationSuccess = () => {
     this.close();
-  }
-
-  handleConfirmDialogClose = () => {
-    this.setState({ confirmDialogOpen: false });
-  }
-
-  handleConfirmDialogOpen = () => {
-    this.setState({ confirmDialogOpen: true });
-  }
-
-  renderConfirmDialog = (deleteComponent) => {
-    const { renderDeleteConfirmTitle, renderDeleteConfirmContent, document, classes } = this.props;
-    const title = document ? renderDeleteConfirmTitle(document, classes, HelpIcon) : '';
-    const content = document ? renderDeleteConfirmContent(document) : '';
-
-    return (
-      <Dialog
-        fullScreen={this.props.fullScreen}
-        open={this.state.confirmDialogOpen}
-        onClose={this.handleClose}
-        aria-labelledby="delete-confirm-dialog-title"
-      >
-        <DialogTitle id="delete-confirm-dialog-title" className={classes.confirmDeleteTitle}>{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{content}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          {deleteComponent}
-          <Button onClick={this.handleConfirmDialogClose} color="primary" autoFocus>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
   }
 
   render() {
@@ -171,7 +132,7 @@ class CrudModal extends Component {
 
     const renderCreateButton = this.props.renderCreateButton || this.renderCreateButton;
     const renderUpdateButton = this.props.renderUpdateButton || this.renderUpdateButton;
-    const renderConfirmDeleteButton = this.props.renderConfirmDeleteButton || this.renderConfirmDeleteButton;
+    const renderDeleteButton = this.props.renderDeleteButton || this.renderDeleteButton;
 
     const renderFuncs = {
       renderForm: this.props.renderForm || this.renderForm,
@@ -191,7 +152,7 @@ class CrudModal extends Component {
         document={document}
         renderCreateButton={renderCreateButton}
         renderUpdateButton={renderUpdateButton}
-        renderDeleteButton={renderConfirmDeleteButton}
+        renderDeleteButton={renderDeleteButton}
         onMutationSuccess={this.handleMutationSuccess}
       >
         {mutatorArg => (
@@ -200,7 +161,6 @@ class CrudModal extends Component {
             <Dialog open={open} onClose={this.close} fullScreen={this.props.fullScreen} classes={{ paper: classes.dialogPaper }}>
               {renderDialogParts(renderFuncs, mutatorArg)}
             </Dialog>
-            {this.renderConfirmDialog(mutatorArg.mutationComponents.delete)}
           </div>
         )}
       </CrudMutator>
@@ -217,7 +177,6 @@ CrudModal.propTypes = {
   renderCreateButton: PropTypes.func,
   renderUpdateButton: PropTypes.func,
   renderDeleteButton: PropTypes.func,
-  renderConfirmDeleteButton: PropTypes.func,
   renderCancelButton: PropTypes.func,
   renderTitle: PropTypes.func,
   renderErrors: PropTypes.func,
