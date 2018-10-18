@@ -74,7 +74,7 @@ class LoginForm extends Component {
     return(
       <div className={classes.form}>
         <TextField name="email" label="Email" margin="normal" fieldProps={fieldProps} />
-        <TextField name="password" label="Password" margin="normal" fieldProps={fieldProps} />
+        <TextField name="password" type="password" label="Password" margin="normal" fieldProps={fieldProps} />
         <div className={classes.buttons}>
           {login}
         </div>
@@ -92,7 +92,6 @@ class LoginForm extends Component {
         children={this.renderForm}
         operations={this.operations}
         onMutationSuccess={this.handleLoginSuccess}
-        defaultValues={{ email: 'noland.germain@gmail.com', password: 'powtowngetdown9875' }}
         getSuccessMessageAndAction={this.getSuccessMessageAndAction}
         {...rest}
       />

@@ -126,8 +126,9 @@ class ResetPasswordForm extends Component {
           one lower case letter, one uperrcase letter, one number, and one symbol.
         </Typography>
 
-        <TextField name="password" label="New password" margin="normal" fieldProps={fieldProps} />
+        <TextField name="password" type="password" label="New password" margin="normal" fieldProps={fieldProps} />
         <TextField
+          type="password" 
           name="passwordConfirm"
           label="Confirm new password"
           margin="normal"

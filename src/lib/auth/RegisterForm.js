@@ -78,10 +78,11 @@ class RegisterForm extends Component {
       <div className={classes.form}>
         <TextField name="name" label="Name" margin="normal" fieldProps={fieldProps} />
         <TextField name="email" label="Email" margin="normal" fieldProps={fieldProps} />
-        <TextField name="password" label="Password" margin="normal" fieldProps={fieldProps} />
+        <TextField name="password" type="password" label="Password" margin="normal" fieldProps={fieldProps} />
         <TextField
           name="passwordConfirm"
           label="Confirm new password"
+          type="password" 
           margin="normal"
           fieldProps={fieldProps}
           helperText="Enter the same password again to confirm."
@@ -103,7 +104,6 @@ class RegisterForm extends Component {
         children={this.renderForm}
         operations={this.operations}
         onMutationSuccess={this.handleSuccess}
-        defaultValues={{ email: 'noland@advancedwebapps.ca', password: '88888888', name: 'noland' }}
         getSuccessMessageAndAction={this.getSuccessMessageAndAction}
         {...rest}
       />
