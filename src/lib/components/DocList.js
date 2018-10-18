@@ -36,6 +36,7 @@ class DocList extends Component {
     const operationName = `${pluralize.plural(collection.type)}ListConnectionDocList${uniqueTag}`;
     const queryName = `${pluralize.plural(pascalToCamel(collection.type))}Connection`;
     const fragment = collection.fragments[fragmentName];
+    if(!fragment) throw new Error(`DocList cannot find fragment "${fragmentName}" on type "${collection.type}".`);
     const fragmentDefinitionName = fragment.definitions[0].name.value;
     const whereInputType = `${collection.type}WhereInput`;
     const orderByInputType = `${collection.type}OrderByInput`;
