@@ -28,9 +28,7 @@ function createApolloClient(options, request) {
 
   const isServer = options.target === 'server';
   const cookie = isServer ? require('cookie') : undefined;
-  // const cookie = require('cookie');
   const fetch = isServer ? require('node-fetch') : undefined;
-  // const fetch = require('node-fetch');
 
 
   const cache = options.ssrMode
