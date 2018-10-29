@@ -62,7 +62,7 @@ class DocList extends Component {
           }
         }
 
-        full: ${queryName}(first: $first, skip: $skip, where: $where, orderBy: $orderBy){
+        full: ${queryName}(where: $where, orderBy: $orderBy){
           aggregate{
             count
           }
