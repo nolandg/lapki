@@ -9,6 +9,9 @@ import chalk from 'chalk';
 import { withClientState } from 'apollo-link-state';
 import { createUploadLink } from 'apollo-upload-client';
 
+// Hack way for Ory's image upload service to get Client
+let lastClientCreated = null;
+export const getApolloClient = () => lastClientCreated;
 
 // Create the Apollo Client
 function createApolloClient(options, request) {
@@ -117,7 +120,9 @@ function createApolloClient(options, request) {
     cache,
   };
 
-  return new ApolloClient(apolloClientOptions);
+  const client = new ApolloClient(apolloClientOptions);
+  lastClientCreated = client;
+  return client;
 }
 
 

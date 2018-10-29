@@ -8,3 +8,4 @@ export * from './Mutator';
 export * from './CrudModal';
 export * from './Snackbar';
 export * from './FileList';
+export * from './RichEditor';
