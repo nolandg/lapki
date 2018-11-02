@@ -10,9 +10,7 @@
     "build-webpack-prod": "webpack --mode production",
     "build-webpack-dev": "webpack --mode development --watch",
     "start": "babel --verbose --out-dir=build src -w",
-    "build": "babel --verbose --out-dir=build src",
-    "link": "node ./scripts/link.js",
-    "unlink": "node ./scripts/unlink.js"
+    "build": "babel --verbose --out-dir=build src"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -38,6 +36,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
+    "figlet": "^1.2.1",
     "file-loader": "^2.0.0",
     "react-dropzone": "^6.0.0",
     "url-loader": "^1.1.1",
