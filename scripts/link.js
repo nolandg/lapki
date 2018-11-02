@@ -45,4 +45,4 @@ const linkOry = (rootOryDir) => {
   });
 };
 
-module.export = { linkOry, linkPeerDeps };
+module.exports = { linkOry, linkPeerDeps };
