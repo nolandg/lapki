@@ -38,7 +38,7 @@ const linkOry = (rootOryDir) => {
 
   oryLinks.forEach(({ path: modulePath, name }) => {
     const home = path.resolve(__dirname, '../');
-    const source = path.resolve(rootOryDir, modulePath);
+    const source = path.resolve(rootOryDir, 'packages', modulePath);
 
     const command = `cd ${source} && yarn link && cd ${home} && yarn link ${name}`;
     run(command);
