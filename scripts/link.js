@@ -1,3 +1,5 @@
+const chalk = require('chalk');
+const path = require('path');
 const { run, print } = require('./utils');
 
 const linkPeerDeps = (source) => {

@@ -2,9 +2,9 @@ const startTime = new Date();
 
 const path = require('path');
 const commandLineArgs = require('command-line-args');
-const chalk = require('chalk');
+// const chalk = require('chalk');
 
-const { print, log, printSuccess, run, printSectionBreak } = require('./utils');
+const { log, printSuccess, run, printSectionBreak } = require('./utils');
 const { linkOry, linkPeerDeps } = require('./link');
 
 const args = {
@@ -35,10 +35,6 @@ const lapkiDir = path.resolve(rootDir, 'lapki');
 const appDir = path.resolve(rootDir, 'app');
 const apiDir = path.resolve(rootDir, 'api');
 
-const cdTopLevel = (dir) => {
-  run(`cd ${path.resolve(rootDir, dir)}`);
-};
-
 const yarnInstall = (dir) => {
   if(!args.skipYarnInstall) {
     log('Installing yarn packages...');
@@ -61,7 +57,7 @@ run('sudo ls');
 if(!args.skipOry) {
   printSectionBreak('Ory');
   gitPull(oryDir);
-  yarnInstall(oryDir);
+  // yarnInstall(oryDir);
   log('Building all packages...');
   run('yarn run build:lib', oryDir);
 }
