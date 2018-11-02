@@ -60,7 +60,7 @@ if(!args.skipOry) {
   gitPull();
   yarnInstall();
   log('Building all packages...');
-  run('yarn build:lib');
+  run('yarn run build:lib');
 }
 
 printSectionBreak('Lapki');
