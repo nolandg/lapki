@@ -30,6 +30,7 @@ const printSectionBreak = text => print(`                                     ${
 const log = text => print(text, { backgroundColor: 'magenta' });
 
 const run = (command) => {
+  print(`Running command "${chalk.bgMagenta(command)}"...`, { color: 'magenta' });
   try { childProcess.execSync(command, { stdio: [0, 1, 2] }); } catch(error) {
     printError(`Command "${command}" failed`, error);
     process.exit(1);
