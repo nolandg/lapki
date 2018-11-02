@@ -31,7 +31,9 @@ if(args.quick) {
 
 const rootDir = '/home/noland/powtown';
 
-const cdToRoot = () => run(`cd ${rootDir}`);
+const cdTopLevel = (dir) => {
+  run(`cd ${path.resolve(rootDir, dir)}`);
+};
 
 const yarnInstall = () => {
   if(!args.skipYarnInstall) {
@@ -54,8 +56,7 @@ run('sudo ls');
 // Pull in git changes and install yarn packages
 if(!args.skipOry) {
   printSectionBreak('Ory');
-  cdToRoot();
-  run('cd ./api/');
+  cdTopLevel('api');
   gitPull();
   yarnInstall();
   log('Building all packages...');
@@ -63,8 +64,7 @@ if(!args.skipOry) {
 }
 
 printSectionBreak('Lapki');
-cdToRoot();
-run('cd ./lapki/');
+cdTopLevel('lapki');
 gitPull();
 yarnInstall();
 if(!args.skipLinking) {
@@ -79,16 +79,14 @@ log('Building Lapki...');
 run('yarn run build');
 
 printSectionBreak('App');
-cdToRoot();
-run('cd ./app/');
+cdTopLevel('app');
 gitPull();
 yarnInstall();
 
 printSectionBreak('Prisma');
 if(!args.skipPrismaDeploy) {
   log('Deploying Prisma...');
-  cdToRoot();
-  run('cd ./api/');
+  cdTopLevel('api');
   run('prisma deploy');
 }else{
   log('Skipped deploying Primsa.');
@@ -98,17 +96,17 @@ printSectionBreak('Restartig API...');
 run('pm2 restart powtown-api');
 
 printSectionBreak('Restartig App...');
-cdToRoot();
-run('cd ./app/');
+cdTopLevel('app');
 log('Building app...');
 run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build');
 log('Gzipping assets...');
-run('find ./build/public -type f -not (-name \'*.gz\' -or -name \'*[~#]\') -exec sh -c \'gzip -c "{}" > "{}.gz"\';');
+const publicPath = path.resolve(rootDir, 'build/public');
+run(`find ${publicPath} -type f -not (-name '*.gz' -or -name '*[~#]') -exec sh -c 'gzip -c "{}" > "{}.gz"';`);
 log('Changing security context so nginx can read files...');
-run('sudo chcon -R --type httpd_sys_content_t ./build/public');
+run(`sudo chcon -R --type httpd_sys_content_t ${publicPath}`);
 log('Nuking destination folder and then copying build to nginx root...');
 run('rm -rf /usr/share/nginx/html/powtown/app');
-run('cp -rf ./build /usr/share/nginx/html/powtown/app');
+run(`cp -rf ${path.resolve(rootDir, 'app/build')} /usr/share/nginx/html/powtown/app`);
 log('Restarting pm2 process...');
 run('pm2 restart powtown-app');
 
