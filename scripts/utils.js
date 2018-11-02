@@ -29,8 +29,10 @@ const printSectionBreak = text => print(`                                     ${
 
 const log = text => print(text, { backgroundColor: 'magenta' });
 
-const run = (command) => {
-  print(`Running command "${chalk.white.bgMagenta(command)}"...`, { color: 'magenta' });
+const run = (command, dir) => {
+  const dirMessage = dir ? ` in directory "${dir}"` : '';
+  print(`Running command "${chalk.white.bgMagenta(command)}"${dirMessage}...`, { color: 'magenta' });
+  if(dir) command = `cd ${dir} && ${command}`;
   try { childProcess.execSync(command, { stdio: [0, 1, 2] }); } catch(error) {
     printError(`Command "${command}" failed`, error);
     process.exit(1);

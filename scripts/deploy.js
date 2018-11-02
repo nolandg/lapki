@@ -30,24 +30,28 @@ if(args.quick) {
 }
 
 const rootDir = '/home/noland/powtown';
+const oryDir = path.resolve(rootDir, 'ory');
+const lapkiDir = path.resolve(rootDir, 'lapki');
+const appDir = path.resolve(rootDir, 'app');
+const apiDir = path.resolve(rootDir, 'api');
 
 const cdTopLevel = (dir) => {
   run(`cd ${path.resolve(rootDir, dir)}`);
 };
 
-const yarnInstall = () => {
+const yarnInstall = (dir) => {
   if(!args.skipYarnInstall) {
     log('Installing yarn packages...');
-    run('yarn');
+    run('yarn', dir);
   }else{
     log('Skipped installing yarn packages.');
   }
 };
 
-const gitPull = () => {
+const gitPull = (dir) => {
   log('Pulling git...');
-  run('git checkout HEAD -- yarn.lock');
-  run('git pull');
+  run('git checkout HEAD -- yarn.lock', dir);
+  run('git pull', dir);
 };
 
 // Get sudo privaledges
@@ -56,38 +60,34 @@ run('sudo ls');
 // Pull in git changes and install yarn packages
 if(!args.skipOry) {
   printSectionBreak('Ory');
-  cdTopLevel('api');
-  gitPull();
-  yarnInstall();
+  gitPull(oryDir);
+  yarnInstall(oryDir);
   log('Building all packages...');
-  run('yarn run build:lib');
+  run('yarn run build:lib', oryDir);
 }
 
 printSectionBreak('Lapki');
-cdTopLevel('lapki');
-gitPull();
-yarnInstall();
+gitPull(lapkiDir);
+yarnInstall(lapkiDir);
 if(!args.skipLinking) {
   log('Linking Ory packages into Lapki...');
-  linkOry(path.resolve(rootDir, 'ory'));
+  linkOry(oryDir);
   log('Linking peer deps into Lapki...');
-  linkPeerDeps(path.resolve(rootDir, 'app'));
+  linkPeerDeps(appDir);
 }else{
   log('Skipping linking Ory and peer deps into Lapki.');
 }
 log('Building Lapki...');
-run('yarn run build');
+run('yarn run build', lapkiDir);
 
 printSectionBreak('App');
-cdTopLevel('app');
-gitPull();
-yarnInstall();
+gitPull(appDir);
+yarnInstall(appDir);
 
 printSectionBreak('Prisma');
 if(!args.skipPrismaDeploy) {
   log('Deploying Prisma...');
-  cdTopLevel('api');
-  run('prisma deploy');
+  run('prisma deploy', apiDir);
 }else{
   log('Skipped deploying Primsa.');
 }
@@ -96,9 +96,8 @@ printSectionBreak('Restartig API...');
 run('pm2 restart powtown-api');
 
 printSectionBreak('Restartig App...');
-cdTopLevel('app');
 log('Building app...');
-run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build');
+run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
 log('Gzipping assets...');
 const publicPath = path.resolve(rootDir, 'build/public');
 run(`find ${publicPath} -type f -not (-name '*.gz' -or -name '*[~#]') -exec sh -c 'gzip -c "{}" > "{}.gz"';`);
