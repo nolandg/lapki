@@ -29,9 +29,6 @@ if(args.quick) {
   args.skipPrismaDeploy = true;
 }
 
-print(`Hello ${chalk.green('there')}`);
-process.exit(0);
-
 const rootDir = '/home/noland/powtown';
 
 const cdToRoot = () => run(`cd ${rootDir}`);
