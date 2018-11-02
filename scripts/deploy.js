@@ -55,7 +55,7 @@ run('sudo ls');
 if(!args.skipOry) {
   printSectionBreak('Ory');
   cdToRoot();
-  run('cd api');
+  run('cd ./api/');
   gitPull();
   yarnInstall();
   log('Building all packages...');
@@ -64,7 +64,7 @@ if(!args.skipOry) {
 
 printSectionBreak('Lapki');
 cdToRoot();
-run('cd lapki');
+run('cd ./lapki/');
 gitPull();
 yarnInstall();
 if(!args.skipLinking) {
@@ -80,7 +80,7 @@ run('yarn run build');
 
 printSectionBreak('App');
 cdToRoot();
-run('cd app');
+run('cd ./app/');
 gitPull();
 yarnInstall();
 
@@ -88,7 +88,7 @@ printSectionBreak('Prisma');
 if(!args.skipPrismaDeploy) {
   log('Deploying Prisma...');
   cdToRoot();
-  run('cd api');
+  run('cd ./api/');
   run('prisma deploy');
 }else{
   log('Skipped deploying Primsa.');
@@ -99,7 +99,7 @@ run('pm2 restart powtown-api');
 
 printSectionBreak('Restartig App...');
 cdToRoot();
-run('cd app');
+run('cd ./app/');
 log('Building app...');
 run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build');
 log('Gzipping assets...');
