@@ -50,6 +50,7 @@ const linkPeerDeps = () => {
 };
 
 const linkOry = () => {
+  const rootOryPath = '../ory/packages/';
   const oryLinks = [
     { path: 'core', name: 'ory-editor-core' },
     { path: 'ui', name: 'ory-editor-ui' },
@@ -64,7 +65,7 @@ const linkOry = () => {
 
   oryLinks.forEach(({ path: modulePath, name }) => {
     const home = path.resolve(__dirname, '../');
-    const source = path.resolve('../ory/packages/', modulePath);
+    const source = path.resolve(rootOryPath, modulePath);
 
     const command = `cd ${source} && yarn link && cd ${home} && yarn link ${name}`;
     childProcess.execSync(command, { stdio: [0, 1, 2] });
