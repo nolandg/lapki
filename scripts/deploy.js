@@ -17,6 +17,7 @@ const args = {
   skipPrismaDeploy: false,
   quick: false,
   compileJssOnly: false,
+  skipRestartingApp: false,
   ...commandLineArgs([
     { name: 'skipLinking', type: Boolean },
     { name: 'skipOry', type: Boolean },
@@ -24,6 +25,7 @@ const args = {
     { name: 'skipPrismaDeploy', type: Boolean },
     { name: 'quick', type: Boolean },
     { name: 'compileJssOnly', type: Boolean },
+    { name: 'skipRestartingApp', type: Boolean },
   ]),
 };
 
@@ -179,22 +181,31 @@ if(!args.skipPrismaDeploy) {
   log('Skipped deploying Primsa.');
 }
 
-printSectionBreak('Restartig API...');
+printSectionBreak('API');
+gitPull(apiDir);
+yarnInstall(apiDir);
+log('Linking Lapki into API...');
+run(`cd ${lapkiDir} && yarn link && cd ${apiDir} && yarn link lapki`);
+log('Restarting API server...');
 run('pm2 restart powtown-api');
 
 printSectionBreak('Restartig App...');
-log('Building app...');
-run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
-log('Gzipping assets...');
-const publicPath = path.resolve(rootDir, 'app/build/public');
-run(`find ${publicPath} -type f -not \\( -name '*.gz' -or -name '*[~#]' \\) -exec sh -c 'gzip -c "{}" > "{}.gz"' \\;`);
-// log('Changing security context so nginx can read files...');
-// run(`sudo chcon -R --type httpd_sys_content_t ${publicPath}`);
-log('Nuking destination folder and then copying build to nginx root...');
-run('rm -rf /usr/share/nginx/html/powtown/app');
-run(`cp -rf ${path.resolve(rootDir, 'app/build')} /usr/share/nginx/html/powtown/app`);
-log('Restarting pm2 process...');
-run('pm2 restart powtown-app');
+if(!args.skipRestartingApp) {
+  log('Building app...');
+  run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
+  log('Gzipping assets...');
+  const publicPath = path.resolve(rootDir, 'app/build/public');
+  run(`find ${publicPath} -type f -not \\( -name '*.gz' -or -name '*[~#]' \\) -exec sh -c 'gzip -c "{}" > "{}.gz"' \\;`);
+  // log('Changing security context so nginx can read files...');
+  // run(`sudo chcon -R --type httpd_sys_content_t ${publicPath}`);
+  log('Nuking destination folder and then copying build to nginx root...');
+  run('rm -rf /usr/share/nginx/html/powtown/app');
+  run(`cp -rf ${path.resolve(rootDir, 'app/build')} /usr/share/nginx/html/powtown/app`);
+  log('Restarting pm2 process...');
+  run('pm2 restart powtown-app');
+}else{
+  log('Skipped restarting app.');
+}
 
 const endTime = new Date();
 const elapsed = Math.round((endTime - startTime) / 1000);
