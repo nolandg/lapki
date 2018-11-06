@@ -119,12 +119,6 @@ const compileCarouselJss = () => {
   log(`Wrote jss out to ${jssOutputPath}`);
 };
 
-if(args.compileJssOnly) {
-  compileOryJss();
-  compileCarouselJss();
-  process.exit();
-}
-
 const yarnInstall = (dir) => {
   if(!args.skipYarnInstall) {
     log('Installing yarn packages...');
@@ -141,7 +135,11 @@ const gitPull = (dir) => {
 };
 
 // ///////////////////////////// Start //////////////////////////////
-compileJss();
+compileOryJss();
+compileCarouselJss();
+if(args.compileJssOnly) {
+  process.exit();
+}
 
 // Get sudo privaledges
 run('sudo ls');
