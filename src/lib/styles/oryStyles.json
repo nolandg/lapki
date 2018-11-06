@@ -1,5 +1,5 @@
 {
-  "ory": {
+  "root": {
     "& .ory-editable": {
       "marginRight": "auto",
       "marginLeft": "auto",
@@ -1030,11 +1030,17 @@
     },
     "& .ory-controls-mode-toggle-control-group": {
       "position": "fixed",
-      "zIndex": "10001",
+      "zIndex": "1001",
       "bottom": "0",
       "right": "0",
       "padding": "16px",
-      "transition": "all 200ms ease"
+      "transition": "all 200ms ease",
+      "marginBottom": "80px",
+      "fallbacks": [
+        {
+          "zIndex": "10001"
+        }
+      ]
     },
     "& .ory-controls-mode-toggle-clearfix": {
       "clear": "both"
@@ -1313,10 +1319,22 @@
       "bottom": "16px"
     },
     "& .ory-plugins-content-divider": {
-      "backgroundColor": "#eee",
+      "backgroundColor": "#aaa",
       "width": "100%",
       "height": "2px",
-      "borderColor": "#eee"
+      "borderColor": "#eee",
+      "fallbacks": [
+        {
+          "height": "2px"
+        },
+        {
+          "width": "100%"
+        },
+        {
+          "backgroundColor": "#eee"
+        }
+      ],
+      "border": "none"
     },
     "& .ory-plugins-content-image": {
       "width": "100%"
@@ -1389,6 +1407,246 @@
       "position": "relative",
       "width": "100%",
       "textAlign": "center"
+    },
+    "& body": {
+      "fontSize": "18px",
+      "background": "#eee",
+      "color": "#333333",
+      "fallbacks": [
+        {
+          "fontSize": "100%"
+        }
+      ],
+      "lineHeight": "28px"
+    },
+    "& body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2, h3, h4, h5, h6": {
+      "fontSizeAdjust": "0.5"
+    },
+    "& .editable-area p, .editable-area h1, .editable-area h2, .editable-area h3, .editable-area h4, .editable-area h5, .editable-area h6, .editable-area blockquote, .editable-area pre": {
+      "margin": "1em 0 0.5em"
+    },
+    "& .editable-area p:first-child, .editable-area h1:first-child, .editable-area h2:first-child, .editable-area h3:first-child, .editable-area h4:first-child, .editable-area h5:first-child, .editable-area h6:first-child, .editable-area blockquote:first-child, .editable-area pre:first-child": {
+      "marginTop": "0"
+    },
+    "& .editable-area p:last-child, .editable-area h1:last-child, .editable-area h2:last-child, .editable-area h3:last-child, .editable-area h4:last-child, .editable-area h5:last-child, .editable-area h6:last-child, .editable-area blockquote:last-child, .editable-area pre:last-child": {
+      "marginBottom": "0"
+    },
+    "& .editable-area ul, .editable-area ol": {
+      "margin": "1em 0",
+      "fallbacks": [
+        {
+          "margin": "0"
+        }
+      ],
+      "listStyleType": "inside"
+    },
+    "& .editable-area li": {
+      "margin": ".2em 0 .2em 1em",
+      "fallbacks": [
+        {
+          "margin": "1em 0"
+        }
+      ]
+    },
+    "& .editable-area body": {
+      "fontSize": "1em",
+      "lineHeight": "1.25em"
+    },
+    "& .editable-area em": {
+      "fontStyle": "italic"
+    },
+    "& .editable-area strong": {
+      "fontWeight": "700"
+    },
+    "& .editable-area h1 strong, .editable-area h2 strong, .editable-area h3 strong, .editable-area h4 strong, .editable-area h5 strong, .editable-area h6 strong": {
+      "fontWeight": "800"
+    },
+    "& @media only screen and (max-width: 64em) and (min-width: 48em)": {
+      ".editable-area body": {
+        "fontSize": "1em",
+        "lineHeight": "1.375em"
+      },
+      ".editable-area h1": {
+        "fontSize": "3em",
+        "lineHeight": "1.05",
+        "fallbacks": [
+          {
+            "lineHeight": "1.125"
+          },
+          {
+            "fontSize": "2.5em"
+          }
+        ]
+      },
+      ".editable-area h2": {
+        "fontSize": "2em",
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h3": {
+        "fontSize": "1.5em",
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h4": {
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h5": {
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h6": {
+        "lineHeight": "1.25em"
+      }
+    },
+    "& .editable-area h1": {
+      "margin": "1em 0 0.5em 0",
+      "fontSize": "2em",
+      "lineHeight": "1.25em"
+    },
+    "& .editable-area h1:first-child": {
+      "marginTop": "0"
+    },
+    "& .editable-area h2": {
+      "margin": "0.8em 0 0.5em 0",
+      "fontSize": "1.625em",
+      "lineHeight": "1.15384615"
+    },
+    "& @media only screen and (max-width: 48em)": {
+      ".editable-area h2": {
+        "fontSize": "2.25em",
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h3": {
+        "fontSize": "1.75em",
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h4": {
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h5": {
+        "lineHeight": "1.25em"
+      },
+      ".editable-area h6": {
+        "lineHeight": "1.25em"
+      }
+    },
+    "& .editable-area h3": {
+      "margin": "0.8em 0 0.5em 0",
+      "fontSize": "1.375em",
+      "lineHeight": "1.13636364"
+    },
+    "& .editable-area h4": {
+      "margin": "0.8em 0 0.5em 0",
+      "fontSize": "1.125em",
+      "lineHeight": "1.11111111"
+    },
+    "& .editable-area h5": {
+      "margin": "0.8em 0 0.5em 0",
+      "fontSize": "1.085em",
+      "lineHeight": "1.055"
+    },
+    "& .editable-area h6": {
+      "margin": "0.8em 0 0.5em 0",
+      "fontSize": "1.055em",
+      "lineHeight": "1.005"
+    },
+    "& .editable-area blockquote": {
+      "fontSize": "1em",
+      "fontStyle": "italic",
+      "padding": "0 2.5em"
+    },
+    "& .ory-cell-leaf": {
+      "margin": "12px",
+      "padding": "8px"
+    },
+    "& .editable-area code, .editable-area pre": {
+      "fontFamily": "monospace",
+      "borderRadius": "0.3em",
+      "padding": "0.4em"
+    },
+    "& .editable-area code": {
+      "display": "inline",
+      "margin": "0 0.5em",
+      "whiteSpace": "pre"
+    },
+    "& .editable-area pre": {
+      "display": "block",
+      "margin": "1em"
+    },
+    "& .editable-area li p": {
+      "margin": "0"
+    },
+    "& .editable-area ol": {
+      "listStyleType": "decimal"
+    },
+    "& .editable-area ul": {
+      "listStyleType": "disc"
+    },
+    "& p": {
+      "margin": "0 0 28px"
+    },
+    "& pre": {
+      "overflowX": "auto"
+    },
+    "& a": {},
+    "& a:hover": {
+      "color": "#333333",
+      "textDecoration": "underline"
+    },
+    "& .container": {
+      "backgroundColor": "white",
+      "background": "white",
+      "padding": "0 24px",
+      "marginRight": "auto",
+      "marginLeft": "auto",
+      "alignItems": "stretch"
+    },
+    "& @media (min-width: 768px)": {
+      ".container": {
+        "width": "750px"
+      }
+    },
+    "& @media (min-width: 992px)": {
+      ".container": {
+        "width": "970px"
+      }
+    },
+    "& @media (min-width: 1200px)": {
+      ".container": {
+        "width": "1170px"
+      }
+    },
+    "& .editable, #editable-static": {
+      "padding": "5px"
+    },
+    "& nav": {
+      "color": "#eee",
+      "background": "#111",
+      "fontFamily": "'Open Sans', serif"
+    },
+    "& nav ul": {
+      "listStyleType": "none",
+      "margin": "0 0 20px 0",
+      "padding": "10px 20px",
+      "textAlign": "right"
+    },
+    "& nav ul li": {
+      "display": "inline-block",
+      "padding": "0 10px"
+    },
+    "& nav ul li a, nav ul li a:visited": {
+      "color": "#eee",
+      "transition": "all 200ms ease",
+      "textDecoration": "none",
+      "fontFamily": "'Open Sans', serif"
+    },
+    "& nav ul li a:hover, nav ul li a:active": {
+      "color": "#aaa",
+      "textDecoration": "none"
+    },
+    "& .ory-controls-mode-toggle-control-group > div:last-child": {
+      "display": "none"
+    },
+    "& .ory-toolbar-drawer > div": {
+      "boxShadow": "3px 0 10px rgba(0,0,0,.5)"
     }
   }
 }

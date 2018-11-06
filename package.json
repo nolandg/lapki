@@ -10,7 +10,7 @@
     "build-webpack-prod": "webpack --mode production",
     "build-webpack-dev": "webpack --mode development --watch",
     "start": "babel --verbose --out-dir=build src -w --copy-files",
-    "build": "babel --verbose --out-dir=build src"
+    "build": "babel --verbose --out-dir=build src --copy-files"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

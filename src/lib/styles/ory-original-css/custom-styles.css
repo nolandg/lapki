@@ -1,10 +1,10 @@
 .ory-controls-mode-toggle-control-group{
   margin-bottom: 80px;
   z-index: 1001;
+}
 
-  & > div:last-child{
-    display: none,
-  }
+.ory-controls-mode-toggle-control-group > div:last-child{
+  display: none;
 }
 
 .ory-toolbar-drawer > div{

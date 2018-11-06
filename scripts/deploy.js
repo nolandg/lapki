@@ -41,7 +41,7 @@ const appDir = path.resolve(rootDir, 'app');
 const apiDir = path.resolve(rootDir, 'api');
 
 const collectCss = () => {
-  const fileNames = ['core', 'ui', 'divider', 'image', 'slate', 'spacer', 'video'];
+  const fileNames = ['core', 'ui', 'divider', 'image', 'slate', 'spacer', 'video', 'typography', 'elements', 'styles', 'custom-styles'];
   let css = '';
 
   fileNames.forEach((fileName) => {
@@ -54,9 +54,9 @@ const collectCss = () => {
 
 const convertCssToJss = (css) => {
   const jss = cssToJss({ code: css });
-  const fixedJss = { ory: {} };
+  const fixedJss = { root: {} };
   _.forEach(jss['@global'], (value, key) => {
-    fixedJss.ory[`& ${key}`] = value;
+    fixedJss.root[`& ${key}`] = value;
   });
 
   return fixedJss;
@@ -76,29 +76,52 @@ const getCssVariables = () => {
   return vars;
 };
 
-const compileJss = () => {
-  printSectionBreak('Compiling JSS...');
+const compileOryJss = () => {
+  printSectionBreak('Compiling Ory JSS...');
 
   const cssOutputPath = path.resolve(__dirname, '../src/lib/styles/ory.css');
   const jssOutputPath = path.resolve(__dirname, '../src/lib/styles/oryStyles.json');
 
   // Get CSS and replace all variables with their values
   let css = collectCss();
+  log(`Found ${css.length} characters of css.`);
   const variables = getCssVariables();
+  log(`Found ${variables.length} variables to replace in css.`);
   variables.forEach((v) => {
     const reg = new RegExp(`var\\(${v.name}.*?\\)`, 'g');
     css = css.replace(reg, v.value);
   });
   fs.writeFileSync(cssOutputPath, css, { encoding: 'utf8' });
-
+  log(`Wrote css out to ${cssOutputPath}.`);
 
   const jss = convertCssToJss(css);
   const jssString = JSON.stringify(jss, null, 2);
   fs.writeFileSync(jssOutputPath, jssString, { encoding: 'utf8' });
+  log(`Wrote jss out to ${jssOutputPath}`);
+};
+
+const compileCarouselJss = () => {
+  printSectionBreak('Compiling Carousel JSS...');
+
+  const cssInputPath = path.resolve(__dirname, '../src/lib/styles/carousel-original-css/carousel.css');
+  const cssOutputPath = path.resolve(__dirname, '../src/lib/styles/carousel.css');
+  const jssOutputPath = path.resolve(__dirname, '../src/lib/styles/carouselStyles.json');
+
+  // Get CSS and replace all variables with their values
+  const css = fs.readFileSync(cssInputPath, { encoding: 'utf8' });
+  log(`Found ${css.length} characters of css.`);
+  fs.writeFileSync(cssOutputPath, css, { encoding: 'utf8' });
+  log(`Wrote css out to ${cssOutputPath}.`);
+
+  const jss = convertCssToJss(css);
+  const jssString = JSON.stringify(jss, null, 2);
+  fs.writeFileSync(jssOutputPath, jssString, { encoding: 'utf8' });
+  log(`Wrote jss out to ${jssOutputPath}`);
 };
 
 if(args.compileJssOnly) {
-  compileJss();
+  compileOryJss();
+  compileCarouselJss();
   process.exit();
 }
 

@@ -1,0 +1,337 @@
+{
+  "root": {
+    "& .carousel .control-arrow, .carousel.carousel-slider .control-arrow": {
+      "W": "all 0.25s ease-in",
+      "M": "all 0.25s ease-in",
+      "fallbacks": [
+        {
+          "M": "all 0.25s ease-in"
+        }
+      ],
+      "O": "all 0.25s ease-in",
+      "transition": "all 0.25s ease-in",
+      "opacity": "0.4",
+      "filter": "alpha(opacity=40)",
+      "position": "absolute",
+      "zIndex": "2",
+      "top": "20px",
+      "background": "none",
+      "border": "0",
+      "fontSize": "32px",
+      "cursor": "pointer"
+    },
+    "& .carousel .control-arrow:hover": {
+      "opacity": "1",
+      "filter": "alpha(opacity=100)"
+    },
+    "& .carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before": {
+      "margin": "0 5px",
+      "display": "inline-block",
+      "borderTop": "8px solid transparent",
+      "borderBottom": "8px solid transparent",
+      "content": "''"
+    },
+    "& .carousel .control-disabled.control-arrow": {
+      "opacity": "0",
+      "filter": "alpha(opacity=0)",
+      "cursor": "inherit",
+      "display": "none"
+    },
+    "& .carousel .control-prev.control-arrow": {
+      "left": "0"
+    },
+    "& .carousel .control-prev.control-arrow:before": {
+      "borderRight": "8px solid #fff"
+    },
+    "& .carousel .control-next.control-arrow": {
+      "right": "0"
+    },
+    "& .carousel .control-next.control-arrow:before": {
+      "borderLeft": "8px solid #fff"
+    },
+    "& .carousel": {
+      "position": "relative",
+      "width": "100%"
+    },
+    "& .carousel *": {
+      "W": "border-box",
+      "M": "border-box",
+      "boxSizing": "border-box"
+    },
+    "& .carousel img": {
+      "width": "100%",
+      "display": "inline-block",
+      "pointerEvents": "none"
+    },
+    "& .carousel .carousel": {
+      "position": "relative"
+    },
+    "& .carousel .control-arrow": {
+      "outline": "0",
+      "border": "0",
+      "background": "none",
+      "top": "50%",
+      "marginTop": "-13px",
+      "fontSize": "18px"
+    },
+    "& .carousel .thumbs-wrapper": {
+      "margin": "20px",
+      "overflow": "hidden"
+    },
+    "& .carousel .thumbs": {
+      "W": "translate3d(0, 0, 0)",
+      "M": "translate3d(0, 0, 0)",
+      "fallbacks": [
+        {
+          "O": "all 0.15s ease-in"
+        },
+        {
+          "M": "translate3d(0, 0, 0)"
+        },
+        {
+          "M": "all 0.15s ease-in"
+        },
+        {
+          "W": "all 0.15s ease-in"
+        },
+        {
+          "M": "all 0.15s ease-in"
+        }
+      ],
+      "O": "translate3d(0, 0, 0)",
+      "transition": "all 0.15s ease-in",
+      "transform": "translate3d(0, 0, 0)",
+      "position": "relative",
+      "listStyle": "none",
+      "whiteSpace": "nowrap"
+    },
+    "& .carousel .thumb": {
+      "W": "border 0.15s ease-in",
+      "M": "border 0.15s ease-in",
+      "fallbacks": [
+        {
+          "M": "border 0.15s ease-in"
+        }
+      ],
+      "O": "border 0.15s ease-in",
+      "transition": "border 0.15s ease-in",
+      "display": "inline-block",
+      "width": "80px",
+      "marginRight": "6px",
+      "whiteSpace": "nowrap",
+      "overflow": "hidden",
+      "border": "3px solid #fff",
+      "padding": "2px"
+    },
+    "& .carousel .thumb.selected, .carousel .thumb:hover": {
+      "border": "3px solid #333",
+      "padding": "2px"
+    },
+    "& .carousel .thumb img": {
+      "verticalAlign": "top"
+    },
+    "& .carousel.carousel-slider": {
+      "position": "relative",
+      "margin": "0",
+      "overflow": "hidden"
+    },
+    "& .carousel.carousel-slider .control-arrow": {
+      "top": "0",
+      "color": "#fff",
+      "fontSize": "26px",
+      "bottom": "0",
+      "marginTop": "0",
+      "padding": "5px"
+    },
+    "& .carousel.carousel-slider .control-arrow:hover": {
+      "background": "rgba(0, 0, 0, 0.2)"
+    },
+    "& .carousel .slider-wrapper": {
+      "overflow": "hidden",
+      "margin": "auto",
+      "width": "100%",
+      "W": "height 0.15s ease-in",
+      "M": "height 0.15s ease-in",
+      "fallbacks": [
+        {
+          "M": "height 0.15s ease-in"
+        }
+      ],
+      "O": "height 0.15s ease-in",
+      "transition": "height 0.15s ease-in"
+    },
+    "& .carousel .slider-wrapper.axis-horizontal .slider": {
+      "M": "horizontal",
+      "display": "flex",
+      "fallbacks": [
+        {
+          "display": "-webkit-flex"
+        },
+        {
+          "display": "-moz-flex"
+        },
+        {
+          "display": "-ms-flexbox"
+        },
+        {
+          "display": "-moz-box"
+        },
+        {
+          "display": "-webkit-box"
+        }
+      ]
+    },
+    "& .carousel .slider-wrapper.axis-horizontal .slider .slide": {
+      "flexDirection": "column",
+      "flexFlow": "column"
+    },
+    "& .carousel .slider-wrapper.axis-vertical": {
+      "M": "horizontal",
+      "display": "flex",
+      "fallbacks": [
+        {
+          "display": "-webkit-flex"
+        },
+        {
+          "display": "-moz-flex"
+        },
+        {
+          "display": "-ms-flexbox"
+        },
+        {
+          "display": "-moz-box"
+        },
+        {
+          "display": "-webkit-box"
+        }
+      ]
+    },
+    "& .carousel .slider-wrapper.axis-vertical .slider": {
+      "W": "column",
+      "flexDirection": "column"
+    },
+    "& .carousel .slider": {
+      "margin": "0",
+      "padding": "0",
+      "position": "relative",
+      "listStyle": "none",
+      "width": "100%"
+    },
+    "& .carousel .slider.animated": {
+      "W": "all 0.35s ease-in-out",
+      "M": "all 0.35s ease-in-out",
+      "fallbacks": [
+        {
+          "M": "all 0.35s ease-in-out"
+        }
+      ],
+      "O": "all 0.35s ease-in-out",
+      "transition": "all 0.35s ease-in-out"
+    },
+    "& .carousel .slide": {
+      "minWidth": "100%",
+      "margin": "0",
+      "position": "relative",
+      "textAlign": "center",
+      "background": "#000"
+    },
+    "& .carousel .slide img": {
+      "width": "100%",
+      "verticalAlign": "top",
+      "border": "0"
+    },
+    "& .carousel .slide iframe": {
+      "display": "inline-block",
+      "width": "calc(100% - 80px)",
+      "margin": "0 40px 40px",
+      "border": "0"
+    },
+    "& .carousel .slide .legend": {
+      "W": "opacity 0.35s ease-in-out",
+      "M": "opacity 0.35s ease-in-out",
+      "fallbacks": [
+        {
+          "transition": "all 0.5s ease-in-out"
+        },
+        {
+          "O": "all 0.5s ease-in-out"
+        },
+        {
+          "M": "opacity 0.35s ease-in-out"
+        },
+        {
+          "M": "all 0.5s ease-in-out"
+        },
+        {
+          "W": "all 0.5s ease-in-out"
+        },
+        {
+          "M": "all 0.5s ease-in-out"
+        }
+      ],
+      "O": "opacity 0.35s ease-in-out",
+      "transition": "opacity 0.35s ease-in-out",
+      "position": "absolute",
+      "bottom": "40px",
+      "left": "50%",
+      "marginLeft": "-45%",
+      "width": "90%",
+      "borderRadius": "10px",
+      "background": "#000",
+      "color": "#fff",
+      "padding": "10px",
+      "fontSize": "12px",
+      "textAlign": "center",
+      "opacity": "0.25"
+    },
+    "& .carousel .control-dots": {
+      "position": "absolute",
+      "bottom": "0",
+      "margin": "10px 0",
+      "textAlign": "center",
+      "width": "100%"
+    },
+    "& @media (min-width: 960px)": {
+      ".carousel .control-dots": {
+        "bottom": "0"
+      }
+    },
+    "& .carousel .control-dots .dot": {
+      "W": "opacity 0.25s ease-in",
+      "M": "opacity 0.25s ease-in",
+      "fallbacks": [
+        {
+          "M": "opacity 0.25s ease-in"
+        }
+      ],
+      "O": "opacity 0.25s ease-in",
+      "transition": "opacity 0.25s ease-in",
+      "opacity": "0.3",
+      "filter": "alpha(opacity=30)",
+      "boxShadow": "1px 1px 2px rgba(0, 0, 0, 0.9)",
+      "background": "#fff",
+      "borderRadius": "50%",
+      "width": "8px",
+      "height": "8px",
+      "cursor": "pointer",
+      "display": "inline-block",
+      "margin": "0 8px"
+    },
+    "& .carousel .control-dots .dot.selected, .carousel .control-dots .dot:hover": {
+      "opacity": "1",
+      "filter": "alpha(opacity=100)"
+    },
+    "& .carousel .carousel-status": {
+      "position": "absolute",
+      "top": "0",
+      "right": "0",
+      "padding": "5px",
+      "fontSize": "10px",
+      "textShadow": "1px 1px 1px rgba(0, 0, 0, 0.9)",
+      "color": "#fff"
+    },
+    "& .carousel:hover .slide .legend": {
+      "opacity": "1"
+    }
+  }
+}
