@@ -1,0 +1,1409 @@
+:root {
+  --gutter-width: 0rem;
+  --outer-margin: 0rem;
+  --gutter-compensation: calc((0rem * 0.5) * -1);
+  --gutter-compensation: calc((var(--gutter-width) * 0.5) * -1);
+  --half-gutter-width: calc((0rem * 0.5));
+  --half-gutter-width: calc((var(--gutter-width) * 0.5));
+  --xs-min: 30;
+  --sm-min: 48;
+  --md-min: 64;
+  --lg-min: 75;
+  --screen-xs-min: 30em;
+  --screen-xs-min: var(--xs-min)em;
+  --screen-sm-min: 48em;
+  --screen-sm-min: var(--sm-min)em;
+  --screen-md-min: 64em;
+  --screen-md-min: var(--md-min)em;
+  --screen-lg-min: 75em;
+  --screen-lg-min: var(--lg-min)em;
+  --container-sm: calc(48 + 0rem);
+  --container-sm: calc(var(--sm-min) + var(--gutter-width));
+  --container-md: calc(64 + 0rem);
+  --container-md: calc(var(--md-min) + var(--gutter-width));
+  --container-lg: calc(75 + 0rem);
+  --container-lg: calc(var(--lg-min) + var(--gutter-width));
+}
+
+.ory-editable {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 2rem;
+  padding-right: 0rem;
+  padding-right: var(--outer-margin, 2rem);
+  padding-left: 2rem;
+  padding-left: 0rem;
+  padding-left: var(--outer-margin, 2rem);
+}
+
+.ory-row {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-right: calc((0rem * 0.5) * -1);
+  margin-right: var(--gutter-compensation, -0.5rem);
+  margin-left: -0.5rem;
+  margin-left: calc((0rem * 0.5) * -1);
+  margin-left: var(--gutter-compensation, -0.5rem);
+  position: relative;
+}
+
+.ory-cell-xs,
+.ory-cell-xs-1,
+.ory-cell-xs-2,
+.ory-cell-xs-3,
+.ory-cell-xs-4,
+.ory-cell-xs-5,
+.ory-cell-xs-6,
+.ory-cell-xs-7,
+.ory-cell-xs-8,
+.ory-cell-xs-9,
+.ory-cell-xs-10,
+.ory-cell-xs-11,
+.ory-cell-xs-12,
+.ory-cell-xs-offset-0,
+.ory-cell-xs-offset-1,
+.ory-cell-xs-offset-2,
+.ory-cell-xs-offset-3,
+.ory-cell-xs-offset-4,
+.ory-cell-xs-offset-5,
+.ory-cell-xs-offset-6,
+.ory-cell-xs-offset-7,
+.ory-cell-xs-offset-8,
+.ory-cell-xs-offset-9,
+.ory-cell-xs-offset-10,
+.ory-cell-xs-offset-11,
+.ory-cell-xs-offset-12 {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding-right: 0.5rem;
+  padding-right: calc((0rem * 0.5));
+  padding-right: var(--half-gutter-width, 0.5rem);
+  padding-left: 0.5rem;
+  padding-left: calc((0rem * 0.5));
+  padding-left: var(--half-gutter-width, 0.5rem);
+  min-width: 0;
+}
+
+.ory-cell-xs {
+  flex-grow: 1;
+  flex-basis: 0;
+  width: 100%;
+  min-width: 100%;
+}
+
+.ory-cell-xs-1 {
+  flex-basis: 8.33333333%;
+  width: 8.33333333%;
+}
+
+.ory-cell-xs-2 {
+  flex-basis: 16.66666667%;
+  width: 16.66666667%;
+}
+
+.ory-cell-xs-3 {
+  flex-basis: 25%;
+  width: 25%;
+  min-width: 25%;
+}
+
+.ory-cell-xs-4 {
+  flex-basis: 33.33333333%;
+  width: 33.33333333%;
+}
+
+.ory-cell-xs-5 {
+  flex-basis: 41.66666667%;
+  width: 41.66666667%;
+}
+
+.ory-cell-xs-6 {
+  flex-basis: 50%;
+  width: 50%;
+  min-width: 50%;
+}
+
+.ory-cell-xs-7 {
+  flex-basis: 58.33333333%;
+  width: 58.33333333%;
+}
+
+.ory-cell-xs-8 {
+  flex-basis: 66.66666667%;
+  width: 66.66666667%;
+}
+
+.ory-cell-xs-9 {
+  flex-basis: 75%;
+  width: 75%;
+  min-width: 75%;
+}
+
+.ory-cell-xs-10 {
+  flex-basis: 83.33333333%;
+  width: 83.33333333%;
+}
+
+.ory-cell-xs-11 {
+  flex-basis: 91.66666667%;
+  width: 91.66666667%;
+}
+
+.ory-cell-xs-12 {
+  flex-basis: 100%;
+  width: 100%;
+  min-width: 100%;
+}
+
+.ory-cell-xs-offset-0 {
+  margin-left: 0;
+}
+
+.ory-cell-xs-offset-1 {
+  margin-left: 8.33333333%;
+}
+
+.ory-cell-xs-offset-2 {
+  margin-left: 16.66666667%;
+}
+
+.ory-cell-xs-offset-3 {
+  margin-left: 25%;
+}
+
+.ory-cell-xs-offset-4 {
+  margin-left: 33.33333333%;
+}
+
+.ory-cell-xs-offset-5 {
+  margin-left: 41.66666667%;
+}
+
+.ory-cell-xs-offset-6 {
+  margin-left: 50%;
+}
+
+.ory-cell-xs-offset-7 {
+  margin-left: 58.33333333%;
+}
+
+.ory-cell-xs-offset-8 {
+  margin-left: 66.66666667%;
+}
+
+.ory-cell-xs-offset-9 {
+  margin-left: 75%;
+}
+
+.ory-cell-xs-offset-10 {
+  margin-left: 83.33333333%;
+}
+
+.ory-cell-xs-offset-11 {
+  margin-left: 91.66666667%;
+}
+
+.start-xs {
+  justify-content: flex-start;
+}
+
+[dir="ltr"] .start-xs {
+  text-align: left;
+}
+
+[dir="rtl"] .start-xs {
+  text-align: right;
+}
+
+.center-xs {
+  justify-content: center;
+  text-align: center;
+}
+
+.end-xs {
+  justify-content: flex-end;
+}
+
+[dir="ltr"] .end-xs {
+  text-align: right;
+}
+
+[dir="rtl"] .end-xs {
+  text-align: left;
+}
+
+.top-xs {
+  align-items: flex-start;
+}
+
+.middle-xs {
+  align-items: center;
+}
+
+.bottom-xs {
+  align-items: flex-end;
+}
+
+.around-xs {
+  justify-content: space-around;
+}
+
+.between-xs {
+  justify-content: space-between;
+}
+
+.first-xs {
+  order: -1;
+}
+
+.last-xs {
+  order: 1;
+}
+
+@media only screen and (min-width: 48em) {
+  .ory-cell-sm,
+  .ory-cell-sm-1,
+  .ory-cell-sm-2,
+  .ory-cell-sm-3,
+  .ory-cell-sm-4,
+  .ory-cell-sm-5,
+  .ory-cell-sm-6,
+  .ory-cell-sm-7,
+  .ory-cell-sm-8,
+  .ory-cell-sm-9,
+  .ory-cell-sm-10,
+  .ory-cell-sm-11,
+  .ory-cell-sm-12,
+  .ory-cell-sm-offset-0,
+  .ory-cell-sm-offset-1,
+  .ory-cell-sm-offset-2,
+  .ory-cell-sm-offset-3,
+  .ory-cell-sm-offset-4,
+  .ory-cell-sm-offset-5,
+  .ory-cell-sm-offset-6,
+  .ory-cell-sm-offset-7,
+  .ory-cell-sm-offset-8,
+  .ory-cell-sm-offset-9,
+  .ory-cell-sm-offset-10,
+  .ory-cell-sm-offset-11,
+  .ory-cell-sm-offset-12 {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+    padding-right: calc((0rem * 0.5));
+    padding-right: var(--half-gutter-width, 0.5rem);
+    padding-left: 0.5rem;
+    padding-left: calc((0rem * 0.5));
+    padding-left: var(--half-gutter-width, 0.5rem);
+    min-width: 0;
+  }
+
+  .ory-cell-sm {
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-sm-1 {
+    flex-basis: 8.33333333%;
+    width: 8.33333333%;
+  }
+
+  .ory-cell-sm-2 {
+    flex-basis: 16.66666667%;
+    width: 16.66666667%;
+  }
+
+  .ory-cell-sm-3 {
+    flex-basis: 25%;
+    width: 25%;
+  min-width: 25%;
+  }
+
+  .ory-cell-sm-4 {
+    flex-basis: 33.33333333%;
+    width: 33.33333333%;
+  }
+
+  .ory-cell-sm-5 {
+    flex-basis: 41.66666667%;
+    width: 41.66666667%;
+  }
+
+  .ory-cell-sm-6 {
+    flex-basis: 50%;
+    width: 50%;
+  min-width: 50%;
+  }
+
+  .ory-cell-sm-7 {
+    flex-basis: 58.33333333%;
+    width: 58.33333333%;
+  }
+
+  .ory-cell-sm-8 {
+    flex-basis: 66.66666667%;
+    width: 66.66666667%;
+  }
+
+  .ory-cell-sm-9 {
+    flex-basis: 75%;
+    width: 75%;
+  min-width: 75%;
+  }
+
+  .ory-cell-sm-10 {
+    flex-basis: 83.33333333%;
+    width: 83.33333333%;
+  }
+
+  .ory-cell-sm-11 {
+    flex-basis: 91.66666667%;
+    width: 91.66666667%;
+  }
+
+  .ory-cell-sm-12 {
+    flex-basis: 100%;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-sm-offset-0 {
+    margin-left: 0;
+  }
+
+  .ory-cell-sm-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .ory-cell-sm-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .ory-cell-sm-offset-3 {
+    margin-left: 25%;
+  }
+
+  .ory-cell-sm-offset-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .ory-cell-sm-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .ory-cell-sm-offset-6 {
+    margin-left: 50%;
+  }
+
+  .ory-cell-sm-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .ory-cell-sm-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .ory-cell-sm-offset-9 {
+    margin-left: 75%;
+  }
+
+  .ory-cell-sm-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .ory-cell-sm-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .start-sm {
+    justify-content: flex-start;
+  }
+    [dir="ltr"] .start-sm {
+    text-align: left;
+  }
+    [dir="rtl"] .start-sm {
+    text-align: right;
+  }
+
+  .center-sm {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .end-sm {
+    justify-content: flex-end;
+  }
+    [dir="ltr"] .end-sm {
+    text-align: right;
+  }
+    [dir="rtl"] .end-sm {
+    text-align: left;
+  }
+
+  .top-sm {
+    align-items: flex-start;
+  }
+
+  .middle-sm {
+    align-items: center;
+  }
+
+  .bottom-sm {
+    align-items: flex-end;
+  }
+
+  .around-sm {
+    justify-content: space-around;
+  }
+
+  .between-sm {
+    justify-content: space-between;
+  }
+
+  .first-sm {
+    order: -1;
+  }
+
+  .last-sm {
+    order: 1;
+  }
+}
+
+@media only screen and (min-width: 64em) {
+  .ory-cell-md,
+  .ory-cell-md-1,
+  .ory-cell-md-2,
+  .ory-cell-md-3,
+  .ory-cell-md-4,
+  .ory-cell-md-5,
+  .ory-cell-md-6,
+  .ory-cell-md-7,
+  .ory-cell-md-8,
+  .ory-cell-md-9,
+  .ory-cell-md-10,
+  .ory-cell-md-11,
+  .ory-cell-md-12,
+  .ory-cell-md-offset-0,
+  .ory-cell-md-offset-1,
+  .ory-cell-md-offset-2,
+  .ory-cell-md-offset-3,
+  .ory-cell-md-offset-4,
+  .ory-cell-md-offset-5,
+  .ory-cell-md-offset-6,
+  .ory-cell-md-offset-7,
+  .ory-cell-md-offset-8,
+  .ory-cell-md-offset-9,
+  .ory-cell-md-offset-10,
+  .ory-cell-md-offset-11,
+  .ory-cell-md-offset-12 {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+    padding-right: calc((0rem * 0.5));
+    padding-right: var(--half-gutter-width, 0.5rem);
+    padding-left: 0.5rem;
+    padding-left: calc((0rem * 0.5));
+    padding-left: var(--half-gutter-width, 0.5rem);
+    min-width: 0;
+  }
+
+  .ory-cell-md {
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-md-1 {
+    flex-basis: 8.33333333%;
+    width: 8.33333333%;
+  }
+
+  .ory-cell-md-2 {
+    flex-basis: 16.66666667%;
+    width: 16.66666667%;
+  }
+
+  .ory-cell-md-3 {
+    flex-basis: 25%;
+    width: 25%;
+  min-width: 25%;
+  }
+
+  .ory-cell-md-4 {
+    flex-basis: 33.33333333%;
+    width: 33.33333333%;
+  }
+
+  .ory-cell-md-5 {
+    flex-basis: 41.66666667%;
+    width: 41.66666667%;
+  }
+
+  .ory-cell-md-6 {
+    flex-basis: 50%;
+    width: 50%;
+  min-width: 50%;
+  }
+
+  .ory-cell-md-7 {
+    flex-basis: 58.33333333%;
+    width: 58.33333333%;
+  }
+
+  .ory-cell-md-8 {
+    flex-basis: 66.66666667%;
+    width: 66.66666667%;
+  }
+
+  .ory-cell-md-9 {
+    flex-basis: 75%;
+    width: 75%;
+  min-width: 75%;
+  }
+
+  .ory-cell-md-10 {
+    flex-basis: 83.33333333%;
+    width: 83.33333333%;
+  }
+
+  .ory-cell-md-11 {
+    flex-basis: 91.66666667%;
+    width: 91.66666667%;
+  }
+
+  .ory-cell-md-12 {
+    flex-basis: 100%;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-md-offset-0 {
+    margin-left: 0;
+  }
+
+  .ory-cell-md-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .ory-cell-md-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .ory-cell-md-offset-3 {
+    margin-left: 25%;
+  }
+
+  .ory-cell-md-offset-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .ory-cell-md-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .ory-cell-md-offset-6 {
+    margin-left: 50%;
+  }
+
+  .ory-cell-md-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .ory-cell-md-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .ory-cell-md-offset-9 {
+    margin-left: 75%;
+  }
+
+  .ory-cell-md-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .ory-cell-md-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .start-md {
+    justify-content: flex-start;
+  }
+    [dir="ltr"] .start-md {
+    text-align: left;
+  }
+    [dir="rtl"] .start-md {
+    text-align: right;
+  }
+
+  .center-md {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .end-md {
+    justify-content: flex-end;
+  }
+    [dir="ltr"] .end-md {
+    text-align: right;
+  }
+    [dir="rtl"] .end-md {
+    text-align: left;
+  }
+
+  .top-md {
+    align-items: flex-start;
+  }
+
+  .middle-md {
+    align-items: center;
+  }
+
+  .bottom-md {
+    align-items: flex-end;
+  }
+
+  .around-md {
+    justify-content: space-around;
+  }
+
+  .between-md {
+    justify-content: space-between;
+  }
+
+  .first-md {
+    order: -1;
+  }
+
+  .last-md {
+    order: 1;
+  }
+}
+
+@media only screen and (min-width: 75em) {
+  .ory-cell-lg,
+  .ory-cell-lg-1,
+  .ory-cell-lg-2,
+  .ory-cell-lg-3,
+  .ory-cell-lg-4,
+  .ory-cell-lg-5,
+  .ory-cell-lg-6,
+  .ory-cell-lg-7,
+  .ory-cell-lg-8,
+  .ory-cell-lg-9,
+  .ory-cell-lg-10,
+  .ory-cell-lg-11,
+  .ory-cell-lg-12,
+  .ory-cell-lg-offset-0,
+  .ory-cell-lg-offset-1,
+  .ory-cell-lg-offset-2,
+  .ory-cell-lg-offset-3,
+  .ory-cell-lg-offset-4,
+  .ory-cell-lg-offset-5,
+  .ory-cell-lg-offset-6,
+  .ory-cell-lg-offset-7,
+  .ory-cell-lg-offset-8,
+  .ory-cell-lg-offset-9,
+  .ory-cell-lg-offset-10,
+  .ory-cell-lg-offset-11,
+  .ory-cell-lg-offset-12 {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+    padding-right: calc((0rem * 0.5));
+    padding-right: var(--half-gutter-width, 0.5rem);
+    padding-left: 0.5rem;
+    padding-left: calc((0rem * 0.5));
+    padding-left: var(--half-gutter-width, 0.5rem);
+    min-width: 0;
+  }
+
+  .ory-cell-lg {
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-lg-1 {
+    flex-basis: 8.33333333%;
+    width: 8.33333333%;
+  }
+
+  .ory-cell-lg-2 {
+    flex-basis: 16.66666667%;
+    width: 16.66666667%;
+  }
+
+  .ory-cell-lg-3 {
+    flex-basis: 25%;
+    width: 25%;
+  min-width: 25%;
+  }
+
+  .ory-cell-lg-4 {
+    flex-basis: 33.33333333%;
+    width: 33.33333333%;
+  }
+
+  .ory-cell-lg-5 {
+    flex-basis: 41.66666667%;
+    width: 41.66666667%;
+  }
+
+  .ory-cell-lg-6 {
+    flex-basis: 50%;
+    width: 50%;
+  min-width: 50%;
+  }
+
+  .ory-cell-lg-7 {
+    flex-basis: 58.33333333%;
+    width: 58.33333333%;
+  }
+
+  .ory-cell-lg-8 {
+    flex-basis: 66.66666667%;
+    width: 66.66666667%;
+  }
+
+  .ory-cell-lg-9 {
+    flex-basis: 75%;
+    width: 75%;
+  min-width: 75%;
+  }
+
+  .ory-cell-lg-10 {
+    flex-basis: 83.33333333%;
+    width: 83.33333333%;
+  }
+
+  .ory-cell-lg-11 {
+    flex-basis: 91.66666667%;
+    width: 91.66666667%;
+  }
+
+  .ory-cell-lg-12 {
+    flex-basis: 100%;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-lg-offset-0 {
+    margin-left: 0;
+  }
+
+  .ory-cell-lg-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .ory-cell-lg-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .ory-cell-lg-offset-3 {
+    margin-left: 25%;
+  }
+
+  .ory-cell-lg-offset-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .ory-cell-lg-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .ory-cell-lg-offset-6 {
+    margin-left: 50%;
+  }
+
+  .ory-cell-lg-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .ory-cell-lg-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .ory-cell-lg-offset-9 {
+    margin-left: 75%;
+  }
+
+  .ory-cell-lg-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .ory-cell-lg-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .start-lg {
+    justify-content: flex-start;
+  }
+    [dir="ltr"] .start-lg {
+    text-align: left;
+  }
+    [dir="rtl"] .start-lg {
+    text-align: right;
+  }
+
+  .center-lg {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .end-lg {
+    justify-content: flex-end;
+  }
+    [dir="ltr"] .end-lg {
+    text-align: right;
+  }
+    [dir="rtl"] .end-lg {
+    text-align: left;
+  }
+
+  .top-lg {
+    align-items: flex-start;
+  }
+
+  .middle-lg {
+    align-items: center;
+  }
+
+  .bottom-lg {
+    align-items: flex-end;
+  }
+
+  .around-lg {
+    justify-content: space-around;
+  }
+
+  .between-lg {
+    justify-content: space-between;
+  }
+
+  .first-lg {
+    order: -1;
+  }
+
+  .last-lg {
+    order: 1;
+  }
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-row-has-floating-children {
+  display: block !important;
+}
+
+.ory-row-is-hovering-this:before {
+  content: " ";
+  position: absolute;
+  background: black;
+  display: block;
+  background: rgba(0, 0, 0, 0.87);
+  background: var(--darkBlack);
+  z-index: 2;
+}
+
+.ory-row-is-hovering-above:before {
+  top: 0;
+  height: 4px;
+  width: 100%;
+}
+
+.ory-row-is-hovering-below:before {
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+}
+
+.ory-row-is-hovering-left-of:before {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.ory-row-is-hovering-right-of:before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-editable {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items:stretch;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-cell-draggable {
+  cursor: move;
+  position: relative;
+  transition: opacity 200ms ease;
+  /* resolves an issue with drag and drop preview in chrome, see https://github.com/ory/editor/issues/180 */
+  /* will-change: transform; */
+}
+
+.ory-cell-draggable-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  cursor: move;
+  border: 1px solid rgba(0, 0, 0, 0);
+  transition: all ease .4s;
+}
+
+.ory-cell-draggable-overlay:hover {
+  background: rgba(0, 0, 0, 0.26);
+  background: var(--minBlack);
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  border: 1px solid var(--lightWhite);
+  background-blend-mode: screen;
+}
+
+.ory-cell-draggable-overlay-description {
+  text-align: center;
+  display: block;
+  color: rgba(0, 0, 0, .97);
+  max-width: 100%;
+}
+
+.ory-cell-draggable-overlay-description span {
+  opacity: 0;
+  text-align: center;
+  color: rgba(0, 0, 0, .97);
+  max-width: 90%;
+  display: inline-block;
+  padding: 8px 22px;
+  margin: 0 auto;
+  border-radius: 0 0 12px 12px;
+  text-transform: uppercase;
+  font-size: 75%;
+  letter-spacing: 0.15em;
+  background: rgba(255, 255, 255, 0);
+  transition: all ease .4s;
+}
+
+.ory-cell-draggable-overlay:hover .ory-cell-draggable-overlay-description span {
+  background: rgba(255, 255, 255, .95);
+  opacity: 1;
+}
+
+.ory-cell-draggable-overlay.ory-cell-draggable-leaf {
+  z-index: 3;
+}
+
+.ory-cell-draggable-inline-left.ory-cell-draggable-overlay,
+.ory-cell-draggable-inline-right.ory-cell-draggable-overlay {
+  float: left;
+  z-index: 4;
+}
+
+.ory-cell-draggable-is-dragging {
+  opacity: 0.4;
+  outline: none;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-cell-droppable {
+  position: relative;
+}
+
+.ory-cell-droppable-is-over-current:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.87);
+  background: var(--darkBlack);
+}
+
+.ory-cell-droppable-is-over-above:before,
+.ory-cell-droppable-is-over-below:before {
+  border-left: 0;
+  border-right: 0;
+}
+
+.ory-cell-droppable-is-over-left-of:before,
+.ory-cell-droppable-is-over-right-of:before {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.ory-cell-droppable-is-over-above:before {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-left: 0;
+  border-right: 0;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-above:before {
+  height: 4px;
+}
+
+.ory-cell-droppable-is-over-below:before {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-below:before {
+  height: 4px;
+}
+
+.ory-cell-droppable-is-over-left-of:before {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-left-of:before {
+  width: 4px;
+}
+
+.ory-cell-droppable-is-over-right-of:before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-right-of:before {
+  width: 4px;
+}
+
+.ory-cell-droppable-is-over-inline-right:before,
+.ory-cell-droppable-is-over-inline-left:before {
+  top: 0;
+  width: 50%;
+  height: 36%;
+  max-height: 128px;
+  background-color: #e0e0e0;
+  background-color: var(--grey300);
+  border: 1px solid rgba(0, 0, 0, 0.26);
+  border: 1px solid var(--minBlack);
+}
+
+.ory-cell-droppable-is-over-inline-left:before {
+  left: 0;
+}
+
+.ory-cell-droppable-is-over-inline-right:before {
+  right: 0;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-cell-empty {
+  background-color: red;
+  padding: 8px;
+  margin: 2px;
+  overflow: hidden;
+}
+
+.ory-cell-empty strong {
+  margin: 0 auto;
+}
+
+.ory-cell-empty code {
+  overflow: scroll;
+}
+
+@-webkit-keyframes oryCellResizeableAnimate {
+  0% {
+    background-color: rgba(255, 255, 255, 0.26);
+    background-color: var(--minWhite);
+    top: 45%;
+    bottom: 45%;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.12);
+    background-color: var(--faintWhite);
+    top: 0;
+    bottom: 0;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.87);
+    background-color: var(--darkWhite);
+    top: 45%;
+    bottom: 45%;
+  }
+}
+
+@keyframes oryCellResizeableAnimate {
+  0% {
+    background-color: rgba(255, 255, 255, 0.26);
+    background-color: var(--minWhite);
+    top: 45%;
+    bottom: 45%;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.12);
+    background-color: var(--faintWhite);
+    top: 0;
+    bottom: 0;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.87);
+    background-color: var(--darkWhite);
+    top: 45%;
+    bottom: 45%;
+  }
+}
+
+.ory-cell-resizable-inline-right > .react-resizable-handle {
+  left: -4px;
+}
+
+.ory-cell-resizable.react-resizable > .react-resizable-handle {
+  position: absolute;
+  z-index: 5;
+  width: 4px;
+  top: 0;
+  bottom: 0;
+  right: -2px;
+  cursor: e-resize;
+  background-color: rgba(0, 0, 0, 0.54);
+  background-color: var(--lightBlack);
+  mix-blend-mode: difference;
+  transition: all 200ms linear;
+}
+
+.ory-cell-resizable.react-resizable > .react-resizable-handle:after {
+  content: " ";
+  background-color: rgba(255, 255, 255, 0.87);
+  background-color: var(--darkWhite);
+  /* width: 30px; */
+  /* height: 30px; */
+  position: absolute;
+  /* z-index: 1000; */
+  top: 45%;
+  bottom: 45%;
+  left: 0;
+  right: 0;
+  transition: all 200ms linear;
+  mix-blend-mode: normal;
+
+  -webkit-animation-name: oryCellResizeableAnimate;
+
+          animation-name: oryCellResizeableAnimate;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
+  -webkit-animation-duration: 0.8s;
+          animation-duration: 0.8s;
+}
+
+.ory-cell-resizable.react-resizable > .react-resizable-handle:hover:after,
+.ory-cell-resizable.react-resizable > .react-resizable-handle:active:after {
+  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--fullWhite);
+  top: 0;
+  bottom: 0;
+}
+
+.ory-cell-inline-left {
+  float: left;
+}
+
+.ory-cell-inline-right {
+  float: right;
+}
+
+.ory-cell-has-inline-neighbour {
+  float: none;
+  width: 100%;
+}
+
+.ory-cell-focused {
+  /* box-shadow: 0 0 5px rgb(81, 203, 238); */
+  /* outline: 1px solid rgb(81, 203, 238); */
+}
+
+.ory-cell {
+  position: relative;
+}
+
+.ory-cell-bring-to-front {
+  z-index: 1;
+}
+
+.ory-cell-resizing-overlay:after {
+  content: " ";
+  z-index: 4;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

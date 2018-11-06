@@ -1,0 +1,1812 @@
+.ory-editable {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 2rem;
+  padding-right: 0rem;
+  padding-right: 0rem;
+  padding-left: 2rem;
+  padding-left: 0rem;
+  padding-left: 0rem;
+}
+
+.ory-row {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-right: calc((0rem * 0.5) * -1);
+  margin-right: calc((0rem * 0.5) * -1);
+  margin-left: -0.5rem;
+  margin-left: calc((0rem * 0.5) * -1);
+  margin-left: calc((0rem * 0.5) * -1);
+  position: relative;
+}
+
+.ory-cell-xs,
+.ory-cell-xs-1,
+.ory-cell-xs-2,
+.ory-cell-xs-3,
+.ory-cell-xs-4,
+.ory-cell-xs-5,
+.ory-cell-xs-6,
+.ory-cell-xs-7,
+.ory-cell-xs-8,
+.ory-cell-xs-9,
+.ory-cell-xs-10,
+.ory-cell-xs-11,
+.ory-cell-xs-12,
+.ory-cell-xs-offset-0,
+.ory-cell-xs-offset-1,
+.ory-cell-xs-offset-2,
+.ory-cell-xs-offset-3,
+.ory-cell-xs-offset-4,
+.ory-cell-xs-offset-5,
+.ory-cell-xs-offset-6,
+.ory-cell-xs-offset-7,
+.ory-cell-xs-offset-8,
+.ory-cell-xs-offset-9,
+.ory-cell-xs-offset-10,
+.ory-cell-xs-offset-11,
+.ory-cell-xs-offset-12 {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding-right: 0.5rem;
+  padding-right: calc((0rem * 0.5));
+  padding-right: calc((0rem * 0.5));
+  padding-left: 0.5rem;
+  padding-left: calc((0rem * 0.5));
+  padding-left: calc((0rem * 0.5));
+  min-width: 0;
+}
+
+.ory-cell-xs {
+  flex-grow: 1;
+  flex-basis: 0;
+  width: 100%;
+  min-width: 100%;
+}
+
+.ory-cell-xs-1 {
+  flex-basis: 8.33333333%;
+  width: 8.33333333%;
+}
+
+.ory-cell-xs-2 {
+  flex-basis: 16.66666667%;
+  width: 16.66666667%;
+}
+
+.ory-cell-xs-3 {
+  flex-basis: 25%;
+  width: 25%;
+  min-width: 25%;
+}
+
+.ory-cell-xs-4 {
+  flex-basis: 33.33333333%;
+  width: 33.33333333%;
+}
+
+.ory-cell-xs-5 {
+  flex-basis: 41.66666667%;
+  width: 41.66666667%;
+}
+
+.ory-cell-xs-6 {
+  flex-basis: 50%;
+  width: 50%;
+  min-width: 50%;
+}
+
+.ory-cell-xs-7 {
+  flex-basis: 58.33333333%;
+  width: 58.33333333%;
+}
+
+.ory-cell-xs-8 {
+  flex-basis: 66.66666667%;
+  width: 66.66666667%;
+}
+
+.ory-cell-xs-9 {
+  flex-basis: 75%;
+  width: 75%;
+  min-width: 75%;
+}
+
+.ory-cell-xs-10 {
+  flex-basis: 83.33333333%;
+  width: 83.33333333%;
+}
+
+.ory-cell-xs-11 {
+  flex-basis: 91.66666667%;
+  width: 91.66666667%;
+}
+
+.ory-cell-xs-12 {
+  flex-basis: 100%;
+  width: 100%;
+  min-width: 100%;
+}
+
+.ory-cell-xs-offset-0 {
+  margin-left: 0;
+}
+
+.ory-cell-xs-offset-1 {
+  margin-left: 8.33333333%;
+}
+
+.ory-cell-xs-offset-2 {
+  margin-left: 16.66666667%;
+}
+
+.ory-cell-xs-offset-3 {
+  margin-left: 25%;
+}
+
+.ory-cell-xs-offset-4 {
+  margin-left: 33.33333333%;
+}
+
+.ory-cell-xs-offset-5 {
+  margin-left: 41.66666667%;
+}
+
+.ory-cell-xs-offset-6 {
+  margin-left: 50%;
+}
+
+.ory-cell-xs-offset-7 {
+  margin-left: 58.33333333%;
+}
+
+.ory-cell-xs-offset-8 {
+  margin-left: 66.66666667%;
+}
+
+.ory-cell-xs-offset-9 {
+  margin-left: 75%;
+}
+
+.ory-cell-xs-offset-10 {
+  margin-left: 83.33333333%;
+}
+
+.ory-cell-xs-offset-11 {
+  margin-left: 91.66666667%;
+}
+
+.start-xs {
+  justify-content: flex-start;
+}
+
+[dir="ltr"] .start-xs {
+  text-align: left;
+}
+
+[dir="rtl"] .start-xs {
+  text-align: right;
+}
+
+.center-xs {
+  justify-content: center;
+  text-align: center;
+}
+
+.end-xs {
+  justify-content: flex-end;
+}
+
+[dir="ltr"] .end-xs {
+  text-align: right;
+}
+
+[dir="rtl"] .end-xs {
+  text-align: left;
+}
+
+.top-xs {
+  align-items: flex-start;
+}
+
+.middle-xs {
+  align-items: center;
+}
+
+.bottom-xs {
+  align-items: flex-end;
+}
+
+.around-xs {
+  justify-content: space-around;
+}
+
+.between-xs {
+  justify-content: space-between;
+}
+
+.first-xs {
+  order: -1;
+}
+
+.last-xs {
+  order: 1;
+}
+
+@media only screen and (min-width: 48em) {
+  .ory-cell-sm,
+  .ory-cell-sm-1,
+  .ory-cell-sm-2,
+  .ory-cell-sm-3,
+  .ory-cell-sm-4,
+  .ory-cell-sm-5,
+  .ory-cell-sm-6,
+  .ory-cell-sm-7,
+  .ory-cell-sm-8,
+  .ory-cell-sm-9,
+  .ory-cell-sm-10,
+  .ory-cell-sm-11,
+  .ory-cell-sm-12,
+  .ory-cell-sm-offset-0,
+  .ory-cell-sm-offset-1,
+  .ory-cell-sm-offset-2,
+  .ory-cell-sm-offset-3,
+  .ory-cell-sm-offset-4,
+  .ory-cell-sm-offset-5,
+  .ory-cell-sm-offset-6,
+  .ory-cell-sm-offset-7,
+  .ory-cell-sm-offset-8,
+  .ory-cell-sm-offset-9,
+  .ory-cell-sm-offset-10,
+  .ory-cell-sm-offset-11,
+  .ory-cell-sm-offset-12 {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+    padding-right: calc((0rem * 0.5));
+    padding-right: calc((0rem * 0.5));
+    padding-left: 0.5rem;
+    padding-left: calc((0rem * 0.5));
+    padding-left: calc((0rem * 0.5));
+    min-width: 0;
+  }
+
+  .ory-cell-sm {
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-sm-1 {
+    flex-basis: 8.33333333%;
+    width: 8.33333333%;
+  }
+
+  .ory-cell-sm-2 {
+    flex-basis: 16.66666667%;
+    width: 16.66666667%;
+  }
+
+  .ory-cell-sm-3 {
+    flex-basis: 25%;
+    width: 25%;
+  min-width: 25%;
+  }
+
+  .ory-cell-sm-4 {
+    flex-basis: 33.33333333%;
+    width: 33.33333333%;
+  }
+
+  .ory-cell-sm-5 {
+    flex-basis: 41.66666667%;
+    width: 41.66666667%;
+  }
+
+  .ory-cell-sm-6 {
+    flex-basis: 50%;
+    width: 50%;
+  min-width: 50%;
+  }
+
+  .ory-cell-sm-7 {
+    flex-basis: 58.33333333%;
+    width: 58.33333333%;
+  }
+
+  .ory-cell-sm-8 {
+    flex-basis: 66.66666667%;
+    width: 66.66666667%;
+  }
+
+  .ory-cell-sm-9 {
+    flex-basis: 75%;
+    width: 75%;
+  min-width: 75%;
+  }
+
+  .ory-cell-sm-10 {
+    flex-basis: 83.33333333%;
+    width: 83.33333333%;
+  }
+
+  .ory-cell-sm-11 {
+    flex-basis: 91.66666667%;
+    width: 91.66666667%;
+  }
+
+  .ory-cell-sm-12 {
+    flex-basis: 100%;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-sm-offset-0 {
+    margin-left: 0;
+  }
+
+  .ory-cell-sm-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .ory-cell-sm-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .ory-cell-sm-offset-3 {
+    margin-left: 25%;
+  }
+
+  .ory-cell-sm-offset-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .ory-cell-sm-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .ory-cell-sm-offset-6 {
+    margin-left: 50%;
+  }
+
+  .ory-cell-sm-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .ory-cell-sm-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .ory-cell-sm-offset-9 {
+    margin-left: 75%;
+  }
+
+  .ory-cell-sm-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .ory-cell-sm-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .start-sm {
+    justify-content: flex-start;
+  }
+    [dir="ltr"] .start-sm {
+    text-align: left;
+  }
+    [dir="rtl"] .start-sm {
+    text-align: right;
+  }
+
+  .center-sm {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .end-sm {
+    justify-content: flex-end;
+  }
+    [dir="ltr"] .end-sm {
+    text-align: right;
+  }
+    [dir="rtl"] .end-sm {
+    text-align: left;
+  }
+
+  .top-sm {
+    align-items: flex-start;
+  }
+
+  .middle-sm {
+    align-items: center;
+  }
+
+  .bottom-sm {
+    align-items: flex-end;
+  }
+
+  .around-sm {
+    justify-content: space-around;
+  }
+
+  .between-sm {
+    justify-content: space-between;
+  }
+
+  .first-sm {
+    order: -1;
+  }
+
+  .last-sm {
+    order: 1;
+  }
+}
+
+@media only screen and (min-width: 64em) {
+  .ory-cell-md,
+  .ory-cell-md-1,
+  .ory-cell-md-2,
+  .ory-cell-md-3,
+  .ory-cell-md-4,
+  .ory-cell-md-5,
+  .ory-cell-md-6,
+  .ory-cell-md-7,
+  .ory-cell-md-8,
+  .ory-cell-md-9,
+  .ory-cell-md-10,
+  .ory-cell-md-11,
+  .ory-cell-md-12,
+  .ory-cell-md-offset-0,
+  .ory-cell-md-offset-1,
+  .ory-cell-md-offset-2,
+  .ory-cell-md-offset-3,
+  .ory-cell-md-offset-4,
+  .ory-cell-md-offset-5,
+  .ory-cell-md-offset-6,
+  .ory-cell-md-offset-7,
+  .ory-cell-md-offset-8,
+  .ory-cell-md-offset-9,
+  .ory-cell-md-offset-10,
+  .ory-cell-md-offset-11,
+  .ory-cell-md-offset-12 {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+    padding-right: calc((0rem * 0.5));
+    padding-right: calc((0rem * 0.5));
+    padding-left: 0.5rem;
+    padding-left: calc((0rem * 0.5));
+    padding-left: calc((0rem * 0.5));
+    min-width: 0;
+  }
+
+  .ory-cell-md {
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-md-1 {
+    flex-basis: 8.33333333%;
+    width: 8.33333333%;
+  }
+
+  .ory-cell-md-2 {
+    flex-basis: 16.66666667%;
+    width: 16.66666667%;
+  }
+
+  .ory-cell-md-3 {
+    flex-basis: 25%;
+    width: 25%;
+  min-width: 25%;
+  }
+
+  .ory-cell-md-4 {
+    flex-basis: 33.33333333%;
+    width: 33.33333333%;
+  }
+
+  .ory-cell-md-5 {
+    flex-basis: 41.66666667%;
+    width: 41.66666667%;
+  }
+
+  .ory-cell-md-6 {
+    flex-basis: 50%;
+    width: 50%;
+  min-width: 50%;
+  }
+
+  .ory-cell-md-7 {
+    flex-basis: 58.33333333%;
+    width: 58.33333333%;
+  }
+
+  .ory-cell-md-8 {
+    flex-basis: 66.66666667%;
+    width: 66.66666667%;
+  }
+
+  .ory-cell-md-9 {
+    flex-basis: 75%;
+    width: 75%;
+  min-width: 75%;
+  }
+
+  .ory-cell-md-10 {
+    flex-basis: 83.33333333%;
+    width: 83.33333333%;
+  }
+
+  .ory-cell-md-11 {
+    flex-basis: 91.66666667%;
+    width: 91.66666667%;
+  }
+
+  .ory-cell-md-12 {
+    flex-basis: 100%;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-md-offset-0 {
+    margin-left: 0;
+  }
+
+  .ory-cell-md-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .ory-cell-md-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .ory-cell-md-offset-3 {
+    margin-left: 25%;
+  }
+
+  .ory-cell-md-offset-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .ory-cell-md-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .ory-cell-md-offset-6 {
+    margin-left: 50%;
+  }
+
+  .ory-cell-md-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .ory-cell-md-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .ory-cell-md-offset-9 {
+    margin-left: 75%;
+  }
+
+  .ory-cell-md-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .ory-cell-md-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .start-md {
+    justify-content: flex-start;
+  }
+    [dir="ltr"] .start-md {
+    text-align: left;
+  }
+    [dir="rtl"] .start-md {
+    text-align: right;
+  }
+
+  .center-md {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .end-md {
+    justify-content: flex-end;
+  }
+    [dir="ltr"] .end-md {
+    text-align: right;
+  }
+    [dir="rtl"] .end-md {
+    text-align: left;
+  }
+
+  .top-md {
+    align-items: flex-start;
+  }
+
+  .middle-md {
+    align-items: center;
+  }
+
+  .bottom-md {
+    align-items: flex-end;
+  }
+
+  .around-md {
+    justify-content: space-around;
+  }
+
+  .between-md {
+    justify-content: space-between;
+  }
+
+  .first-md {
+    order: -1;
+  }
+
+  .last-md {
+    order: 1;
+  }
+}
+
+@media only screen and (min-width: 75em) {
+  .ory-cell-lg,
+  .ory-cell-lg-1,
+  .ory-cell-lg-2,
+  .ory-cell-lg-3,
+  .ory-cell-lg-4,
+  .ory-cell-lg-5,
+  .ory-cell-lg-6,
+  .ory-cell-lg-7,
+  .ory-cell-lg-8,
+  .ory-cell-lg-9,
+  .ory-cell-lg-10,
+  .ory-cell-lg-11,
+  .ory-cell-lg-12,
+  .ory-cell-lg-offset-0,
+  .ory-cell-lg-offset-1,
+  .ory-cell-lg-offset-2,
+  .ory-cell-lg-offset-3,
+  .ory-cell-lg-offset-4,
+  .ory-cell-lg-offset-5,
+  .ory-cell-lg-offset-6,
+  .ory-cell-lg-offset-7,
+  .ory-cell-lg-offset-8,
+  .ory-cell-lg-offset-9,
+  .ory-cell-lg-offset-10,
+  .ory-cell-lg-offset-11,
+  .ory-cell-lg-offset-12 {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+    padding-right: calc((0rem * 0.5));
+    padding-right: calc((0rem * 0.5));
+    padding-left: 0.5rem;
+    padding-left: calc((0rem * 0.5));
+    padding-left: calc((0rem * 0.5));
+    min-width: 0;
+  }
+
+  .ory-cell-lg {
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-lg-1 {
+    flex-basis: 8.33333333%;
+    width: 8.33333333%;
+  }
+
+  .ory-cell-lg-2 {
+    flex-basis: 16.66666667%;
+    width: 16.66666667%;
+  }
+
+  .ory-cell-lg-3 {
+    flex-basis: 25%;
+    width: 25%;
+  min-width: 25%;
+  }
+
+  .ory-cell-lg-4 {
+    flex-basis: 33.33333333%;
+    width: 33.33333333%;
+  }
+
+  .ory-cell-lg-5 {
+    flex-basis: 41.66666667%;
+    width: 41.66666667%;
+  }
+
+  .ory-cell-lg-6 {
+    flex-basis: 50%;
+    width: 50%;
+  min-width: 50%;
+  }
+
+  .ory-cell-lg-7 {
+    flex-basis: 58.33333333%;
+    width: 58.33333333%;
+  }
+
+  .ory-cell-lg-8 {
+    flex-basis: 66.66666667%;
+    width: 66.66666667%;
+  }
+
+  .ory-cell-lg-9 {
+    flex-basis: 75%;
+    width: 75%;
+  min-width: 75%;
+  }
+
+  .ory-cell-lg-10 {
+    flex-basis: 83.33333333%;
+    width: 83.33333333%;
+  }
+
+  .ory-cell-lg-11 {
+    flex-basis: 91.66666667%;
+    width: 91.66666667%;
+  }
+
+  .ory-cell-lg-12 {
+    flex-basis: 100%;
+    width: 100%;
+  min-width: 100%;
+  }
+
+  .ory-cell-lg-offset-0 {
+    margin-left: 0;
+  }
+
+  .ory-cell-lg-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .ory-cell-lg-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .ory-cell-lg-offset-3 {
+    margin-left: 25%;
+  }
+
+  .ory-cell-lg-offset-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .ory-cell-lg-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .ory-cell-lg-offset-6 {
+    margin-left: 50%;
+  }
+
+  .ory-cell-lg-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .ory-cell-lg-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .ory-cell-lg-offset-9 {
+    margin-left: 75%;
+  }
+
+  .ory-cell-lg-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .ory-cell-lg-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .start-lg {
+    justify-content: flex-start;
+  }
+    [dir="ltr"] .start-lg {
+    text-align: left;
+  }
+    [dir="rtl"] .start-lg {
+    text-align: right;
+  }
+
+  .center-lg {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .end-lg {
+    justify-content: flex-end;
+  }
+    [dir="ltr"] .end-lg {
+    text-align: right;
+  }
+    [dir="rtl"] .end-lg {
+    text-align: left;
+  }
+
+  .top-lg {
+    align-items: flex-start;
+  }
+
+  .middle-lg {
+    align-items: center;
+  }
+
+  .bottom-lg {
+    align-items: flex-end;
+  }
+
+  .around-lg {
+    justify-content: space-around;
+  }
+
+  .between-lg {
+    justify-content: space-between;
+  }
+
+  .first-lg {
+    order: -1;
+  }
+
+  .last-lg {
+    order: 1;
+  }
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-row-has-floating-children {
+  display: block !important;
+}
+
+.ory-row-is-hovering-this:before {
+  content: " ";
+  position: absolute;
+  background: black;
+  display: block;
+  background: rgba(0, 0, 0, 0.87);
+  background: rgba(0, 0, 0, 0.87);
+  z-index: 2;
+}
+
+.ory-row-is-hovering-above:before {
+  top: 0;
+  height: 4px;
+  width: 100%;
+}
+
+.ory-row-is-hovering-below:before {
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+}
+
+.ory-row-is-hovering-left-of:before {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.ory-row-is-hovering-right-of:before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-editable {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items:stretch;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-cell-draggable {
+  cursor: move;
+  position: relative;
+  transition: opacity 200ms ease;
+  /* resolves an issue with drag and drop preview in chrome, see https://github.com/ory/editor/issues/180 */
+  /* will-change: transform; */
+}
+
+.ory-cell-draggable-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  cursor: move;
+  border: 1px solid rgba(0, 0, 0, 0);
+  transition: all ease .4s;
+}
+
+.ory-cell-draggable-overlay:hover {
+  background: rgba(0, 0, 0, 0.26);
+  background: rgba(0, 0, 0, 0.26);
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  background-blend-mode: screen;
+}
+
+.ory-cell-draggable-overlay-description {
+  text-align: center;
+  display: block;
+  color: rgba(0, 0, 0, .97);
+  max-width: 100%;
+}
+
+.ory-cell-draggable-overlay-description span {
+  opacity: 0;
+  text-align: center;
+  color: rgba(0, 0, 0, .97);
+  max-width: 90%;
+  display: inline-block;
+  padding: 8px 22px;
+  margin: 0 auto;
+  border-radius: 0 0 12px 12px;
+  text-transform: uppercase;
+  font-size: 75%;
+  letter-spacing: 0.15em;
+  background: rgba(255, 255, 255, 0);
+  transition: all ease .4s;
+}
+
+.ory-cell-draggable-overlay:hover .ory-cell-draggable-overlay-description span {
+  background: rgba(255, 255, 255, .95);
+  opacity: 1;
+}
+
+.ory-cell-draggable-overlay.ory-cell-draggable-leaf {
+  z-index: 3;
+}
+
+.ory-cell-draggable-inline-left.ory-cell-draggable-overlay,
+.ory-cell-draggable-inline-right.ory-cell-draggable-overlay {
+  float: left;
+  z-index: 4;
+}
+
+.ory-cell-draggable-is-dragging {
+  opacity: 0.4;
+  outline: none;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-cell-droppable {
+  position: relative;
+}
+
+.ory-cell-droppable-is-over-current:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.87);
+  background: rgba(0, 0, 0, 0.87);
+}
+
+.ory-cell-droppable-is-over-above:before,
+.ory-cell-droppable-is-over-below:before {
+  border-left: 0;
+  border-right: 0;
+}
+
+.ory-cell-droppable-is-over-left-of:before,
+.ory-cell-droppable-is-over-right-of:before {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.ory-cell-droppable-is-over-above:before {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-left: 0;
+  border-right: 0;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-above:before {
+  height: 4px;
+}
+
+.ory-cell-droppable-is-over-below:before {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-below:before {
+  height: 4px;
+}
+
+.ory-cell-droppable-is-over-left-of:before {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-left-of:before {
+  width: 4px;
+}
+
+.ory-cell-droppable-is-over-right-of:before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.ory-cell-droppable-leaf.ory-cell-droppable-is-over-right-of:before {
+  width: 4px;
+}
+
+.ory-cell-droppable-is-over-inline-right:before,
+.ory-cell-droppable-is-over-inline-left:before {
+  top: 0;
+  width: 50%;
+  height: 36%;
+  max-height: 128px;
+  background-color: #e0e0e0;
+  background-color: #e0e0e0;
+  border: 1px solid rgba(0, 0, 0, 0.26);
+  border: 1px solid rgba(0, 0, 0, 0.26);
+}
+
+.ory-cell-droppable-is-over-inline-left:before {
+  left: 0;
+}
+
+.ory-cell-droppable-is-over-inline-right:before {
+  right: 0;
+}
+
+/*!
+ * This file is part of ORY Editor.
+ *
+ * ORY Editor is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ORY Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with ORY Editor.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @license LGPL-3.0
+ * @copyright 2016-2018 Aeneas Rekkas
+ * @author Aeneas Rekkas <aeneas+oss@aeneas.io>
+ *
+ */
+
+.ory-cell-empty {
+  background-color: red;
+  padding: 8px;
+  margin: 2px;
+  overflow: hidden;
+}
+
+.ory-cell-empty strong {
+  margin: 0 auto;
+}
+
+.ory-cell-empty code {
+  overflow: scroll;
+}
+
+@-webkit-keyframes oryCellResizeableAnimate {
+  0% {
+    background-color: rgba(255, 255, 255, 0.26);
+    background-color: rgba(255, 255, 255, 0.26);
+    top: 45%;
+    bottom: 45%;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.12);
+    top: 0;
+    bottom: 0;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.87);
+    background-color: rgba(255, 255, 255, 0.87);
+    top: 45%;
+    bottom: 45%;
+  }
+}
+
+@keyframes oryCellResizeableAnimate {
+  0% {
+    background-color: rgba(255, 255, 255, 0.26);
+    background-color: rgba(255, 255, 255, 0.26);
+    top: 45%;
+    bottom: 45%;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.12);
+    top: 0;
+    bottom: 0;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.87);
+    background-color: rgba(255, 255, 255, 0.87);
+    top: 45%;
+    bottom: 45%;
+  }
+}
+
+.ory-cell-resizable-inline-right > .react-resizable-handle {
+  left: -4px;
+}
+
+.ory-cell-resizable.react-resizable > .react-resizable-handle {
+  position: absolute;
+  z-index: 5;
+  width: 4px;
+  top: 0;
+  bottom: 0;
+  right: -2px;
+  cursor: e-resize;
+  background-color: rgba(0, 0, 0, 0.54);
+  background-color: rgba(0, 0, 0, 0.54);
+  mix-blend-mode: difference;
+  transition: all 200ms linear;
+}
+
+.ory-cell-resizable.react-resizable > .react-resizable-handle:after {
+  content: " ";
+  background-color: rgba(255, 255, 255, 0.87);
+  background-color: rgba(255, 255, 255, 0.87);
+  /* width: 30px; */
+  /* height: 30px; */
+  position: absolute;
+  /* z-index: 1000; */
+  top: 45%;
+  bottom: 45%;
+  left: 0;
+  right: 0;
+  transition: all 200ms linear;
+  mix-blend-mode: normal;
+
+  -webkit-animation-name: oryCellResizeableAnimate;
+
+          animation-name: oryCellResizeableAnimate;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
+  -webkit-animation-duration: 0.8s;
+          animation-duration: 0.8s;
+}
+
+.ory-cell-resizable.react-resizable > .react-resizable-handle:hover:after,
+.ory-cell-resizable.react-resizable > .react-resizable-handle:active:after {
+  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 1);
+  top: 0;
+  bottom: 0;
+}
+
+.ory-cell-inline-left {
+  float: left;
+}
+
+.ory-cell-inline-right {
+  float: right;
+}
+
+.ory-cell-has-inline-neighbour {
+  float: none;
+  width: 100%;
+}
+
+.ory-cell-focused {
+  /* box-shadow: 0 0 5px rgb(81, 203, 238); */
+  /* outline: 1px solid rgb(81, 203, 238); */
+}
+
+.ory-cell {
+  position: relative;
+}
+
+.ory-cell-bring-to-front {
+  z-index: 1;
+}
+
+.ory-cell-resizing-overlay:after {
+  content: " ";
+  z-index: 4;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.ory-controls-mode-toggle-button-inner {
+  float: right;
+  margin: 8px;
+}
+
+.ory-controls-mode-toggle-button-description {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  margin-top: 18px;
+  float: right;
+  background: transparent;
+  color: transparent;
+  border: 1px transparent solid;
+  padding: 2px 8px;
+  text-align: right;
+  max-width: 0;
+  transition: all 200ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ory-controls-mode-toggle-button:hover .ory-controls-mode-toggle-button-description {
+  max-width: 999px;
+  background: rgba(0, 0, 0, 0.87);
+  background: rgba(0, 0, 0, 0.87);
+  color: #ffffff;
+  color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.ory-controls-mode-toggle-control-group {
+  position: fixed;
+  z-index: 10001;
+  bottom: 0;
+  right: 0;
+  padding: 16px;
+  transition: all 200ms ease;
+}
+
+.ory-controls-mode-toggle-clearfix {
+  clear: both;
+}
+
+.ory-controls-mode-toggle-control {
+  z-index: 1;
+}
+
+.ory-toolbar-item-drag-handle-button,
+.ory-toolbar-item-drag-handle-button svg {
+  cursor: move !important;
+}
+
+.ory-toolbar-item-drag-handle {
+  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.87) !important;
+  color: rgba(255, 255, 255, 0.87) !important;
+  fill: rgba(255, 255, 255, 0.87) !important;
+  fill: rgba(255, 255, 255, 0.87) !important;
+}
+
+.ory-toolbar-item:hover .ory-toolbar-item-drag-handle {
+  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  color: rgba(0, 0, 0, 0.54) !important;
+  color: rgba(0, 0, 0, 0.54) !important;
+  fill: rgba(0, 0, 0, 0.54) !important;
+  fill: rgba(0, 0, 0, 0.54) !important;
+}
+
+.ory-toolbar-item:hover .ory-toolbar-item-drag-handle:hover {
+  background: rgba(0, 0, 0, 0.54);
+  background: rgba(0, 0, 0, 0.54);
+  color: rgba(255, 255, 255, 0.87) !important;
+  color: rgba(255, 255, 255, 0.87) !important;
+  fill: rgba(255, 255, 255, 0.87) !important;
+  fill: rgba(255, 255, 255, 0.87) !important;
+}
+
+.ory-toolbar-item:hover .ory-toolbar-item-drag-handle:active {
+  background: rgba(0, 0, 0, 0.26);
+  background: rgba(0, 0, 0, 0.26);
+  color: rgba(255, 255, 255, 0.87) !important;
+  color: rgba(255, 255, 255, 0.87) !important;
+  fill: rgba(255, 255, 255, 0.87) !important;
+  fill: rgba(255, 255, 255, 0.87) !important;
+}
+
+.rc-tooltip {
+  position: absolute;
+  z-index: 1301;
+  display: block;
+  visibility: visible;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.rc-tooltip-hidden {
+  display: none;
+}
+
+.rc-tooltip-placement-top,
+.rc-tooltip-placement-topLeft,
+.rc-tooltip-placement-topRight {
+  padding: 5px 0 9px 0;
+}
+
+.rc-tooltip-placement-right,
+.rc-tooltip-placement-rightTop,
+.rc-tooltip-placement-rightBottom {
+  padding: 0 5px 0 9px;
+}
+
+.rc-tooltip-placement-bottom,
+.rc-tooltip-placement-bottomLeft,
+.rc-tooltip-placement-bottomRight {
+  padding: 9px 0 5px 0;
+}
+
+.rc-tooltip-placement-left,
+.rc-tooltip-placement-leftTop,
+.rc-tooltip-placement-leftBottom {
+  padding: 0 9px 0 5px;
+}
+
+.rc-tooltip-inner {
+  padding: 8px 10px;
+  color: #fff;
+  text-align: left;
+  text-decoration: none;
+  background-color: #373737;
+  border-radius: 6px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.17);
+}
+
+.rc-tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.rc-tooltip-placement-top .rc-tooltip-arrow,
+.rc-tooltip-placement-topLeft .rc-tooltip-arrow,
+.rc-tooltip-placement-topRight .rc-tooltip-arrow {
+  bottom: 4px;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #373737;
+}
+
+.rc-tooltip-placement-top .rc-tooltip-arrow {
+  left: 50%;
+}
+
+.rc-tooltip-placement-topLeft .rc-tooltip-arrow {
+  left: 15%;
+}
+
+.rc-tooltip-placement-topRight .rc-tooltip-arrow {
+  right: 15%;
+}
+
+.rc-tooltip-placement-right .rc-tooltip-arrow,
+.rc-tooltip-placement-rightTop .rc-tooltip-arrow,
+.rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
+  left: 4px;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-right-color: #373737;
+}
+
+.rc-tooltip-placement-right .rc-tooltip-arrow {
+  top: 50%;
+}
+
+.rc-tooltip-placement-rightTop .rc-tooltip-arrow {
+  top: 15%;
+  margin-top: 0;
+}
+
+.rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
+  bottom: 15%;
+}
+
+.rc-tooltip-placement-left .rc-tooltip-arrow,
+.rc-tooltip-placement-leftTop .rc-tooltip-arrow,
+.rc-tooltip-placement-leftBottom .rc-tooltip-arrow {
+  right: 4px;
+  margin-top: -5px;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #373737;
+}
+
+.rc-tooltip-placement-left .rc-tooltip-arrow {
+  top: 50%;
+}
+
+.rc-tooltip-placement-leftTop .rc-tooltip-arrow {
+  top: 15%;
+  margin-top: 0;
+}
+
+.rc-tooltip-placement-leftBottom .rc-tooltip-arrow {
+  bottom: 15%;
+}
+
+.rc-tooltip-placement-bottom .rc-tooltip-arrow,
+.rc-tooltip-placement-bottomLeft .rc-tooltip-arrow,
+.rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
+  top: 4px;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #373737;
+}
+
+.rc-tooltip-placement-bottom .rc-tooltip-arrow {
+  left: 50%;
+}
+
+.rc-tooltip-placement-bottomLeft .rc-tooltip-arrow {
+  left: 15%;
+}
+
+.rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
+  right: 15%;
+}
+
+.rc-tooltip.rc-tooltip-zoom-enter,
+.rc-tooltip.rc-tooltip-zoom-leave {
+  display: block;
+}
+
+.rc-tooltip-zoom-enter,
+.rc-tooltip-zoom-appear {
+  opacity: 0;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.rc-tooltip-zoom-leave {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+  animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.rc-tooltip-zoom-enter.rc-tooltip-zoom-enter-active,
+.rc-tooltip-zoom-appear.rc-tooltip-zoom-appear-active {
+  -webkit-animation-name: rcToolTipZoomIn;
+  animation-name: rcToolTipZoomIn;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+}
+
+.rc-tooltip-zoom-leave.rc-tooltip-zoom-leave-active {
+  -webkit-animation-name: rcToolTipZoomOut;
+  animation-name: rcToolTipZoomOut;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+}
+
+@-webkit-keyframes rcToolTipZoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes rcToolTipZoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+}
+
+@-webkit-keyframes rcToolTipZoomOut {
+  0% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+}
+
+@keyframes rcToolTipZoomOut {
+  0% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+}
+
+.ory-controls-trash {
+  position: fixed;
+  bottom: -64px;
+  z-index: 100;
+  left: 50%;
+  transition: bottom 200ms ease;
+  padding: 8px;
+}
+
+.ory-controls-trash.ory-controls-trash-active {
+  bottom: 16px;
+}
+.ory-plugins-content-divider {
+  background-color: #eee;
+  width: 100%;
+  height: 2px;
+  border-color: #eee;
+}
+.ory-plugins-content-image {
+  width: 100%;
+}
+
+.ory-plugins-content-image-placeholder {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+.ory-plugins-content-slate-inline-toolbar {
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0;
+  background-color: #212121;
+  background-color: #212121;
+  border-radius: 4px;
+  transition: opacity .75s;
+}
+
+.ory-plugins-content-slate-inline-toolbar--hidden{
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.ory-plugins-content-slate-paragraph-placeholder {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.54);
+  color: rgba(0, 0, 0, 0.54);
+}
+
+:not(pre)>code.ory-plugins-content-slate-code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+}
+.ory-plugins-content-spacer {
+  border: 1px dashed rgba(0, 0, 0, 0.26);
+  border: 1px dashed rgba(0, 0, 0, 0.26);
+  border-bottom: none;
+  position: relative;
+}
+
+.ory-plugins-content-spacer-read-only {
+  border-color: transparent !important;
+}
+
+.ory-plugins-content-spacer > .react-resizable > .react-resizable-handle:before,
+.ory-plugins-content-spacer > .react-resizable > .react-resizable-handle:hover:before {
+  content: " ";
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  bottom: 0;
+  right: 0;
+  cursor: n-resize;
+  line-height: 12px;
+  font-size: 1.5em;
+  height: 24px;
+}
+.ory-plugins-content-video-placeholder {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}

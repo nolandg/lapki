@@ -1,7 +1,10 @@
 const startTime = new Date();
 
+const fs = require('fs');
 const path = require('path');
 const commandLineArgs = require('command-line-args');
+const { cssToJss } = require('jss-cli');
+const _ = require('lodash');
 // const chalk = require('chalk');
 
 const { log, printSuccess, run, printSectionBreak } = require('./utils');
@@ -13,12 +16,14 @@ const args = {
   skipYarnInstall: false,
   skipPrismaDeploy: false,
   quick: false,
+  compileJssOnly: false,
   ...commandLineArgs([
     { name: 'skipLinking', type: Boolean },
     { name: 'skipOry', type: Boolean },
     { name: 'skipYarnInstall', type: Boolean },
     { name: 'skipPrismaDeploy', type: Boolean },
     { name: 'quick', type: Boolean },
+    { name: 'compileJssOnly', type: Boolean },
   ]),
 };
 
@@ -35,6 +40,68 @@ const lapkiDir = path.resolve(rootDir, 'lapki');
 const appDir = path.resolve(rootDir, 'app');
 const apiDir = path.resolve(rootDir, 'api');
 
+const collectCss = () => {
+  const fileNames = ['core', 'ui', 'divider', 'image', 'slate', 'spacer', 'video'];
+  let css = '';
+
+  fileNames.forEach((fileName) => {
+    const filePath = path.resolve(__dirname, '../src/lib/styles/ory-original-css/', `${fileName}.css`);
+    css += fs.readFileSync(filePath, { encoding: 'utf8' });
+  });
+
+  return css;
+};
+
+const convertCssToJss = (css) => {
+  const jss = cssToJss({ code: css });
+  const fixedJss = { ory: {} };
+  _.forEach(jss['@global'], (value, key) => {
+    fixedJss.ory[`& ${key}`] = value;
+  });
+
+  return fixedJss;
+};
+
+const getCssVariables = () => {
+  const filePath = path.resolve(__dirname, '../src/lib/styles/ory-original-css/variables.css');
+  const css = fs.readFileSync(filePath, { encoding: 'utf8' });
+  const reg = /(--.*?):\s(.*?);/g;
+  let match;
+  const vars = [];
+
+  while(match = reg.exec(css)){ // eslint-disable-line
+    vars.push({ name: match[1], value: match[2] });
+  }
+
+  return vars;
+};
+
+const compileJss = () => {
+  printSectionBreak('Compiling JSS...');
+
+  const cssOutputPath = path.resolve(__dirname, '../src/lib/styles/ory.css');
+  const jssOutputPath = path.resolve(__dirname, '../src/lib/styles/oryStyles.json');
+
+  // Get CSS and replace all variables with their values
+  let css = collectCss();
+  const variables = getCssVariables();
+  variables.forEach((v) => {
+    const reg = new RegExp(`var\\(${v.name}.*?\\)`, 'g');
+    css = css.replace(reg, v.value);
+  });
+  fs.writeFileSync(cssOutputPath, css, { encoding: 'utf8' });
+
+
+  const jss = convertCssToJss(css);
+  const jssString = JSON.stringify(jss, null, 2);
+  fs.writeFileSync(jssOutputPath, jssString, { encoding: 'utf8' });
+};
+
+if(args.compileJssOnly) {
+  compileJss();
+  process.exit();
+}
+
 const yarnInstall = (dir) => {
   if(!args.skipYarnInstall) {
     log('Installing yarn packages...');
@@ -49,6 +116,9 @@ const gitPull = (dir) => {
   run('git checkout HEAD -- yarn.lock', dir);
   run('git pull', dir);
 };
+
+// ///////////////////////////// Start //////////////////////////////
+compileJss();
 
 // Get sudo privaledges
 run('sudo ls');

@@ -1,0 +1,29 @@
+.ory-plugins-content-slate-inline-toolbar {
+  position: absolute;
+  z-index: 1;
+  top: -10000px;
+  left: -10000px;
+  margin-top: -6px;
+  opacity: 0;
+  background-color: #212121;
+  background-color: var(--grey900);
+  border-radius: 4px;
+  transition: opacity .75s;
+}
+
+.ory-plugins-content-slate-inline-toolbar--hidden{
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.ory-plugins-content-slate-paragraph-placeholder {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.54);
+  color: var(--lightBlack);
+}
+
+:not(pre)>code.ory-plugins-content-slate-code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+}

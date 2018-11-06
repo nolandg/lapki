@@ -9,7 +9,7 @@
   "scripts": {
     "build-webpack-prod": "webpack --mode production",
     "build-webpack-dev": "webpack --mode development --watch",
-    "start": "babel --verbose --out-dir=build src -w",
+    "start": "babel --verbose --out-dir=build src -w --copy-files",
     "build": "babel --verbose --out-dir=build src"
   },
   "dependencies": {
@@ -38,6 +38,8 @@
     "eslint-plugin-react": "^7.11.1",
     "figlet": "^1.2.1",
     "file-loader": "^2.0.0",
+    "jss": "^9.8.7",
+    "jss-cli": "^5.0.2",
     "react-dropzone": "^6.0.0",
     "url-loader": "^1.1.1",
     "webpack": "^4.20.2",

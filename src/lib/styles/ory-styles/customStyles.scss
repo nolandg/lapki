@@ -1,0 +1,12 @@
+.ory-controls-mode-toggle-control-group{
+  margin-bottom: 80px;
+  z-index: 1001;
+
+  & > div:last-child{
+    display: none,
+  }
+}
+
+.ory-toolbar-drawer > div{
+    box-shadow: 3px 0 10px rgba(0,0,0,.5);
+}
