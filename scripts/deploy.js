@@ -193,9 +193,9 @@ printSectionBreak('Restartig App...');
 if(!args.skipRestartingApp) {
   log('Building app...');
   run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
-  log('Gzipping assets...');
-  const publicPath = path.resolve(rootDir, 'app/build/public');
-  run(`find ${publicPath} -type f -not \\( -name '*.gz' -or -name '*[~#]' \\) -exec sh -c 'gzip -c "{}" > "{}.gz"' \\;`);
+  // log('Gzipping assets...');
+  // const publicPath = path.resolve(rootDir, 'app/build/public');
+  // run(`find ${publicPath} -type f -not \\( -name '*.gz' -or -name '*[~#]' \\) -exec sh -c 'gzip -c "{}" > "{}.gz"' \\;`);
   // log('Changing security context so nginx can read files...');
   // run(`sudo chcon -R --type httpd_sys_content_t ${publicPath}`);
   log('Nuking destination folder and then copying build to nginx root...');
