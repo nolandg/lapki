@@ -4,14 +4,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-
-// The editor core
 import Editor, { Editable, createEmptyState } from 'ory-editor-core'; // eslint-disable-line import/no-extraneous-dependencies
-
-// The default ui components
 import { Trash, DisplayModeToggle, Toolbar } from 'ory-editor-ui'; // eslint-disable-line import/no-extraneous-dependencies
-
 import { withFormFields } from '../../HOCs'; // eslint-disable-line import/no-extraneous-dependencies
+
+import oryStyles from '../../styles/oryStyles.json';
 import plugins from './plugins';
 
 const editable = createEmptyState();
@@ -24,7 +21,7 @@ editor.trigger.mode.edit();
 
 const styles = theme => ({
   root: {
-
+    ...oryStyles.root,
   },
   loading: {
     display: 'flex',

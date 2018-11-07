@@ -7,7 +7,7 @@ import plugins from './plugins';
 import oryStyles from '../../styles/oryStyles.json';
 
 const styles = theme => ({
-  ory: oryStyles.ory,
+  ory: oryStyles.root,
 });
 
 const RichRenderer = ({ json, className, options, classes }) => {
