@@ -225,6 +225,7 @@ CrudModal.defaultStyles = theme => ({
   },
   dialogActions: {
     marginBottom: theme.spacing.unit * 6,
+    marginRight: theme.spacing.unit * 2,
   },
   circularProgress: {
     height: '.5em',

@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 import { withFormFields } from '../HOCs/withFormFields';
@@ -184,16 +185,15 @@ class IntegrationReactSelect extends React.Component {
     super(props);
     this.state = {
       suggestions: [],
-      single: null,
-      multi: null,
+      value: null,
       inputValue: '',
     };
   }
 
-  handleChange = name => (value) => {
-    this.setState({
-      [name]: value,
-    });
+  handleChange = (value) => {
+    const { transformValue, onChange } = this.props;
+    this.setState({ value });
+    if(onChange) onChange(transformValue(value.value));
   };
 
   handleInputValueChange = (value) => {
@@ -201,10 +201,7 @@ class IntegrationReactSelect extends React.Component {
     this.setState({ inputValue: value });
 
     client.query({ query, variables: { query: value }, fetchPolicy: 'network-only' }).then((result) => {
-      console.log('for query: ', value);
-      console.log('got results: ', result.data.titleSuggestions);
       const suggestions = result.data.titleSuggestions.map(s => ({ value: s[valueKey], label: s[labelKey] }));
-      console.log('Suggestions: ', suggestions);
       this.setState({ suggestions });
     }).catch((error) => {
       console.error('Error getting title suggestions: ', error);
@@ -212,8 +209,8 @@ class IntegrationReactSelect extends React.Component {
   }
 
   render() {
-    const { suggestions, inputValue } = this.state;
-    const { classes, theme, placeholder, label, multiple } = this.props;
+    const { suggestions, inputValue, value } = this.state;
+    const { classes, theme, placeholder, label, multiple, helperText } = this.props;
 
     const selectStyles = {
       input: base => ({
@@ -225,43 +222,29 @@ class IntegrationReactSelect extends React.Component {
       }),
     };
 
-    const commonProps = {
-      placeholder,
-      textFieldProps: {
-        label,
-        InputLabelProps: {
-          shrink: true,
-        },
-      },
-      classes,
-      styles: selectStyles,
-      options: suggestions,
-      components,
-      onInputChange: this.handleInputValueChange,
-      inputValue,
-      filterOption: () => true,
-    };
-
     return (
       <div className={classes.root}>
         <NoSsr>
-          {multiple
-            ? (
-              <Select
-                {...commonProps}
-                value={this.state.multi}
-                onChange={this.handleChange('multi')}
-                isMulti
-              />
-            )
-            : (
-              <Select
-                {...commonProps}
-                value={this.state.single}
-                onChange={this.handleChange('single')}
-              />
-            )
-        }
+          <Select
+            value={value}
+            onChange={this.handleChange}
+            isMulti={multiple}
+            placeholder={placeholder}
+            textFieldProps={{
+              label,
+              InputLabelProps: {
+                shrink: true,
+              },
+            }}
+            classes={classes}
+            styles={selectStyles}
+            options={suggestions}
+            components={components}
+            onInputChange={this.handleInputValueChange}
+            inputValue={inputValue}
+            filterOption={() => true}
+          />
+          {helperText ? <FormHelperText>{helperText}</FormHelperText> : null }
         </NoSsr>
       </div>
     );
@@ -277,6 +260,10 @@ IntegrationReactSelect.propTypes = {
   client: PropTypes.object.isRequired,
   labelKey: PropTypes.string,
   valueKey: PropTypes.string,
+  transformValue: PropTypes.func,
+  query: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
+  helperText: PropTypes.node,
 };
 IntegrationReactSelect.defaultProps = {
   multiple: false,
@@ -284,6 +271,9 @@ IntegrationReactSelect.defaultProps = {
   label: '',
   valueKey: 'id',
   labelKey: 'title',
+  onChange: null,
+  transformValue: value => value,
+  helperText: null,
 };
 
 const Autocomplete = compose(
