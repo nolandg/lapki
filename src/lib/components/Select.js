@@ -6,6 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
 import MuiSelect from '@material-ui/core/Select';
 // import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -26,13 +27,19 @@ const styles = theme => ({
     '& svg': {
       marginRight: theme.spacing.unit * 1,
     },
+    padding: {
+      top: theme.spacing.unit * 1,
+      bottom: theme.spacing.unit * 1,
+    },
+    '&:not(:last-child)': {
+      borderBottom: 'solid 1px rgba(0,0,0,.14)',
+    },
   },
 });
 
 class Select extends React.Component {
   constructor(props) {
     super(props);
-    const { multiple } = props;
 
     const { theme } = this.props;
     this.paperStyle = {
@@ -40,7 +47,6 @@ class Select extends React.Component {
     };
 
     this.state = {
-      values: props.value !== undefined ? props.value : (multiple ? [] : null),
       open: false,
     };
   }
@@ -99,13 +105,20 @@ class Select extends React.Component {
     return this.renderValue(values);
   }
 
+  handleCheckboxChange = (event) => {
+    // Prevent the checkbox event from setting a new value which is shit
+    // This allows event to bubble up to option/list item that properly sets new value on change
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   render() {
     const { open } = this.state;
     const { classes, options, label, multiple, helperText, error, disabled, className, value, minSelections, maxSelections, fieldProps, ...rest } = this.props;
 
     return (
       <FormControl {...rest} className={`${classes.formControl} ${className}`} error={error} disabled={disabled}>
-        <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel>
+        {label ? <InputLabel htmlFor="select-multiple-checkbox">{label}</InputLabel> : null }
         <MuiSelect
           open={open}
           onOpen={() => this.setState({ open: true })}
@@ -123,9 +136,10 @@ class Select extends React.Component {
           renderValue={this.renderValues}
         >
           {options.map((option) => { // eslint-disable-line
+            const checked = !!value.find && !!value.find(v => v === option.value);
             return (
               <MenuItem key={option.value} value={option.value}>
-                {/* {multiple ? <Checkbox checked={!!value.find(v => v === option.value)} /> : null } */}
+                {multiple ? <Checkbox checked={checked} onChange={this.handleCheckboxChange} /> : null }
                 {option.icon}
                 <ListItemText primary={option.text} />
               </MenuItem>
@@ -149,7 +163,7 @@ Select.propTypes = {
   className: PropTypes.string,
   theme: PropTypes.object.isRequired,
   multiple: PropTypes.bool,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   minSelections: PropTypes.number,
   maxSelections: PropTypes.number,
   helperText: PropTypes.node,
@@ -167,6 +181,7 @@ Select.defaultProps = {
   disabled: undefined,
   value: undefined,
   className: '',
+  label: '',
 };
 
 const SelectEnhanced = withFormFields(withStyles(styles, { withTheme: true })(Select));

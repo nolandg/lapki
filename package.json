@@ -15,7 +15,8 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "keycode": "^2.2.0",
-    "material-ui-pickers": "^1.0.0-rc.17"
+    "material-ui-pickers": "^1.0.0-rc.17",
+    "react-select": "^2.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -60,6 +61,7 @@
     "await-to-js": "^2.0.1",
     "babel-polyfill": "^6.26.0",
     "browser-or-node": "^1.1.0",
+    "classnames": "^2.2.6",
     "cookie": "^0.3.1",
     "express": "^4.16.3",
     "graphql": "^0.13.2",

@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
-import HelpIcon from '@material-ui/icons/Help';
 import CancelIcon from '@material-ui/icons/Cancel';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
@@ -12,7 +11,6 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import _ from 'lodash';
@@ -124,6 +122,10 @@ class CrudModal extends Component {
     this.close();
   }
 
+  handleClick = (event) => {
+    event.stopPropagation();
+  }
+
   render() {
     const { open } = this.state;
     const { collection, fragmentName, fields, document, classes, ...rest } = this.props;
@@ -156,9 +158,14 @@ class CrudModal extends Component {
         onMutationSuccess={this.handleMutationSuccess}
       >
         {mutatorArg => (
-          <div>
+          <div onClick={this.handleClick}> {/* eslint-disable-line */}
             {renderTrigger(this.open)}
-            <Dialog open={open} onClose={this.close} fullScreen={this.props.fullScreen} classes={{ paper: classes.dialogPaper }}>
+            <Dialog
+              open={open}
+              onClose={this.close}
+              fullScreen={this.props.fullScreen}
+              classes={{ paper: classes.dialogPaper }}
+            >
               {renderDialogParts(renderFuncs, mutatorArg)}
             </Dialog>
           </div>
@@ -197,7 +204,6 @@ CrudModal.defaultProps = {
   renderCreateButton: null,
   renderUpdateButton: null,
   renderDeleteButton: null,
-  renderConfirmDeleteButton: null,
   renderCancelButton: null,
   renderError: null,
   renderTitle: null,
@@ -215,6 +221,7 @@ CrudModal = withMobileDialog()(CrudModal);
 CrudModal.defaultStyles = theme => ({
   dialogPaper: {
     position: 'relative',
+    padding: 0,
   },
   dialogActions: {
     marginBottom: theme.spacing.unit * 6,
