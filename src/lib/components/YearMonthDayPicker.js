@@ -17,6 +17,7 @@ const styles = theme => ({
   controls: {
     display: 'flex',
     justifyContent: 'flex-start',
+    alignItems: 'center',
     '& > *': {
       margin: {
         right: theme.spacing.unit * 4,
@@ -39,16 +40,15 @@ class YearMonthDayPicker extends React.Component {
      if(!int) int = 0;
      const str = int.toString();
      const year = parseInt(str.slice(0, -4), 10) || 0;
-     const month = parseInt(str.slice(-4, -2), 10) || 0;
-     const day = parseInt(str.slice(-2), 10) || 0;
+     const month = parseInt(str.slice(-4, -2), 10) || 1;
+     const day = parseInt(str.slice(-2), 10) || 1;
 
      return { year, month, day };
    };
 
    static intToMoment(int) {
      const { year, month, day } = YearMonthDayPicker.intToDate(int);
-     const m = moment.utc().year(year).month(month - 1)
-       .date(day);
+     const m = moment.utc().year(year).month(month - 1).date(day);
      return m;
    }
 
@@ -59,9 +59,6 @@ class YearMonthDayPicker extends React.Component {
     if(day <= 9) day = `0${day}`;
     const int = `${year}${month}${day}`;
     return parseInt(int, 10);
-  };
-
-  handleYearChange = (event) => {
   };
 
   handleChange = (part, newValue) => {
@@ -77,11 +74,11 @@ class YearMonthDayPicker extends React.Component {
   }
 
   handleMonthChange = (value) => {
-    this.handleChange('month', value[0]);
+    this.handleChange('month', value);
   }
 
   handleDayChange = (value) => {
-    this.handleChange('day', value[0]);
+    this.handleChange('day', value);
   }
 
   render() {
@@ -104,7 +101,7 @@ class YearMonthDayPicker extends React.Component {
             className="month"
             label="Month"
             disabled={disabled}
-            value={[month]}
+            value={month}
             options={YearMonthDayPicker.monthOptions}
             onChange={this.handleMonthChange}
           />
@@ -112,7 +109,7 @@ class YearMonthDayPicker extends React.Component {
             className="day"
             label="Day"
             disabled={disabled}
-            value={[day]}
+            value={day}
             options={YearMonthDayPicker.dayOptions}
             onChange={this.handleDayChange}
           />
