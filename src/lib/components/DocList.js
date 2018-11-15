@@ -213,7 +213,7 @@ class DocList extends Component {
     const docs = result.docs;
 
     if(error) {
-      console.log('error');
+      console.error('Error loading doc in DocList: ', error);
       return renderFuncs.renderError(error, result);
     }
     if(loading) {

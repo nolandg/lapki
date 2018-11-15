@@ -2,10 +2,12 @@ import gql from 'graphql-tag';
 
 export default gql`
   fragment PermissionFragment on Permission {
-    id
     name
     title
     description
+    type
+    operation
+    ownership
   }
 
   fragment RoleFragment on Role {
