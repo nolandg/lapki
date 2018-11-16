@@ -8,12 +8,14 @@ const extractPermsFromRole = (role) => {
   return perms;
 };
 
-const getFlattenedPerms = (user) => {
+const getFlattenedPerms = (user, allPermissions) => {
   let perms = [];
   if(!user.roles) return perms;
 
   user.roles.forEach((r) => { perms = [...perms, ...extractPermsFromRole(r)]; });
-  perms = _.uniqBy(perms, 'name');
+  perms = _.uniq(perms);
+  perms = perms.map(permName => allPermissions.find(o => o.name === permName));
+  perms = perms.filter(perm => !!perm);
   return perms;
 };
 
@@ -23,8 +25,8 @@ const userCanDo = (user, operation, ownership, type) => {
   return !!perm || user.hasRole('super-user');
 };
 
-const attachUserAuthMethods = (user) => {
-  const permissions = getFlattenedPerms(user);
+const attachUserAuthMethods = (user, allPermissions) => {
+  const permissions = getFlattenedPerms(user, allPermissions);
   user.permissions = permissions;
 
   user.hasPerm = function (perm) { return !!permissions.find(p => p.name === perm); };

@@ -15,6 +15,14 @@ const currentUserQuery = gql`
     currentUser {
       ...CurrentUserFragment
     }
+    permissions {
+      name
+      title
+      description
+      type
+      operation
+      ownership
+    }
   }
 `;
 Mutator.registerQuery('CurrentUser_for_UserContext');
@@ -30,13 +38,16 @@ class UserContextProvider extends Component {
       <Query query={currentUserQuery} errorPolicy="all" notifyOnNetworkStatusChange>
         {({ networkStatus, error, data }) => {
           let user;
+          let allPermissions;
 
           if(data && data.currentUser) {
             user = { ...data.currentUser };
+            allPermissions = data.permissions;
           }else{
             user = buildAnnonUser();
+            allPermissions = [];
           }
-          attachUserAuthMethods(user);
+          attachUserAuthMethods(user, allPermissions);
 
           Object.freeze(user);
 
@@ -44,6 +55,7 @@ class UserContextProvider extends Component {
             loading: networkStatus !== 7,
             error,
             user,
+            allPermissions,
           };
 
           return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -21,7 +21,7 @@ function withUser(WrappedComponent) {
       return (
         <UserContextConsumer>
           { (value) => {
-            const { user, loading, error } = value;
+            const { user, loading, error, allPermissions } = value;
 
             return (
               <WrappedComponent
@@ -29,6 +29,7 @@ function withUser(WrappedComponent) {
                 currentUser={user}
                 currentUserLoading={loading}
                 currentUserError={error}
+                allPermissions={allPermissions}
                 logout={() => logout(client)}
                 {...this.props}
               />

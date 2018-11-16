@@ -148,7 +148,7 @@ class AuthenticationForm extends Component {
           onChange={this.handleTabChange}
         >
           <Tab value="Login" label="Login" disabled={isLoggedIn} classes={tabClasses} />
-          <Tab value="Register" label="Register" disabled={isLoggedIn} classes={tabClasses} />
+          {/* <Tab value="Register" label="Register" disabled={isLoggedIn} classes={tabClasses} /> */}
           <Tab value="PasswordReset" label="Reset Password" disabled={isLoggedIn} classes={tabClasses} />
           <Tab value="Logout" label="Logout" disabled={!isLoggedIn} classes={tabClasses} />
         </Tabs>
