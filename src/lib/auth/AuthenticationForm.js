@@ -85,14 +85,14 @@ class AuthenticationForm extends Component {
     <TabContainer>
       <LoginForm onSuccess={this.handleSuccess} />
       <div className={this.props.classes.extras}>
-        <div>
+        {/* <div>
           <Typography>
             Don't have an account?
           </Typography>
           <Button color="primary" onClick={() => this.handleTabChange(null, 'Register')}>
               Register now
           </Button>
-        </div>
+        </div> */}
         <div>
           <Typography>
           Forgot your password?

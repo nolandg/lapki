@@ -9,3 +9,4 @@ export * from './ResetPasswordForm';
 
 export * from './pages/ConfirmEmailPage';
 export * from './pages/ResetPasswordPage';
+export * from './pages/SignupByInvitePage';

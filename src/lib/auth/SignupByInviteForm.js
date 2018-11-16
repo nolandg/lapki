@@ -8,7 +8,7 @@ import { withRouter, Redirect } from 'react-router';
 import { compose } from 'react-apollo';
 import { TextField, Mutator } from '../components'; // eslint-disable-line import/no-extraneous-dependencies
 
-import ResetPasswordCollection from '../collections/ResetPassword';
+import SignupByInviteCollection from '../collections/SignupByInvite';
 
 const styles = theme => ({
   form: {
@@ -30,28 +30,30 @@ const styles = theme => ({
   },
 });
 
-const resetPasswordQuery = gql`
-  mutation ResetPasswordQuery($email: String!, $token: String!, $password: String!) {
-    passwordReset(email: $email, resetToken: $token, password: $password){
+const signupQuery = gql`
+  mutation SignupByInvite($email: String!, $token: String!, $password: String!, $name: String!) {
+    signupByInvite(data: {email: $email, inviteToken: $token, password: $password, name: $name}){
       id
+      name
+      email
     }
   }
 `;
 
-class ResetPasswordForm extends Component {
+class SignupByInviteForm extends Component {
   constructor(props) {
     super(props);
     this.operations = this.buildOperations(props);
 
     this.state = {
-      resetComplete: false,
+      signupComplete: false,
       readyToRedirect: false,
     };
   }
 
   buildOperations = props => ({
-    resetPassword: {
-      mutationQuery: resetPasswordQuery,
+    signup: {
+      mutationQuery: signupQuery,
       renderButton: this.renderButton,
       handleClick: this.handleClick,
     },
@@ -61,40 +63,21 @@ class ResetPasswordForm extends Component {
     const { classes } = this.props;
     return (
       <Button onClick={handleClick} variant="contained" color="primary" disabled={loading} className={classes.button}>
-      Change Password
+        Confirm Account
       </Button>
     );
   }
 
-  getResetParams = () => {
-    const params = this.props.match.params;
-
-    return {
-      email: params.email,
-      token: params.token,
-      name: params.name,
-    };
-  }
-
   handleClick = async (mutate, { prepareToSaveDoc }, result) => {
-    let formValues = await prepareToSaveDoc();
+    const formValues = await prepareToSaveDoc();
     if(!formValues) return; // must have failed validation
+    const { email, token } = this.props.match.params;
 
-    const { email, token } = this.getResetParams();
-
-    formValues = {
-      ...formValues,
-      email,
-      token,
-    };
-
-    mutate({
-      variables: { ...formValues },
-    });
+    mutate({ variables: { ...formValues, token, email } });
   }
 
-  handleSuccess = ({ passwordReset }) => {
-    this.setState({ resetComplete: true });
+  handleSuccess = () => {
+    this.setState({ signupComplete: true });
     setTimeout(() => this.setState({ readyToRedirect: true }), 2000);
   }
 
@@ -102,31 +85,37 @@ class ResetPasswordForm extends Component {
     if(error) {
       return {
         message: `
-          Your password reset link has either expired or is invalid.
-          Please try requesting a password reset again and check your email.
+          Your invitation links looks invalid or expired.
+          Please try requesting an invitation again.
         `,
       };
     }
-
-    return { message: 'You have successfully reset your password.' };
+    console.log('Data: ', data);
+    return { message: `Account confirmed. You are now logged in as "${data.signupByInvite.name}".` };
   }
 
   renderForm = ({ fieldProps, mutationComponents, globalErrors, errors }) => {
-    const { resetPassword } = mutationComponents;
+    const { signup } = mutationComponents;
     const { classes, className } = this.props;
     const { readyToRedirect } = this.state;
+    const { email } = this.props.match.params;
 
     if(readyToRedirect) return <Redirect to="/" />;
 
     return(
       <div className={`${classes.form} ${className}`}>
-        <Typography>
-          To reset your password, enter a new, strong password below.
-          It must be at least 8 characters long and contain at least
-          one lower case letter, one uperrcase letter, one number, and one symbol.
+        <Typography variant="body1">
+          Please complete the form below to confirm your account for email address "{email}".
         </Typography>
 
-        <TextField name="password" type="password" label="New password" margin="normal" autoComplete="on" fieldProps={fieldProps} />
+        <TextField
+          name="name"
+          label="Name"
+          margin="normal"
+          autoComplete="on"
+          fieldProps={fieldProps}
+        />
+        <TextField name="password" type="password" label="Password" margin="normal" autoComplete="on" fieldProps={fieldProps} />
         <TextField
           type="password"
           name="passwordConfirm"
@@ -137,7 +126,7 @@ class ResetPasswordForm extends Component {
         />
 
         <div className={classes.buttons}>
-          {resetPassword}
+          {signup}
         </div>
       </div>
     );
@@ -148,8 +137,8 @@ class ResetPasswordForm extends Component {
 
     return (
       <Mutator
-        collection={ResetPasswordCollection}
-        fields={['password', 'passwordConfirm']}
+        collection={SignupByInviteCollection}
+        fields={['password', 'passwordConfirm', 'name']}
         children={this.renderForm}
         operations={this.operations}
         onMutationSuccess={this.handleSuccess}
@@ -160,20 +149,20 @@ class ResetPasswordForm extends Component {
   }
 }
 
-ResetPasswordForm.propTypes = {
+SignupByInviteForm.propTypes = {
   classes: PropTypes.object.isRequired,
   currentUser: PropTypes.object,
   match: PropTypes.object.isRequired,
   className: PropTypes.string,
 };
-ResetPasswordForm.defaultProps = {
+SignupByInviteForm.defaultProps = {
   currentUser: null,
   className: '',
 };
 
 
-ResetPasswordForm = compose(
+SignupByInviteForm = compose(
   withStyles(styles),
   withRouter,
-)(ResetPasswordForm);
-export { ResetPasswordForm };
+)(SignupByInviteForm);
+export { SignupByInviteForm };

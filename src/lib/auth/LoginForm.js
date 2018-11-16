@@ -73,8 +73,8 @@ class LoginForm extends Component {
     const { classes } = this.props;
     return(
       <div className={classes.form}>
-        <TextField name="email" label="Email" margin="normal" fieldProps={fieldProps} />
-        <TextField name="password" type="password" label="Password" margin="normal" fieldProps={fieldProps} />
+        <TextField name="email" label="Email" margin="normal" type="email" autoComplete="on" fieldProps={fieldProps} />
+        <TextField name="password" type="password" label="Password" margin="normal" autoComplete="on" fieldProps={fieldProps} />
         <div className={classes.buttons}>
           {login}
         </div>
