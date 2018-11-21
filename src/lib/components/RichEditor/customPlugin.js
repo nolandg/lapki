@@ -32,8 +32,13 @@ Renderer = compose(
 )(Renderer);
 
 const editorStyles = theme => ({
-  root: {
-
+  denied: {
+    border: 'dashed 2px rgba(0,0,0,.2);',
+    padding: theme.spacing.unit * 1,
+    color: '#666',
+  },
+  deniedMessage: {
+    fontStyle: 'italic',
   },
 });
 
@@ -48,8 +53,13 @@ class Editor extends React.Component {
     if(!currentUser.hasPerm('use-dangerous-editors')) {
       return (
         <div className={classes.denied}>
-        This is an advanced editor feature and is doesn't seem to be enabled for your user account.<br /><br />
-        If you think you should have access to this feature, please contact the site administrator.
+          <div className={classes.deniedMessage}>
+            This is an advanced editor section and is not enabled for your user account.
+            If you think you should have access to edit this section, please contact the site administrator.
+            <br /><br />
+            Content:
+          </div>
+          <Renderer state={this.props.state} />
         </div>
       );
     }
