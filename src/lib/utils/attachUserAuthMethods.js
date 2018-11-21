@@ -29,7 +29,7 @@ const attachUserAuthMethods = (user, allPermissions) => {
   const permissions = getFlattenedPerms(user, allPermissions);
   user.permissions = permissions;
 
-  user.hasPerm = function (perm) { return !!permissions.find(p => p.name === perm); };
+  user.hasPerm = function (perm) { return !!permissions.find(p => p.name === perm) || user.hasRole('super-user'); };
   user.hasRole = function (role) { return !!this.roles.find(r => r.name === role); };
   user.canDoOnAny = function (operation, type) { return userCanDo(this, operation, 'any', type); };
   user.canDoOnOwn = function (operation, type) { return userCanDo(this, operation, 'own', type); };

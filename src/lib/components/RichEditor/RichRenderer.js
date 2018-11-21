@@ -7,7 +7,21 @@ import plugins from './plugins';
 import oryStyles from '../../styles/oryStyles.json';
 
 const styles = theme => ({
-  ory: oryStyles.root,
+  ory: {
+    ...oryStyles.root,
+    '& .ory-cell-sm-6': {
+      '@media only screen and (min-width: 48em)': {
+        flexBasis: '100%',
+        width: '100%',
+        minWidth: '100%',
+      },
+      '@media only screen and (min-width: 70em)': {
+        flexBasis: '50%',
+        width: '50%',
+        minWidth: '50%',
+      },
+    },
+  },
 });
 
 const RichRenderer = ({ json, className, options, classes }) => {

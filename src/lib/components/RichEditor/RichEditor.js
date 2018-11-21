@@ -20,8 +20,20 @@ const editor = new Editor({
 editor.trigger.mode.edit();
 
 const styles = theme => ({
-  root: {
+  ory: {
     ...oryStyles.root,
+    '& .ory-cell-sm-6': {
+      '@media only screen and (min-width: 48em)': {
+        flexBasis: '100%',
+        width: '100%',
+        minWidth: '100%',
+      },
+      '@media only screen and (min-width: 70em)': {
+        flexBasis: '50%',
+        width: '50%',
+        minWidth: '50%',
+      },
+    },
   },
   loading: {
     display: 'flex',
@@ -91,7 +103,7 @@ class RichEditor extends Component {
     }
 
     return (
-      <div className={`${classes.root} ${className}`}>
+      <div className={`${classes.ory} ${className}`}>
         <Editable
           editor={editor}
           id={editableState.id}
