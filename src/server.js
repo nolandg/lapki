@@ -1,5 +1,3 @@
-// import 'babel-polyfill';
-
 export * as serverApp from './lib/boot/serverApp';
 export * from './lib/contexts';
 export * from './lib/components';

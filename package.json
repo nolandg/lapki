@@ -1,6 +1,6 @@
 {
-  "name": "lapki",
-  "version": "0.0.1",
+  "name": "@nolandg/lapki",
+  "version": "1.0.0",
   "description": "Full-stack reactive GraphQL Node framework",
   "license": "MIT",
   "author": "Noland Germain",
@@ -87,6 +87,7 @@
     "resolve-url-loader": "^2.3.1",
     "sass-loader": "^7.0.3",
     "serialize-javascript": "^1.5.0",
-    "yup": "^0.26.5"
+    "yup": "^0.26.5",
+    "ory-editor-core": "*"
   }
 }
