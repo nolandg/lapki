@@ -13,6 +13,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import DownloadIcon from '@material-ui/icons/CloudDownload';
 import { withRouter } from 'react-router';
 
+import { ResponsiveImage } from './ResponsiveImage';
+
 import wordIcon from '../../../images/icon-word.png';
 import excelIcon from '../../../images/icon-excel.png';
 import pdfIcon from '../../../images/icon-pdf.png';
@@ -53,8 +55,11 @@ class FileList extends React.Component {
     return '';
   }
 
-  getImageSrc = ({ location, mimetype, filename }) => {
-    if(mimetype.startsWith('image')) return { src: location, isImage: true };
+  getImageSrc = ({ location, mimetype, filename, sizes }) => {
+    if(mimetype.startsWith('image')) {
+      if(sizes && sizes.thumb) return { src: sizes.thumb.location, isImage: true };
+      return { src: location, isImage: true };
+    }
 
     const ext = this.getFilenameExtension(filename);
     switch(ext) {

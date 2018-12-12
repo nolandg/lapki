@@ -8,3 +8,4 @@ export * from './Snackbar';
 export * from './FileList';
 export * from './RichEditor';
 export * from './Autocomplete';
+export * from './ResponsiveImage';
