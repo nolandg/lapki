@@ -29,7 +29,7 @@ const RichRenderer = ({ json, className, options, classes }) => {
   options = { render: false, ...options };
 
   return (
-    <div className={`${classes.ory} ${className}`}>
+    <div className={`ory ${classes.ory} ${className}`}>
       <HTMLRenderer state={json} plugins={plugins.plugins} options={options} />
     </div>
   );

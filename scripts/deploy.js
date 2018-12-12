@@ -97,7 +97,16 @@ const compileOryJss = () => {
   log(`Wrote css out to ${cssOutputPath}.`);
 
   const jss = convertCssToJss(css);
-  const jssString = JSON.stringify(jss, null, 2);
+  let jssString = JSON.stringify(jss, null, 2);
+
+  // Fix nested rules within media queries. Add & to every class
+  jssString = jssString.replace(/((")|(, ))(\.[a-z]+[a-z0-9-_]+)/gi, '$1& $4');
+  // Remove & infront of @media
+  jssString = jssString.replace(/"& @media/gi, '"@media');
+  // Change responsive breakpoints
+  jssString = jssString.replace(/min-width: 48em/gi, 'min-width: 68em');
+
+
   fs.writeFileSync(jssOutputPath, jssString, { encoding: 'utf8' });
   log(`Wrote jss out to ${jssOutputPath}`);
 };

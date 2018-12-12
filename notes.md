@@ -12,3 +12,7 @@ Dec 13. noland-test site:
   after update:
   - bundle.js = 873kb
   - PSI scores: 69 desktop, 40 mobile
+
+  after images became reasonable sizes:
+  - 3.1MB of images for widescreen, 1.3MB for mobile
+  - PSI scores: 89-98 for desktop, 27-60 mobile
