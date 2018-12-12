@@ -8,3 +8,7 @@ Dec 13. noland-test site:
   - 6.6MB of images
   - all scripts from my domain = 1.4MB
   - PSI scores: 61 desktop, 14 mobile
+
+  after update:
+  - bundle.js = 873kb
+  - PSI scores: 69 desktop, 40 mobile
