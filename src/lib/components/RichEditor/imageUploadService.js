@@ -5,6 +5,7 @@ import { getApolloClient } from '../../boot/createApolloClient';
 const mutation = gql`
   mutation uploadFile($file: Upload!){
     uploadFile(file: $file) {
+      id
       location
     }
   }

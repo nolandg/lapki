@@ -27,6 +27,9 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
   },
+  test: {
+    backgroundColor: 'red',
+  },
 });
 
 class DocList extends Component {
