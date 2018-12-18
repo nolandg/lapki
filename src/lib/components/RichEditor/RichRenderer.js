@@ -21,6 +21,9 @@ const styles = theme => ({
         minWidth: '50%',
       },
     },
+    '& li > p': {
+      marginBottom: 5,
+    },
   },
 });
 

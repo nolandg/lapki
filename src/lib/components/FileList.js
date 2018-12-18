@@ -99,12 +99,13 @@ class FileList extends React.Component {
               </Button>
             ))}
             {showDownloadButton && location ? (
-              <Button key="__download" onClick={handleClick} size="small" color="primary">
+              <Button key="__download" size="small" color="primary" component="a" href={location}>
                 <DownloadIcon /><span>Download</span>
               </Button>
             ) : null}
           </CardActions>
         ) : null}
+        {/* <Typography variant="caption">Perma link: {location}</Typography> */}
       </Card>
     );
   }
