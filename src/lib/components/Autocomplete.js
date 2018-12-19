@@ -210,7 +210,7 @@ class IntegrationReactSelect extends React.Component {
 
   render() {
     const { suggestions, inputValue, value } = this.state;
-    const { classes, theme, placeholder, label, multiple, helperText } = this.props;
+    const { classes, theme, placeholder, label, multiple, helperText, ...rest } = this.props;
 
     const selectStyles = {
       input: base => ({
@@ -243,6 +243,7 @@ class IntegrationReactSelect extends React.Component {
             onInputChange={this.handleInputValueChange}
             inputValue={inputValue}
             filterOption={() => true}
+            {...rest}
           />
           {helperText ? <FormHelperText>{helperText}</FormHelperText> : null }
         </NoSsr>

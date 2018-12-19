@@ -10,6 +10,7 @@ import { create as createJss } from 'jss';
 import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
+import { RequestContextProvider } from '../contexts/RequestContext';
 import createApolloClient from './createApolloClient';
 
 
@@ -33,9 +34,11 @@ export default function startClientApp({ routes, muiTheme, apolloClientOptions, 
       <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
         <ApolloProvider client={client}>
           <BrowserRouter>
-            <UserContextProvider>
-              <After data={data} routes={routes} />
-            </UserContextProvider>
+            <RequestContextProvider>
+              <UserContextProvider>
+                <After data={data} routes={routes} />
+              </UserContextProvider>
+            </RequestContextProvider>
           </BrowserRouter>
         </ApolloProvider>
       </MuiThemeProvider>

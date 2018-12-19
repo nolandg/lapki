@@ -22,7 +22,7 @@ const styles = theme => ({
       },
     },
     '& li > p': {
-      marginBottom: 5,
+      marginBottom: 7,
     },
   },
 });

@@ -11,6 +11,7 @@ import { create as createJss } from 'jss';
 import jssExpand from 'jss-expand';
 
 import { UserContextProvider } from '../contexts/UserContext';
+import { RequestContextProvider } from '../contexts/RequestContext';
 
 const jss = createJss({ plugins: [...jssPreset().plugins, jssExpand()] });
 
@@ -41,7 +42,7 @@ RerenderGuard.propTypes = {
 RerenderGuard.defaultProps = {
 };
 
-export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apolloClient, production }) => {
+export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apolloClient, production, req }) => {
   const sheetsRegistry = new SheetsRegistry();
   const [error, page] = await qatch(renderPage(After => props => (
     <RerenderGuard sheetsRegistry={sheetsRegistry}>
@@ -54,9 +55,11 @@ export const getInitialProps = async ({ assets, data, renderPage, muiTheme, apol
         >
           <MuiThemeProvider sheetsManager={sheetsManager} theme={muiTheme}>
             <ApolloProvider client={apolloClient}>
-              <UserContextProvider>
-                <After {...props} />
-              </UserContextProvider>
+              <RequestContextProvider request={req}>
+                <UserContextProvider>
+                  <After {...props} />
+                </UserContextProvider>
+              </RequestContextProvider>
             </ApolloProvider>
           </MuiThemeProvider>
         </JssProvider>
