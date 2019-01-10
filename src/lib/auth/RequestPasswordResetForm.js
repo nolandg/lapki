@@ -90,7 +90,6 @@ class RequestPasswordResetForm extends Component {
         children={this.renderForm}
         operations={this.operations}
         onMutationSuccess={this.handleSuccess}
-        defaultValues={}
         getSuccessMessageAndAction={this.getSuccessMessageAndAction}
         {...rest}
       />
