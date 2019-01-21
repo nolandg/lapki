@@ -17,9 +17,14 @@ const linkPeerDeps = (source) => {
   print(chalk.green(`Found ${peerDeps.length} peer deps, linking now...`));
 
   peerDeps.forEach((depName) => {
-    const home = path.resolve(__dirname, '../');
-    const depSource = path.resolve(source, 'node_modules', depName);
-    run(`cd ${depSource} && yarn link && cd ${home} && yarn link ${depName}`);
+    // const home = path.resolve(__dirname, '../');
+    // const depSource = path.resolve(source, 'node_modules', depName);
+    // run(`cd ${depSource} && yarn link && cd ${home} && yarn link ${depName}`);
+    const link = path.resolve(__dirname, '../node_modules', depName);
+    const dest = path.resolve(source, 'node_modules', depName);
+    // print(`Removing existing dir for peer dep "${depName}"`);
+    run(`rm -rf ${link}`);
+    run(`ln -s ${dest} ${link}`);
   });
 };
 
@@ -37,12 +42,19 @@ const linkOry = (rootOryDir) => {
   ];
 
   oryLinks.forEach(({ path: modulePath, name }) => {
-    const home = path.resolve(__dirname, '../');
-    const source = path.resolve(rootOryDir, 'packages', modulePath);
+    // const home = path.resolve(__dirname, '../');
+    const dest = path.resolve(rootOryDir, 'packages', modulePath);
+    const link = path.resolve(__dirname, '../node_modules', name);
 
-    const command = `cd ${source} && yarn link && cd ${home} && yarn link ${name}`;
-    run(command);
+    run(`rm -rf ${link}`);
+    run(`ln -s ${dest} ${link}`);
   });
 };
 
+// slate ory plugin also needs peer deps of ory core, ory ui, react router dom, 
+
+// linkOry('/home/noland/projects/powtown/ory');
+// linkPeerDeps('/home/noland/projects/powtown/powtown-app');
+
 module.exports = { linkOry, linkPeerDeps };
+
