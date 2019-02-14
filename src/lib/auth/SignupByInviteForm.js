@@ -70,7 +70,7 @@ class SignupByInviteForm extends Component {
 
   handleClick = async (mutate, { prepareToSaveDoc }, result) => {
     const formValues = await prepareToSaveDoc();
-    if(!formValues) return; // must have failed validation
+    if (!formValues) return; // must have failed validation
     const { email, token } = this.props.match.params;
 
     mutate({ variables: { ...formValues, token, email } });
@@ -82,7 +82,7 @@ class SignupByInviteForm extends Component {
   }
 
   getSnackbarMessageAndAction = ({ error, data }) => {
-    if(error) {
+    if (error) {
       return {
         message: `
           Your invitation links looks invalid or expired.
@@ -91,7 +91,7 @@ class SignupByInviteForm extends Component {
       };
     }
     console.log('Data: ', data);
-    return { message: `Account confirmed. You are now logged in as "${data.signupByInvite.name}".` };
+    return { message: `Account confirmed. You can now login as "${data.signupByInvite.name}".` };
   }
 
   renderForm = ({ fieldProps, mutationComponents, globalErrors, errors }) => {
@@ -100,9 +100,9 @@ class SignupByInviteForm extends Component {
     const { readyToRedirect } = this.state;
     const { email } = this.props.match.params;
 
-    if(readyToRedirect) return <Redirect to="/" />;
+    if (readyToRedirect) return <Redirect to="/" />;
 
-    return(
+    return (
       <div className={`${classes.form} ${className}`}>
         <Typography variant="body1">
           Please complete the form below to confirm your account for email address "{email}".

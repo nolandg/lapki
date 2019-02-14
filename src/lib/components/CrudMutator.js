@@ -51,8 +51,8 @@ class CrudMutator extends Component {
 
     const operations = {
       create: buildOperation('create'),
-      update: buildOperation('update'),
-      delete: buildOperation('delete'),
+      // update: buildOperation('update'),
+      // delete: buildOperation('delete'),
     };
 
 
@@ -66,26 +66,26 @@ class CrudMutator extends Component {
 
     // If not provided with create or update buttons, use provided save button instead
     // Allows collapsing create and update into save
-    if(!operations.create.renderButton && props.renderSaveButton) {
+    if (!operations.create.renderButton && props.renderSaveButton) {
       operations.create.renderButton = props.renderSaveButton;
     }
-    if(!operations.update.renderButton && props.renderSaveButton) {
+    if (!operations.update.renderButton && props.renderSaveButton) {
       operations.update.renderButton = props.renderSaveButton;
     }
 
     // If provided with onSave[Success/Error], use that instead
-    if(onSaveSuccess) {
+    if (onSaveSuccess) {
       operations.create.onSuccess = onSaveSuccess;
       operations.update.onSuccess = onSaveSuccess;
     }
-    if(onSaveError) {
+    if (onSaveError) {
       operations.create.onError = onSaveError;
       operations.update.onError = onSaveError;
     }
 
     // Automatically supress rendering of delete button for new docs
     operations.delete.renderButton = (...args) => {
-      if(args[0].isNew) return null;
+      if (args[0].isNew) return null;
       return props.renderDeleteButton(...args);
     };
 
@@ -94,7 +94,7 @@ class CrudMutator extends Component {
 
   handleCreateDoc = async (mutate, { prepareToSaveDoc }, result) => {
     const doc = await prepareToSaveDoc();
-    if(!doc) return; // must have failed validation
+    if (!doc) return; // must have failed validation
     mutate({
       variables: {
         data: doc,
@@ -104,9 +104,9 @@ class CrudMutator extends Component {
 
   handleUpdateDoc = async (mutate, { prepareToSaveDoc }, result) => {
     const doc = await prepareToSaveDoc();
-    if(!doc) return; // must have failed validation
+    if (!doc) return; // must have failed validation
     const id = _.get(this.props, 'document.id');
-    if(!id) throw Error('Cannot update a document without id.');
+    if (!id) throw Error('Cannot update a document without id.');
 
     // We can't send id for updates
     delete doc.id;
@@ -122,7 +122,7 @@ class CrudMutator extends Component {
   handleDeleteDoc = async (mutate, { clearErrors }, result) => {
     clearErrors();
     const id = _.get(this.props, 'document.id');
-    if(!id) throw Error('Cannot delete a document without id.');
+    if (!id) throw Error('Cannot delete a document without id.');
 
     mutate({
       variables: {
