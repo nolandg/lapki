@@ -51,8 +51,8 @@ class CrudMutator extends Component {
 
     const operations = {
       create: buildOperation('create'),
-      // update: buildOperation('update'),
-      // delete: buildOperation('delete'),
+      update: buildOperation('update'),
+      delete: buildOperation('delete'),
     };
 
 
