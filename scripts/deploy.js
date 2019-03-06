@@ -201,7 +201,7 @@ run('pm2 restart powtown-api');
 printSectionBreak('Restartig App...');
 if(!args.skipRestartingApp) {
   log('Building app...');
-  run('PUBLIC_PATH=https://noland-test.powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
+  run('PUBLIC_PATH=https://powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
   // log('Gzipping assets...');
   // const publicPath = path.resolve(rootDir, 'app/build/public');
   // run(`find ${publicPath} -type f -not \\( -name '*.gz' -or -name '*[~#]' \\) -exec sh -c 'gzip -c "{}" > "{}.gz"' \\;`);
