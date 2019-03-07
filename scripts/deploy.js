@@ -29,18 +29,21 @@ const args = {
   ]),
 };
 
-if(args.quick) {
+if (args.quick) {
   args.skipLinking = true;
   args.skipOry = true;
   args.skipYarnInstall = true;
   args.skipPrismaDeploy = true;
 }
 
+
 const rootDir = '/home/noland/powtown';
 const oryDir = path.resolve(rootDir, 'ory');
 const lapkiDir = path.resolve(rootDir, 'lapki');
 const appDir = path.resolve(rootDir, 'app');
 const apiDir = path.resolve(rootDir, 'api');
+
+const settings = require(path.resolve(rootDir), 'app/settings.json');
 
 const collectCss = () => {
   const fileNames = ['core', 'ui', 'divider', 'image', 'slate', 'spacer', 'video', 'typography', 'elements', 'styles', 'custom-styles'];
@@ -71,7 +74,7 @@ const getCssVariables = () => {
   let match;
   const vars = [];
 
-  while(match = reg.exec(css)){ // eslint-disable-line
+  while (match = reg.exec(css)) { // eslint-disable-line
     vars.push({ name: match[1], value: match[2] });
   }
 
@@ -131,10 +134,10 @@ const compileCarouselJss = () => {
 };
 
 const yarnInstall = (dir) => {
-  if(!args.skipYarnInstall) {
+  if (!args.skipYarnInstall) {
     log('Installing yarn packages...');
     run('yarn', dir);
-  }else{
+  } else {
     log('Skipped installing yarn packages.');
   }
 };
@@ -148,7 +151,7 @@ const gitPull = (dir) => {
 // ///////////////////////////// Start //////////////////////////////
 compileOryJss();
 compileCarouselJss();
-if(args.compileJssOnly) {
+if (args.compileJssOnly) {
   process.exit();
 }
 
@@ -156,7 +159,7 @@ if(args.compileJssOnly) {
 run('sudo ls');
 
 // Pull in git changes and install yarn packages
-if(!args.skipOry) {
+if (!args.skipOry) {
   printSectionBreak('Ory');
   gitPull(oryDir);
   // yarnInstall(oryDir);
@@ -167,12 +170,12 @@ if(!args.skipOry) {
 printSectionBreak('Lapki');
 gitPull(lapkiDir);
 yarnInstall(lapkiDir);
-if(!args.skipLinking) {
+if (!args.skipLinking) {
   log('Linking Ory packages into Lapki...');
   linkOry(oryDir);
   log('Linking peer deps into Lapki...');
   linkPeerDeps(appDir);
-}else{
+} else {
   log('Skipping linking Ory and peer deps into Lapki.');
 }
 log('Building Lapki...');
@@ -183,10 +186,10 @@ gitPull(appDir);
 yarnInstall(appDir);
 
 printSectionBreak('Prisma');
-if(!args.skipPrismaDeploy) {
+if (!args.skipPrismaDeploy) {
   log('Deploying Prisma...');
   run('prisma deploy', apiDir);
-}else{
+} else {
   log('Skipped deploying Primsa.');
 }
 
@@ -199,20 +202,20 @@ log('Restarting API server...');
 run('pm2 restart powtown-api');
 
 printSectionBreak('Restartig App...');
-if(!args.skipRestartingApp) {
+if (!args.skipRestartingApp) {
   log('Building app...');
-  run('PUBLIC_PATH=https://powellriver.ca:3091/ NODE_ENV=production yarn run build', appDir);
+  run(`PUBLIC_PATH=${settings.publicPath} NODE_ENV=production yarn run build`, appDir);
   // log('Gzipping assets...');
   // const publicPath = path.resolve(rootDir, 'app/build/public');
-  // run(`find ${publicPath} -type f -not \\( -name '*.gz' -or -name '*[~#]' \\) -exec sh -c 'gzip -c "{}" > "{}.gz"' \\;`);
+  // run(`find ${ publicPath } - type f - not \\(-name '*.gz' - or - name '*[~#]' \\) - exec sh - c 'gzip -c "{}" > "{}.gz"' \\; `);
   // log('Changing security context so nginx can read files...');
-  // run(`sudo chcon -R --type httpd_sys_content_t ${publicPath}`);
+  // run(`sudo chcon - R--type httpd_sys_content_t ${ publicPath } `);
   log('Nuking destination folder and then copying build to nginx root...');
   run('rm -rf /usr/share/nginx/html/powtown/app');
-  run(`cp -rf ${path.resolve(rootDir, 'app/build')} /usr/share/nginx/html/powtown/app`);
+  run(`cp - rf ${path.resolve(rootDir, 'app/build')} /usr/share / nginx / html / powtown / app`);
   log('Restarting pm2 process...');
   run('pm2 restart powtown-app');
-}else{
+} else {
   log('Skipped restarting app.');
 }
 
