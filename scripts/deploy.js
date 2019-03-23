@@ -43,7 +43,7 @@ const lapkiDir = path.resolve(rootDir, 'lapki');
 const appDir = path.resolve(rootDir, 'app');
 const apiDir = path.resolve(rootDir, 'api');
 
-const settings = require(path.resolve(rootDir), 'app/settings.json');
+const settings = require(path.resolve(rootDir, 'app/settings.json'));
 
 const collectCss = () => {
   const fileNames = ['core', 'ui', 'divider', 'image', 'slate', 'spacer', 'video', 'typography', 'elements', 'styles', 'custom-styles'];
@@ -212,7 +212,7 @@ if (!args.skipRestartingApp) {
   // run(`sudo chcon - R--type httpd_sys_content_t ${ publicPath } `);
   log('Nuking destination folder and then copying build to nginx root...');
   run('rm -rf /usr/share/nginx/html/powtown/app');
-  run(`cp - rf ${path.resolve(rootDir, 'app/build')} /usr/share / nginx / html / powtown / app`);
+  run(`cp -rf ${path.resolve(rootDir, 'app/build')} /usr/share/nginx/html/powtown/app`);
   log('Restarting pm2 process...');
   run('pm2 restart powtown-app');
 } else {
@@ -223,3 +223,4 @@ const endTime = new Date();
 const elapsed = Math.round((endTime - startTime) / 1000);
 
 printSuccess(`Done in ${elapsed} seconds`);
+
