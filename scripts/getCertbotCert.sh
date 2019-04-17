@@ -8,3 +8,5 @@ sudo certbot certonly \
   -d dev.powellriver.ca \
   -d dev.api.powellriver.ca \
   -d dev.static.powellriver.ca
+
+sudo systemctl restart nginx
