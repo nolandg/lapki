@@ -9,8 +9,8 @@ const deleteAuthCookie = () => {
 };
 
 const logout = (apolloClient) => {
-  apolloClient.resetStore();
   deleteAuthCookie();
+  apolloClient.resetStore();
 };
 
 function withUser(WrappedComponent) {
