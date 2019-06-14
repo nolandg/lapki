@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { UserContextConsumer } from '../contexts';
 
 const deleteAuthCookie = () => {
-  document.cookie = 'lapki_auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.powellriver.ca';
-  document.cookie = 'lapki_auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=api.powellriver.ca';
+  document.cookie = 'lapki_auth_token2=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.powellriver.ca';
+  document.cookie = 'lapki_auth_token2=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=api.powellriver.ca';
 };
 
 const logout = (apolloClient) => {
