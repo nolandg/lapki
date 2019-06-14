@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { UserContextConsumer } from '../contexts';
 
 const deleteAuthCookie = () => {
-  document.cookie = 'lapki_auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  document.cookie = 'lapki_auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.powellriver.ca';
 };
 
 const logout = (apolloClient) => {
@@ -20,7 +20,7 @@ function withUser(WrappedComponent) {
 
       return (
         <UserContextConsumer>
-          { (value) => {
+          {(value) => {
             const { user, loading, error, allPermissions } = value;
 
             return (
