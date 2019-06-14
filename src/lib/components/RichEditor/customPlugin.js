@@ -1,12 +1,16 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import CodeIcon from '@material-ui/icons/Code';
 import TextField from '@material-ui/core/TextField';
+import Helmet from 'react-helmet';
+import { withRouter } from 'react-router';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { withUser } from '../../HOCs/withUser';
-// import Select from '../Select';
 
 const rendererStyles = theme => ({
   root: {
@@ -15,11 +19,32 @@ const rendererStyles = theme => ({
 });
 
 class Renderer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    if (typeof window !== 'undefined') {
+      if (props.state.reload && window._lapki_route_transitions_count) {
+        window.location.reload();
+      }
+    }
+  }
+
+  componentDidMount = () => {
+    const { state: { js } } = this.props;
+    // eslint-disable-next-line no-eval
+    eval(js);
+  }
+
   render() {
-    const { state: { value }, classes } = this.props;
+    const { state: { html, remoteJs }, classes } = this.props;
 
     return (
-      <div className={classes.root} dangerouslySetInnerHTML={{ __html: value }} />
+      <React.Fragment>
+        <Helmet>
+          <script src={remoteJs} />
+        </Helmet>
+        <div className={classes.root} dangerouslySetInnerHTML={{ __html: html }} />
+      </React.Fragment>
     );
   }
 }
@@ -29,6 +54,7 @@ Renderer.propTypes = {
 };
 Renderer = compose(
   withStyles(rendererStyles),
+  withRouter,
 )(Renderer);
 
 const editorStyles = theme => ({
@@ -43,14 +69,14 @@ const editorStyles = theme => ({
 });
 
 class Editor extends React.Component {
-  handleChange = (event) => {
-    this.props.onChange({ value: event.target.value });
+  handleChange = key => (event) => {
+    this.props.onChange({ [`${key}`]: event.target.value });
   };
 
   render() {
-    const { state: { value }, classes, currentUser } = this.props;
+    const { state: { html, js, remoteJs, reload }, classes, currentUser } = this.props;
 
-    if(!currentUser.hasPerm('use-dangerous-editors')) {
+    if (!currentUser.hasPerm('use-dangerous-editors')) {
       return (
         <div className={classes.denied}>
           <div className={classes.deniedMessage}>
@@ -67,15 +93,45 @@ class Editor extends React.Component {
     return (
       <div className={classes.root}>
         <TextField
-          onChange={this.handleChange}
-          value={value || ''}
-          label="HTML Code:"
+          onChange={this.handleChange('html')}
+          value={html || ''}
+          label="HTML:"
           margin="normal"
           multiline
           rows={8}
           rowsMax={20}
           variant="outlined"
           fullWidth
+        />
+        <TextField
+          onChange={this.handleChange('js')}
+          value={js || ''}
+          label="Java Script:"
+          margin="normal"
+          multiline
+          rows={8}
+          rowsMax={20}
+          variant="outlined"
+          fullWidth
+        />
+        <TextField
+          onChange={this.handleChange('remoteJs')}
+          value={remoteJs || ''}
+          label="Remote Script URL:"
+          margin="normal"
+          variant="outlined"
+          fullWidth
+        />
+        <FormControlLabel
+          control={(
+            <Switch
+              checked={reload}
+              onChange={this.handleChange('reload')}
+              value="checkedB"
+              color="primary"
+            />
+          )}
+          label="Reload page if not initial load"
         />
       </div>
     );
@@ -93,7 +149,7 @@ Editor = compose(
 )(Editor);
 
 const CustomContent = ({ readOnly, ...rest }) => {
-  if(readOnly) return <Renderer {...rest} />;
+  if (readOnly) return <Renderer {...rest} />;
   return <Editor {...rest} />;
 };
 CustomContent.propTypes = {
