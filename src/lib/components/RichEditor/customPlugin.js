@@ -36,14 +36,14 @@ class Renderer extends React.Component {
   }
 
   render() {
-    const { state: { html, remoteJs }, classes } = this.props;
+    const { state: { html, remoteJs, value }, classes } = this.props;
 
     return (
       <React.Fragment>
         <Helmet>
           <script src={remoteJs} />
         </Helmet>
-        <div className={classes.root} dangerouslySetInnerHTML={{ __html: html }} />
+        <div className={classes.root} dangerouslySetInnerHTML={{ __html: html || value }} />
       </React.Fragment>
     );
   }
