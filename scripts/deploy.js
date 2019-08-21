@@ -223,4 +223,3 @@ const endTime = new Date();
 const elapsed = Math.round((endTime - startTime) / 1000);
 
 printSuccess(`Done in ${elapsed} seconds`);
-
